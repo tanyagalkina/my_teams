@@ -21,18 +21,17 @@ CC 				= @gcc
 CXX 			= @g++
 LINKLIB			+= -L ./libs/myteams/ -lmyteams -luuid
 LIB 			+= ./libs/myteams/libmyteams.so -luuid
-CFLAGS 			+= -Wall -Werror -Wextra
+# CFLAGS 			+= -Wall -Werror -Wextra
 
 SERVER_NAME 	= 	myteams_server
 
 SERVER_SRC 		= 	server/main.c 				\
-					server/utils.c				\
-					server/new_connection.c		\
+					server/init_server.c		\
 					server/setup_server.c		\
-					server/commands.c			\
-					server/get_command.c		\
+					server/cleanup.c			\
+					server/handle_connection.c	\
+					server/utils.c				\
 					server/run_server.c			\
-
 
 CLIENT_NAME 	= 	myteams_cli
 
@@ -41,7 +40,7 @@ CLIENT_SRC 		= 	client/main.c 				\
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
 CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)
 
-all: 			myteams_server myteams_cli
+all: 			myteams_server
 
 myteams_server:	$(SERVER_OBJ)
 	@$(CC) -o $(SERVER_NAME) $(SERVER_OBJ) $(LIB)
