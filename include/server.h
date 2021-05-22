@@ -133,4 +133,10 @@ int run_server(server_t *server);
 /* handle_connection.c */
 void handle_connection(server_t *server, int fd, fd_set *current);
 
+/* save_data.c */
+void save_data(server_t *server);
+
+/* restore_data.c */
+void restore_data(server_t *server);
+
 #endif //SERVER_H_

@@ -21,7 +21,7 @@ CC 				= @gcc
 CXX 			= @g++
 LINKLIB			+= -L ./libs/myteams/ -lmyteams -luuid
 LIB 			+= ./libs/myteams/libmyteams.so -luuid
-# CFLAGS 			+= -Wall -Werror -Wextra
+CFLAGS 			+= -Wall -Werror -Wextra
 
 SERVER_NAME 	= 	myteams_server
 
@@ -32,6 +32,8 @@ SERVER_SRC 		= 	server/main.c 				\
 					server/handle_connection.c	\
 					server/utils.c				\
 					server/run_server.c			\
+					server/save_data.c			\
+					server/restore_data.c		\
 
 CLIENT_NAME 	= 	myteams_cli
 
