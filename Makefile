@@ -21,7 +21,7 @@ CC 				= @gcc
 CXX 			= @g++
 LINKLIB			+= -L ./libs/myteams/ -lmyteams -luuid
 LIB 			+= ./libs/myteams/libmyteams.so -luuid
-CFLAGS 			+= -Wall -Werror -Wextra
+# CFLAGS 			+= -Wall -Werror -Wextra
 
 SERVER_NAME 	= 	myteams_server
 
