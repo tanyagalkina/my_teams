@@ -8,6 +8,7 @@
 #include "../include/server.h"
 #include <stdlib.h>
 #include <string.h>
+#include <sys/queue.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -50,6 +51,23 @@ static char *get_message_from_client(server_t *server, int fd)
     return NULL;
 }
 
+/* this is just a template to show easy use of uuid and the TAILQ stuff */
+int add_team(server_t *server, const char *name)
+{
+    uuid_t binuuid;
+    team_t *new_team = NULL;
+
+    uuid_generate_random(binuuid);
+    if ((new_team = (team_t *)malloc(sizeof(team_t))) == NULL)
+        return FAILURE;
+
+    strcpy(new_team->name, name);
+    uuid_unparse(binuuid, new_team->uuid);
+
+    TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
+    return SUCCESS;
+}
+
 void handle_connection(server_t *server, int fd, fd_set *current)
 {
     char *message = NULL;
@@ -66,8 +84,14 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         return;
     if ((sp_message = split_string(message)) == NULL)
         return;
-    for (int i = 0; sp_message[i]; i++) {
-        printf("#%s#\n", sp_message[i]);
+
+    team_t *tmp;
+    if (strcmp(sp_message[0], "ls") == 0) {
+        TAILQ_FOREACH(tmp, &server->admin->team_head, next) {
+            printf("uuid: %s, name: %s\n", tmp->uuid, tmp->name);
+        }
+    } else {
+        add_team(server, sp_message[0]);
     }
 
     free_2d(sp_message);

@@ -11,7 +11,7 @@
 
 static volatile sig_atomic_t done;
 
-void signal_handle(int sig_num)
+void signal_handle(__attribute__((unused))int sig_num)
 {
     server_debug_print(WARNING, "Ctrl + C stopping ...");
     done = 1;
