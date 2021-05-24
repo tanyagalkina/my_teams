@@ -38,11 +38,13 @@ SERVER_SRC 		= 	server/main.c 				\
 CLIENT_NAME 	= 	myteams_cli
 
 CLIENT_SRC 		= 	client/main.c 				\
+					client/enjoy_the_client.c	\
+					client/my_str_to_word.c		\
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
 CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)
 
-all: 			myteams_server
+all: 			myteams_server myteams_cli
 
 myteams_server:	$(SERVER_OBJ)
 	@$(CC) -o $(SERVER_NAME) $(SERVER_OBJ) $(LIB)
