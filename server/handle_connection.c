@@ -6,6 +6,7 @@
 */
 
 #include "../include/server.h"
+#include "../include/commons.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/queue.h>
@@ -36,18 +37,31 @@ static int accept_new_connection(server_t *server, fd_set *current)
     return SUCCESS;
 }
 
+
+///maybe change it to get_request from client...
 static char *get_message_from_client(server_t *server, int fd)
 {
     //@todo get the struct from the user + parse it or something idk
     int r;
-    char buffer[100];
+    char buffer[REQUEST_SIZE];
 
-    memset(buffer, 0, 100);
+    memset(buffer, 0, REQUEST_SIZE);
 
-    if ((r = read(fd, &buffer, 100)) == -1)
+
+    if ((r = read(fd, &buffer, REQUEST_SIZE)) == -1)
         return NULL;
+    if (r == 0) {
+        printf("the client is disconnected\n");
+        return NULL;
+    }
+    request_t *req = (void *)buffer;
 
-    return strdup(buffer);
+    printf("the type of request was %d\n", req->type);
+    printf("the massage in request was %s\n", req->message);
+    printf("the description was %s\n", req->description);
+    printf("the name was %s\n", req->name);
+
+    return strdup("haha");
     return NULL;
 }
 
@@ -68,10 +82,23 @@ int add_team(server_t *server, const char *name)
     return SUCCESS;
 }
 
+///generation example
+response_t generate_response()
+{
+    response_t response;
+    response.request_type = 1; ///type of prev request which was answered
+    response.status_code = 200; /// 200 OK for example)
+    response.extern_body_size = 0; /// the size of data list following (if the case))
+    //response.extern_body_type type of theh data following like users, or messages, or teams
+    strcpy(response.message, "Very good!"); /// comment message
+    return response;
+}
+
 void handle_connection(server_t *server, int fd, fd_set *current)
 {
     char *message = NULL;
     char **sp_message = NULL;
+    response_t response;
 
     if (fd == server->fd) {
         if (accept_new_connection(server, current) == FAILURE)
@@ -81,11 +108,12 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         return;
     }
     if ((message = get_message_from_client(server, fd)) == NULL)
-        return;
-    if ((sp_message = split_string(message)) == NULL)
-        return;
-
-    team_t *tmp;
+       return;
+    response = generate_response(); ///normally based on the request)))
+    send(fd, &response, RESPONSE_SIZE, 0);
+    //if ((sp_message = split_string(message)) == NULL)
+    //    return;
+    /*team_t *tmp;
     if (strcmp(sp_message[0], "ls") == 0) {
         TAILQ_FOREACH(tmp, &server->admin->team_head, next) {
             printf("uuid: %s, name: %s\n", tmp->uuid, tmp->name);
@@ -95,5 +123,5 @@ void handle_connection(server_t *server, int fd, fd_set *current)
     }
 
     free_2d(sp_message);
-    free(message);
+    free(message);*/
 }
