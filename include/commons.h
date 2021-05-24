@@ -10,6 +10,43 @@
 #ifndef TEAMS_COMMONS_H
 #define TEAMS_COMMONS_H
 
+enum command_type {
+    LOGIN = 1,
+    LOGOUT,
+    USERS,
+    USER,
+    SEND,
+    MESSAGES,
+    SUBSCRIBE,
+    SUBSCRIBED,
+    UNSUBSCRIBE,
+    CREATE,
+    LIST,
+    INFOS,
+    USE
+};
+
+typedef enum use_context_level {
+    TEAM = 1,
+    CHANNEL,
+    THREAD
+}use_level_t;
+
+typedef enum status_code {
+    STATUS_OK = 200,
+    STATUS_KO = 400
+}code_t;
+
+typedef enum data_type
+{
+    USER_TYPE = 1, ///names only
+    MESSAGE_TYPE,
+    TEAM_TYPE,
+    CHANNEL_TYPE,
+    THREAD_TYPE,
+    REPLY_TYPE
+}datatype_t;
+
 #pragma pack(1)
 typedef struct response {
     char message[128];
@@ -17,6 +54,7 @@ typedef struct response {
     int status_code;
     int extern_body_size;
     int extern_body_type;
+    use_level_t level;
 }response_t;
 
 typedef struct request {

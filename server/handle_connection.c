@@ -86,10 +86,10 @@ int add_team(server_t *server, const char *name)
 response_t generate_response()
 {
     response_t response;
-    response.request_type = 1; ///type of prev request which was answered
+    response.request_type = USERS; ///type of prev request which was answered
     response.status_code = 200; /// 200 OK for example)
-    response.extern_body_size = 0; /// the size of data list following (if the case))
-    //response.extern_body_type type of theh data following like users, or messages, or teams
+    response.extern_body_size = 2; /// the size of data list following (if the case))
+    response.extern_body_type = USER_TYPE;
     strcpy(response.message, "Very good!"); /// comment message
     return response;
 }

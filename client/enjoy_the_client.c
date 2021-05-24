@@ -34,7 +34,7 @@ void process_response(int sd, char *buffer)
     printf("the response code was: %d\n", resp->status_code);
     printf("the message was: %s\n", resp->message);
     ///todo: cast the response and check the info volumes (if the case)
-    char response[RESPONSE_SIZE];
+    ///char response[RESPONSE_SIZE];
 
     //read(sock, response, RESPONSE_SIZE);
     //printf("The proseccing showed %s:", response);
@@ -47,7 +47,7 @@ request_t create_req(char **user_req, int context_level)
     switch (context_level)
     {
         case(0):
-            new_req.type = 10;
+            new_req.type = CREATE;
             strcpy(new_req.name, (user_req[1]));
             new_req.context_level = 0;
             strcpy(new_req.description, (user_req[2]));
