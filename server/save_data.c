@@ -25,7 +25,7 @@ static void save_teams(server_t *server)
     }
 
     TAILQ_FOREACH(tmp, &server->admin->team_head, next) {
-        fprintf(file, "%s,%s,\n", tmp->uuid, tmp->name);
+        fprintf(file, "uuid:%s,name:%s,\n", tmp->uuid, tmp->name);
     }
 }
 

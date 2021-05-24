@@ -85,6 +85,7 @@ void handle_connection(server_t *server, int fd, fd_set *current)
     if ((sp_message = split_string(message)) == NULL)
         return;
 
+    /* just for testing */
     team_t *tmp;
     if (strcmp(sp_message[0], "ls") == 0) {
         TAILQ_FOREACH(tmp, &server->admin->team_head, next) {

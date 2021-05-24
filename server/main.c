@@ -8,6 +8,7 @@
 #include "../include/server.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <sys/queue.h>
 
@@ -23,6 +24,13 @@ int errorhandling(int ac, char **av)
 {
     if (ac != 2)
         return FAILURE;
+
+    if (strcmp(av[1], "-help") == 0) {
+        printf("USAGE: ./myteams_server port\n");
+        printf("\n\tport is the port number on which the server socket \
+listens.\n");
+        exit(0);
+    }
 
     for (int i = 0; av[1][i]; i++) {
         if (!isdigit(av[1][i])) {
