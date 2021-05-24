@@ -27,7 +27,8 @@ enum command_type {
 };
 
 typedef enum use_context_level {
-    TEAM = 1,
+    NONE,
+    TEAM,
     CHANNEL,
     THREAD
 }use_level_t;

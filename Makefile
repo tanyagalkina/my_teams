@@ -40,6 +40,20 @@ CLIENT_NAME 	= 	myteams_cli
 CLIENT_SRC 		= 	client/main.c 				\
 					client/enjoy_the_client.c	\
 					client/my_str_to_word.c		\
+					client/requests/info.c		\
+					client/requests/list.c		\
+					client/requests/login.c		\
+					client/requests/logout.c	\
+					client/requests/messages.c	\
+					client/requests/send.c		\
+					client/requests/subscribe.c	\
+					client/requests/create.c	\
+					client/requests/subscribed.c	\
+					client/requests/unsubscribe.c	\
+					client/requests/use.c		\
+					client/requests/user.c		\
+					client/requests/users.c
+
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
 CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)
