@@ -108,7 +108,10 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         return;
     }
     if ((message = get_message_from_client(server, fd)) == NULL)
-       return;
+        return;
+    if ((sp_message = split_string(message)) == NULL)
+        return;
+
     response = generate_response(); ///normally based on the request)))
     send(fd, &response, RESPONSE_SIZE, 0);
     //if ((sp_message = split_string(message)) == NULL)
