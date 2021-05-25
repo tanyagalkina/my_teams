@@ -5,32 +5,62 @@
 ** client/src
 */
 
-#include "../include/commons.h"
 #include "../include/client.h"
 
-void check_args(char **av)
+static int is_valid_port(char *av)
 {
-    return;
+    int pid = atoi(av);
+    int num_length = 0;
+
+    while (pid) {
+        num_length++;
+        pid /= 10;
+    }
+    if (atoi(av) < 1 || atoi(av) > 65353 || strlen(av) != (size_t)num_length) {
+        printf("port number is invalid\n");
+        return (0);
+    }
+    return (1);
+}
+
+void display_help(void)
+{
+    printf("USAGE: ./myteams_cli ip port\n");
+    printf("\t\tip\tis the server ip address on which the server socket listens\n");
+    printf("\t\tport\tis the port number on which the server socket listens\n");
+}
+
+void check_args(int argc, char **av)
+{
+    if (argc == 2 && !strcmp("-help", av[1])) {
+        display_help();
+        exit (0);
+    }
+    if (argc != 3 ) {
+        display_help();
+        exit (84);
+    }
+    if (is_valid_port(av[2]))
+        return;
+    else
+        exit (84);
 }
 
 int do_connection(char *ip, int port)
 {
     int sock = 0;
     struct sockaddr_in serv_addr;
+
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         printf("\n Socket creation error \n");
         return -1;
     }
-
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
-
-    // Convert IPv4 and IPv6 addresses from text to binary form
     if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) <= 0) {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
     }
-
     if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
         printf("\nConnection Failed \n");
         return -1;
@@ -38,28 +68,21 @@ int do_connection(char *ip, int port)
     return sock;
 }
 
-/// client code
-int main(int argc, char **argv) {
-
-    check_args(argv);
-    int sock = do_connection(argv[1], atoi(argv[2]));
-    enjoy_the_client(sock);
-    /*request_t req;
-    req.type = 3;
-    strcpy(req.message, "Hello, my dear, how do u feel?");
-    strcpy(req.name, "Tanya");
-    strcpy(req.description, "This is our very best time ever!");
-    int valread = 0;
-    char buffer[RESPONSE_SIZE];
-    while (1) {
-      //  printf(" I am in the loop\n");
-        send(sock, &req, sizeof(request_t), 0);
-        //send (sock, hello, strlen(hello), 0);
-
-        //send(sock , hello , strlen(hello) , 0 );
-        //printf("Hello message sent\n");
-        valread = read(sock, buffer, RESPONSE_SIZE);
-        printf("%s\n", buffer);
-    }*/
+int main(int argc, char **argv)
+{
+    int sock;
+    client_t *client_stuff;
+    check_args(argc, argv);
+    sock = do_connection(argv[1], atoi(argv[2]));
+    if (sock == -1)
+        return (84);
+    client_stuff->sd = sock;
+    client_stuff->context_level = NONE;
+    FD_ZERO(&client_stuff->master);
+    FD_ZERO(&client_stuff->reading);
+    FD_SET(sock, &client_stuff->master);
+    FD_SET(0, &client_stuff->master);
+    set_signals();
+    enjoy_the_client(client_stuff);
     return 0;
 }

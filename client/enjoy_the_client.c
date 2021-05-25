@@ -7,17 +7,18 @@
 
 #include "../include/client.h"
 
-void process_response(int sd, char *buffer)
+void process_resp_or_event(int sd, char *buffer, int valread)
 {
+    if (valread == 0) {
+        printf("our server is gone on vacation, what a pitty...\n");
+        go = 0;
+        return;
+    }
     response_t *resp = (void *)buffer;
     printf("the request type was: %d\n", resp->request_type);
     printf("the response code was: %d\n", resp->status_code);
     printf("the message was: %s\n", resp->message);
-    ///todo: cast the response and check the info volumes (if the case)
-    ///char response[RESPONSE_SIZE];
-
-    //read(sock, response, sizeof(TYPE_USER);
-    //printf("The proseccing showed %s:", response);
+    client_print_channel("uuid", resp->message, resp->description);
 }
 
 void show_help()
@@ -25,7 +26,7 @@ void show_help()
     printf("USAGE: ./myteams_cli ip port\n");
     printf("\t\tip\tis the server ip address on which the server socket listens\n");
     printf("\t\tport\tis the port number on which the server socket listens\n");
-    printf("the protocol and the commands to be updated\n");
+    printf("the protocol and the commands to be updated...\n");
 }
 
 ///if the input is invalid returns request of type 84))
@@ -35,6 +36,7 @@ request_t generate_request(char *input, use_level_t *context_level)
     int i = 0;
 
     char **user_req = my_str_to_word_array(input);
+    printf("%s\n%s\n%s\n", user_req[0], user_req[1], user_req[2]);
     if (!strcmp("/help", user_req[0])) {
         show_help();
         req.type = 42;
@@ -52,7 +54,6 @@ request_t generate_request(char *input, use_level_t *context_level)
         printf("invalid request\n");
         req.type = 84;
     }
-
     return req;
 }
 
@@ -72,51 +73,43 @@ void set_signals(void)
     signal(SIGTERM, sig_handler);
 }
 
-void enjoy_the_client(int sd)
+void process_cli_request(int sd, use_level_t *context_level)
 {
-    use_level_t context_level = NONE; /// stores the value of prev use request (if the case) otherwise == NONE
     size_t size = INPUT_SIZE;
-    int valread = 0;
-    set_signals();
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
-    char buffer[RESPONSE_SIZE];
-    fd_set master;
-    fd_set reading;
-    FD_ZERO(&master);
-    FD_ZERO(&reading);
-    FD_SET(sd, &master);
-    FD_SET(0, &master);
+    getline(&input, &size, stdin);
+    new_request = generate_request(input, context_level);
+    if (new_request.type == 84)
+        printf("Your request is invalid, please see the spec\n");
+    if (new_request.type == 42)
+        return;
+    else
+        send(sd, &new_request, sizeof(request_t), 0);
+}
 
-    while (go)
-    {
-        reading = master;
-        if (select(sd + 1, &reading, NULL, NULL, NULL) < 0) {
+void enjoy_the_client(client_t *cl)
+{
+    int valread = 0;
+    char buffer[RESPONSE_SIZE];
+    while (go) {
+        cl->reading = cl->master;
+        if (select(cl->sd + 1, &cl->reading, NULL, NULL, NULL) < 0) {
             if (go)
-            exit(84);
+                exit(84);
             else continue;
         }
-        for (int i = 0; i < (sd + 1); i++) {
-            if (FD_ISSET(i, &reading)) {
+        for (int i = 0; i < (cl->sd + 1); i++) {
+            if (FD_ISSET(i, &cl->reading)) {
                 if (i == 0)
-                {
-                    getline(&input, &size, stdin);
-                    new_request = generate_request(input, &context_level);
-                    if (new_request.type == 84)
-                        printf("Your request is invalid, please see the spec\n");
-                    if (new_request.type == 42)
-                        continue;
-                    else {
-                        send(sd, &new_request, sizeof(request_t), 0);
-                        memset(buffer, 0, RESPONSE_SIZE);
-                }
-            }
+                    process_cli_request(cl->sd, &cl->context_level);
                 else {
-                    valread = read(sd, &buffer, RESPONSE_SIZE);
-                    process_response(sd, buffer);
+                    valread = read(cl->sd, &buffer, RESPONSE_SIZE);
+                    process_resp_or_event(cl->sd, buffer, valread);
+                    memset(buffer, 0, RESPONSE_SIZE);
                 }
             }
         }
     }
-    printf("here i would free the stuff\n");
+    printf("here i would free the stuff... but what?\n");
 }

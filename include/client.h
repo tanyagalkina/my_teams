@@ -17,7 +17,10 @@
 #include <uuid/uuid.h>
 #include <assert.h>
 #include <signal.h>
+#include <uuid/uuid.h>
+
 #include "../include/commons.h"
+#include "../libs/myteams/logging_client.h"
 
 #define INPUT_SIZE 2048
 
@@ -29,6 +32,15 @@ typedef struct req
     request_t (*func)(char **, use_level_t *);
 
 }req_t;
+
+typedef struct client
+{
+    int sd;
+    use_level_t context_level;
+    fd_set master;
+    fd_set reading;
+
+}client_t;
 
 request_t login_req(char **user_req, use_level_t *context_level);
 request_t logout_req(char **user_req, use_level_t *context_level);
@@ -61,7 +73,8 @@ static const req_t req_table[] = {
         {NULL, NULL}
 };
 
-void enjoy_the_client(int sd);
+void set_signals(void);
+void enjoy_the_client(client_t *client_stuff);
 char **my_str_to_word_array(char const *str);
 
 #endif //TEAMS_CLIENT_H

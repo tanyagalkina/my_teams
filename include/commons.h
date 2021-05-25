@@ -10,7 +10,9 @@
 #ifndef TEAMS_COMMONS_H
 #define TEAMS_COMMONS_H
 
-enum command_type {
+///from 1 ... client requests
+///from 100 ... client events
+typedef enum command_type {
     LOGIN = 1,
     LOGOUT,
     USERS,
@@ -55,7 +57,7 @@ enum command_type {
         ///time_t thread_timestamp,
         ///char const *thread_title,
         ///char const *thread_body);
-};
+}event_t;
 
 typedef enum use_context_level {
     NONE,
@@ -66,7 +68,18 @@ typedef enum use_context_level {
 
 typedef enum status_code {
     STATUS_OK = 200,
-    STATUS_KO = 400
+    ///int client_error_unknown_team(char const *team_uuid);
+    KO_UNKN_TEAM = 400,
+    ///int client_error_unknown_channel(char const *channel_uuid);
+    KO_UNKN_CHANNEL = 500,
+    ///int client_error_unknown_thread(char const *thread_uuid);
+    KO_UNKN_THREAD = 600,
+    ///int client_error_unknown_user(char const *user_uuid);
+    KO_UNKN_USER = 700,
+    ///int client_error_unauthorized(void);
+    KO_UNAUTHOR = 800,
+    ///int client_error_already_exist(void);
+    KO_ERROR_EXISTS = 900
 }code_t;
 
 typedef enum data_type
