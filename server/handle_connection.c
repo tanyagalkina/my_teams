@@ -37,7 +37,6 @@ static int accept_new_connection(server_t *server, fd_set *current)
     return SUCCESS;
 }
 
-
 ///maybe change it to get_request from client...
 static char *get_message_from_client(server_t *server, int fd)
 {
@@ -60,6 +59,10 @@ static char *get_message_from_client(server_t *server, int fd)
     printf("the massage in request was %s\n", req->message);
     printf("the description was %s\n", req->description);
     printf("the name was %s\n", req->name);
+    ///this was checking the client loop I will leave it for now
+    ///if (req->type == SEND)
+    ///    send(fd - 1, &req->message, MAX_BODY_LENGTH, 0);
+
 
     return strdup("haha");
     return NULL;
@@ -83,14 +86,15 @@ int add_team(server_t *server, const char *name)
 }
 
 ///generation example
-response_t generate_response()
+response_t generate_response(int fd)
 {
     response_t response;
     response.request_type = USERS; ///type of prev request which was answered
-    response.status_code = 200; /// 200 OK for example)
+    response.status_code = STATUS_OK; /// 200 OK for example)
     response.extern_body_size = 2; /// the size of data list following (if the case))
     response.extern_body_type = USER_TYPE;
     strcpy(response.message, "Very good!"); /// comment message
+
     return response;
 }
 
@@ -112,7 +116,7 @@ void handle_connection(server_t *server, int fd, fd_set *current)
     if ((sp_message = split_string(message)) == NULL)
         return;
 
-    response = generate_response(); ///normally based on the request)))
+    response = generate_response(fd); ///normally based on the request)))
     send(fd, &response, RESPONSE_SIZE, 0);
     //if ((sp_message = split_string(message)) == NULL)
     //    return;

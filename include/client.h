@@ -16,9 +16,12 @@
 #include <string.h>
 #include <uuid/uuid.h>
 #include <assert.h>
+#include <signal.h>
 #include "../include/commons.h"
 
 #define INPUT_SIZE 2048
+
+static volatile sig_atomic_t go = 1;
 
 typedef struct req
 {

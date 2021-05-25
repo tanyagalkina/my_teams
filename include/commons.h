@@ -23,7 +23,38 @@ enum command_type {
     CREATE,
     LIST,
     INFOS,
-    USE
+    USE,
+    LOGGED_IN = 100,
+    LOGGED_OUT,
+    MESSAGE_REC,
+    REPLY_REC,
+    TEAM_CREAT,
+    CHANNEL_CREAT,
+    THREAD_CREAT
+    ///int client_event_logged_in(char const *user_uuid, const char *user_name);
+    ///int client_event_logged_out(char const *user_uuid, const char *user_name);
+    ///int client_event_private_message_received(
+         ///char const *user_uuid,
+         ///char const *message_body);
+    ///int client_event_thread_reply_received(
+        ///char const *team_uuid,
+        ///char const *thread_uuid,
+        ///char const *user_uuid,
+        ///char const *reply_body);
+    ///int client_event_team_created(
+        ///char const *team_uuid,
+        ///char const *team_name,
+        ///char const *team_description);
+    ///int client_event_channel_created(
+        ///char const *channel_uuid,
+        ///char const *channel_name,
+        ///char const *channel_description);
+    ///int client_event_thread_created(
+        ///char const *thread_uuid,
+        ///char const *user_uuid,
+        ///time_t thread_timestamp,
+        ///char const *thread_title,
+        ///char const *thread_body);
 };
 
 typedef enum use_context_level {
@@ -56,6 +87,12 @@ typedef struct response {
     int extern_body_size;
     int extern_body_type;
     use_level_t level;
+    char description[255];
+    time_t timestamp;
+    char team_uuid[UUID_STR_LEN];
+    char user_uuid[UUID_STR_LEN];
+    char channel_uuid[UUID_STR_LEN];
+    char thread_uuid[UUID_STR_LEN];
 }response_t;
 
 typedef struct request {
