@@ -5,10 +5,13 @@
 ** myteams
 */
 
-#include <uuid/uuid.h>
+
 
 #ifndef TEAMS_COMMONS_H
 #define TEAMS_COMMONS_H
+
+#include <uuid/uuid.h>
+#include "server.h"
 
 ///from 1 ... client requests
 ///from 100 ... client events
@@ -26,37 +29,37 @@ typedef enum command_type {
     LIST,
     INFOS,
     USE,
-    LOGGED_IN = 100,
-    LOGGED_OUT,
-    MESSAGE_REC,
-    REPLY_REC,
-    TEAM_CREAT,
-    CHANNEL_CREAT,
-    THREAD_CREAT
     ///int client_event_logged_in(char const *user_uuid, const char *user_name);
+    LOGGED_IN = 100,
     ///int client_event_logged_out(char const *user_uuid, const char *user_name);
+    LOGGED_OUT,
     ///int client_event_private_message_received(
          ///char const *user_uuid,
          ///char const *message_body);
+    MESSAGE_REC,
     ///int client_event_thread_reply_received(
         ///char const *team_uuid,
         ///char const *thread_uuid,
         ///char const *user_uuid,
         ///char const *reply_body);
+    REPLY_REC,
     ///int client_event_team_created(
         ///char const *team_uuid,
         ///char const *team_name,
         ///char const *team_description);
+    TEAM_CREAT,
     ///int client_event_channel_created(
         ///char const *channel_uuid,
         ///char const *channel_name,
         ///char const *channel_description);
+    CHANNEL_CREAT,
     ///int client_event_thread_created(
         ///char const *thread_uuid,
         ///char const *user_uuid,
         ///time_t thread_timestamp,
         ///char const *thread_title,
         ///char const *thread_body);
+    THREAD_CREAT
 }event_t;
 
 typedef enum use_context_level {
@@ -94,13 +97,14 @@ typedef enum data_type
 
 #pragma pack(1)
 typedef struct response {
-    char message[128];
+    char message[MAX_BODY_LENGTH];
+    char name[MAX_NAME_LENGTH];
     int request_type;
     int status_code;
     int extern_body_size;
     int extern_body_type;
     use_level_t level;
-    char description[255];
+    char description[MAX_DESCRIPTION_LENGTH];
     time_t timestamp;
     char team_uuid[UUID_STR_LEN];
     char user_uuid[UUID_STR_LEN];

@@ -36,16 +36,14 @@ request_t generate_request(char *input, use_level_t *context_level)
     int i = 0;
 
     char **user_req = my_str_to_word_array(input);
-    printf("%s\n%s\n%s\n", user_req[0], user_req[1], user_req[2]);
     if (!strcmp("/help", user_req[0])) {
         show_help();
         req.type = 42;
         return req;
     }
-
     while (req_table[i].req != NULL) {
         if (!strcmp(req_table[i].req, user_req[0])) {
-            req = req_table[i].func(user_req, context_level);
+            req = req_table[i].func(user_req[0], input, context_level);
             break;
         }
         ++i;
@@ -80,8 +78,10 @@ void process_cli_request(int sd, use_level_t *context_level)
     request_t new_request;
     getline(&input, &size, stdin);
     new_request = generate_request(input, context_level);
-    if (new_request.type == 84)
+    if (new_request.type == 84) {
         printf("Your request is invalid, please see the spec\n");
+        return;
+    }
     if (new_request.type == 42)
         return;
     else

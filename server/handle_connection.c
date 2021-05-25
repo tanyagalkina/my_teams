@@ -55,7 +55,8 @@ static char *get_message_from_client(server_t *server, int fd)
     }
     request_t *req = (void *)buffer;
 
-    printf("the type of request was %d\n", req->type);
+    printf("type:%d\n", req->type);
+    printf("uuid %s\n", req->uuid);
     printf("the massage in request was %s\n", req->message);
     printf("the description was %s\n", req->description);
     printf("the name was %s\n", req->name);

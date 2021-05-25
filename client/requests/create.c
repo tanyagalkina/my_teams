@@ -7,7 +7,7 @@
 
 #include "../../include/client.h"
 
-request_t create_req(char **user_req, use_level_t *context_level)
+request_t create_req(char *user_req, char *args, use_level_t *context_level)
 {
     request_t new_req;
 
@@ -15,9 +15,9 @@ request_t create_req(char **user_req, use_level_t *context_level)
     {
         case(NONE):
             new_req.type = CREATE;
-            strcpy(new_req.name, (user_req[1]));
+            strcpy(new_req.name, "New_name");
             new_req.context_level = *context_level;
-            strcpy(new_req.description, (user_req[2]));
+            strcpy(new_req.description, "New_description");
             return new_req;
         default:
             new_req.type = 84;

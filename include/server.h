@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <sys/queue.h>
 #include <uuid/uuid.h>
+#include "common_structs.h"
 
 #define COLOR_BLUE    "\x1b[34m"
 #define COLOR_CYAN    "\x1b[36m"
@@ -78,7 +79,7 @@ typedef struct user_t {
     char name[MAX_NAME_LENGTH];     /* name of the user */
     char uuid[UUID_STR_LEN];        /* uuid of the user */
     uuid_t *subscribed_teams;       /* list of subscribed teams */
-    bool isLoggedIn;                /* true if the user is loggged in */
+    int isLoggedIn;                /* true if the user is loggged in */
 } user_t;
 
 typedef struct message_t {

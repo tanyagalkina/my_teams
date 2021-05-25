@@ -19,7 +19,8 @@
 #include <signal.h>
 #include <uuid/uuid.h>
 
-#include "../include/commons.h"
+#include "commons.h"
+#include "common_structs.h"
 #include "../libs/myteams/logging_client.h"
 
 #define INPUT_SIZE 2048
@@ -29,7 +30,7 @@ static volatile sig_atomic_t go = 1;
 typedef struct req
 {
     char *req;
-    request_t (*func)(char **, use_level_t *);
+    request_t (*func)(char *, char *, use_level_t *);
 
 }req_t;
 
@@ -42,19 +43,19 @@ typedef struct client
 
 }client_t;
 
-request_t login_req(char **user_req, use_level_t *context_level);
-request_t logout_req(char **user_req, use_level_t *context_level);
-request_t users_req(char **user_req, use_level_t *context_level);
-request_t user_req(char **user_req, use_level_t *context_level);
-request_t send_req(char **user_req, use_level_t *context_level);
-request_t messages_req(char **user_req, use_level_t *context_level);
-request_t subscribe_req(char **user_req, use_level_t *context_level);
-request_t subscribed_req(char **user_req, use_level_t *context_level);
-request_t unsubscribe_req(char **user_req, use_level_t *context_level);
-request_t create_req(char **user_req, use_level_t *context_level);
-request_t list_req(char **user_req, use_level_t *context_level);
-request_t info_req(char **user_req, use_level_t *context_level);
-request_t use_req(char **user_req, use_level_t *context_level);
+request_t login_req(char *user_req, char *args, use_level_t *context_level);
+request_t logout_req(char *user_req, char *args, use_level_t *context_level);
+request_t users_req(char *user_req, char *args, use_level_t *context_level);
+request_t user_req(char *user_req, char *args, use_level_t *context_level);
+request_t send_req(char *user_req, char *args, use_level_t *context_level);
+request_t messages_req(char *user_req, char *args, use_level_t *context_level);
+request_t subscribe_req(char *user_req, char *args, use_level_t *context_level);
+request_t subscribed_req(char *user_req, char *args, use_level_t *context_level);
+request_t unsubscribe_req(char *user_req, char *args, use_level_t *context_level);
+request_t create_req(char *user_req, char *args, use_level_t *context_level);
+request_t list_req(char *user_req, char *args, use_level_t *context_level);
+request_t info_req(char *user_req, char *args, use_level_t *context_level);
+request_t use_req(char *user_req, char *args, use_level_t *context_level);
 
 static const req_t req_table[] = {
         {"/login", &login_req},

@@ -7,7 +7,7 @@
 
 #include "../../include/client.h"
 
-request_t users_req(char **user_req, use_level_t *context_level)
+request_t users_req(char *user_req, char *args, use_level_t *context_level)
 {
     request_t new_req;
 
