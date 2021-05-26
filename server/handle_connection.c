@@ -59,17 +59,20 @@ static char *get_request_from_client(server_t *server, int fd)
             cmd_table[i].f(server, req, fd);
     }
 
-
+    ///int client_event_logged_in(char const *user_uuid, const char *user_name);
+    ///LOGGED_IN = 100,
+    response_t new_response;
+    new_response.request_type = LOGGED_IN;
+    new_response.status_code = STATUS_OK;
+    strcpy(new_response.name, (req->name));
+    strcpy(new_response.user_uuid, (get_user_by_name(server, req->name)->info->user_uuid));
+    send(fd, &new_response, RESPONSE_SIZE, 0);
     /*printf("type:#%d#\n", req->type);*/
     /*printf("uuid #%s#\n", req->uuid);*/
     /*printf("the massage in request was #%s#\n", req->message);*/
     /*printf("the description was #%s#\n", req->description);*/
     /*printf("the name was #%s#\n", req->name);*/
     ///this was checking the client loop I will leave it for now
-    if (req->type == SEND) {
-        //send(fd - 1, &req->message, MAX_BODY_LENGTH, 0);
-        printf("type was actually send\n");
-    }
     return NULL;
 }
 
