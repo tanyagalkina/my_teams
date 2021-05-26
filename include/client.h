@@ -24,6 +24,9 @@
 #include "../libs/myteams/logging_client.h"
 
 #define INPUT_SIZE 2048
+#define QUOTES      "please, include all arguments in quotes\n"
+#define BAD_INPUT   "invalid command line input\n"
+#define INVALID_UUID "invalid uuid\n"
 
 static volatile sig_atomic_t go = 1;
 
@@ -40,6 +43,9 @@ typedef struct client
     use_level_t context_level;
     fd_set master;
     fd_set reading;
+    int logged_in;
+    uuid_t own_uuid;
+    char own_name[MAX_NAME_LENGTH];
 
 }client_t;
 

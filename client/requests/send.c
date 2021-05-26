@@ -9,12 +9,15 @@
 
 request_t send_req(char *user_req, char *input, use_level_t *context_level)
 {
+    char **req_args;
     request_t new_req;
     if (!count_quotes(4, input))
-        return bad_request("please, include all the arguments in quotes\n");
-    char **req_args = get_args(input, 2);
+        return bad_request(QUOTES);
+    if (NULL == (req_args = get_args(input, 2)))
+        return bad_request(BAD_INPUT);
+
     if (is_not_valid_uuid(req_args[0]))
-        return bad_request("given uuid is not valid\n");
+        return bad_request(INVALID_UUID);
 
     strcpy(new_req.uuid, strdup(req_args[0]));
     strcpy(new_req.message, strdup(req_args[1]));
