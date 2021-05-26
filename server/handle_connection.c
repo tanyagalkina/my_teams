@@ -49,6 +49,7 @@ static char *get_request_from_client(server_t *server, int fd)
         return NULL;
 
     if (r == 0) {
+        //@todo remove the clients from the list and close the fd
         printf("the client is disconnected\n");
         return NULL;
     }

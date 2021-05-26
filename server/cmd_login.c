@@ -61,4 +61,3 @@ int cmd_login(server_t *server, request_t *req, int fd)
     }
     return add_new_user(server, req, fd);
 }
-
