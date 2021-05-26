@@ -17,6 +17,19 @@ void clean_teams(server_t **server)
         TAILQ_REMOVE(&(*server)->admin->team_head, tmp, next);
         free(tmp);
     }
+    free((*server)->admin->teams);
+}
+
+void clean_users(server_t **server)
+{
+    user_t *tmp;
+
+    while ((tmp = (user_t *)TAILQ_FIRST(&(*server)->admin->user_head))) {
+        TAILQ_REMOVE(&(*server)->admin->user_head, tmp, next);
+        free(tmp->info);
+        free(tmp);
+    }
+    free((*server)->admin->users);
 }
 
 void cleanup(server_t *server)

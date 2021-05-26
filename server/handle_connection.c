@@ -7,6 +7,7 @@
 
 #include "../include/server.h"
 #include "../include/commons.h"
+#include "../include/commands.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/queue.h>
@@ -37,36 +38,38 @@ static int accept_new_connection(server_t *server, fd_set *current)
     return SUCCESS;
 }
 
-///maybe change it to get_request from client...
-static char *get_message_from_client(server_t *server, int fd)
+static char *get_request_from_client(server_t *server, int fd)
 {
     int r;
+    request_t *req = NULL;
     char buffer[REQUEST_SIZE];
 
     memset(buffer, 0, REQUEST_SIZE);
-
-
     if ((r = read(fd, &buffer, REQUEST_SIZE)) == -1)
         return NULL;
+
     if (r == 0) {
         printf("the client is disconnected\n");
         return NULL;
     }
-    request_t *req = (void *)buffer;
+    req = (void *)buffer;
 
-    printf("type:%d\n", req->type);
-    printf("uuid %s\n", req->uuid);
-    printf("the massage in request was #%s#\n", req->message);
-    printf("the description was #%s#\n", req->description);
-    printf("the name was #%s#\n", req->name);
+    for (int i = 0; i < COMMANDS; i++) {
+        if (cmd_table[i].cmd_type == req->type)
+            cmd_table[i].f(server, req, fd);
+    }
+
+
+    /*printf("type:#%d#\n", req->type);*/
+    /*printf("uuid #%s#\n", req->uuid);*/
+    /*printf("the massage in request was #%s#\n", req->message);*/
+    /*printf("the description was #%s#\n", req->description);*/
+    /*printf("the name was #%s#\n", req->name);*/
     ///this was checking the client loop I will leave it for now
     if (req->type == SEND) {
         //send(fd - 1, &req->message, MAX_BODY_LENGTH, 0);
         printf("type was actually send\n");
     }
-
-
-    return strdup("haha");
     return NULL;
 }
 
@@ -113,7 +116,7 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         FD_SET(fd, current);
         return;
     }
-    if ((message = get_message_from_client(server, fd)) == NULL)
+    if ((message = get_request_from_client(server, fd)) == NULL)
         return;
     if ((sp_message = split_string(message)) == NULL)
         return;

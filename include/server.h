@@ -64,8 +64,10 @@ typedef struct team_t {
 } team_t;
 
 typedef struct user_t {
+    TAILQ_ENTRY(user_t) next;       /* 'linked list next pointer */
     uuid_t *subscribed_teams;       /* list of subscribed teams */
     user_info_t *info;
+    int current_fd;                 /* keeps track of the current fd */
 } user_t;
 
 typedef struct message_t {
@@ -123,5 +125,9 @@ void save_data(server_t *server);
 
 /* restore_data.c */
 void restore_data(server_t *server);
+
+/* get_user_by.c */
+user_t *get_user_by_fd(server_t *server, int fd);
+user_t *get_user_by_name(server_t *server, const char *name);
 
 #endif //SERVER_H_

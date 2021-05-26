@@ -20,11 +20,24 @@ static int setup_teams(server_t **server)
     return SUCCESS;
 }
 
+static int setup_users(server_t **server)
+{
+    if (((*server)->admin->users = malloc(sizeof(user_t))) == NULL)
+        return FAILURE;
+
+    memset((*server)->admin->users, 0, sizeof(user_t));
+
+    TAILQ_INIT(&(*server)->admin->user_head);
+    return SUCCESS;
+}
+
 server_t *setup_server(server_t *server)
 {
     if ((server->admin = (admin_t *)malloc(sizeof(admin_t))) == NULL)
         return NULL;
     if (setup_teams(&server) == FAILURE)
+        return NULL;
+    if (setup_users(&server) == FAILURE)
         return NULL;
 
     return server;

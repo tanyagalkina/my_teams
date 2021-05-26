@@ -34,6 +34,9 @@ SERVER_SRC 		= 	server/main.c 				\
 					server/run_server.c			\
 					server/save_data.c			\
 					server/restore_data.c		\
+					server/cmd_login.c			\
+					server/get_user_by.c		\
+					server/cmd_logout.c			\
 
 CLIENT_NAME 	= 	myteams_cli
 
