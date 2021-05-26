@@ -79,7 +79,8 @@ void process_cli_request(int sd, use_level_t *context_level)
     getline(&input, &size, stdin);
     new_request = generate_request(input, context_level);
     if (new_request.type == 84) {
-        printf("Your request is invalid, please see the spec\n");
+        printf("Your request is invalid\n");
+        printf(new_request.message);
         return;
     }
     if (new_request.type == 42)
