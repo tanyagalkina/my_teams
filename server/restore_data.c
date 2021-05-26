@@ -23,7 +23,10 @@ static void restore_teams(server_t *server)
     while (getline(&line, &len, file) != -1) {
         if ((new_team = (team_t *)malloc(sizeof(team_t))) == NULL)
             return;
-        sscanf(line, "uuid:%36[^,],name:%32[^,]", new_team->uuid, new_team->name);
+        if ((new_team->info = (team_info_t *)malloc(sizeof(team_info_t))) == NULL)
+            return;
+
+        sscanf(line, "uuid:%36[^,],name:%32[^,]", new_team->info->team_uuid, new_team->info->team_name);
         TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
     }
     fclose(file);

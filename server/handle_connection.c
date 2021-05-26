@@ -80,8 +80,8 @@ int add_team(server_t *server, const char *name)
     if ((new_team = (team_t *)malloc(sizeof(team_t))) == NULL)
         return FAILURE;
 
-    strcpy(new_team->name, name);
-    uuid_unparse(binuuid, new_team->uuid);
+    strcpy(new_team->info->team_name, name);
+    uuid_unparse(binuuid, new_team->info->team_uuid);
 
     TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
     return SUCCESS;
