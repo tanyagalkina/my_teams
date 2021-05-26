@@ -52,7 +52,8 @@ CLIENT_SRC 		= 	client/main.c 				\
 					client/requests/unsubscribe.c	\
 					client/requests/use.c		\
 					client/requests/user.c		\
-					client/requests/users.c
+					client/requests/users.c		\
+					client/requests/request_tools.c
 
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)

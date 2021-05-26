@@ -78,4 +78,10 @@ void set_signals(void);
 void enjoy_the_client(client_t *client_stuff);
 char **my_str_to_word_array(char const *str);
 
+///request_tools.c
+int is_not_valid_uuid(char *str);
+int count_quotes(int nb_quotes, char *input);
+request_t bad_request(char *comment);
+char **get_args(char *input, int nb_args);
+
 #endif //TEAMS_CLIENT_H
