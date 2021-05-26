@@ -5,14 +5,14 @@
 ** handle_connection
 */
 
-#include "../include/server.h"
-#include "../include/commons.h"
 #include "../include/commands.h"
+#include "../include/commons.h"
+#include "../include/server.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/queue.h>
 #include <unistd.h>
-#include <stdio.h>
 
 static int accept_new_connection(server_t *server, fd_set *current)
 {
@@ -28,17 +28,10 @@ static int accept_new_connection(server_t *server, fd_set *current)
         return FAILURE;
 
     FD_SET(client_fd, current);
-
-    //@todo add user here
-    /*user_t *user = create_user(client_fd);*/
-    /*if (user == NULL)*/
-        /*return FAILURE;*/
-
-    /*server->users = server_add_user(server, user);*/
     return SUCCESS;
 }
 
-static char *get_request_from_client(server_t *server, int fd)
+static int get_request_from_client(server_t *server, int fd)
 {
     int r;
     request_t *req = NULL;
@@ -46,12 +39,12 @@ static char *get_request_from_client(server_t *server, int fd)
 
     memset(buffer, 0, REQUEST_SIZE);
     if ((r = read(fd, &buffer, REQUEST_SIZE)) == -1)
-        return NULL;
+        return SUCCESS;
 
     if (r == 0) {
-        //@todo remove the clients from the list and close the fd
-        printf("the client is disconnected\n");
-        return NULL;
+        server_debug_print(INFO, "a client disconnected");
+        get_user_by_fd(server, fd)->info->user_status = LOGGED_OUT;
+        return FAILURE;
     }
     req = (void *)buffer;
 
@@ -59,60 +52,11 @@ static char *get_request_from_client(server_t *server, int fd)
         if (cmd_table[i].cmd_type == req->type)
             cmd_table[i].f(server, req, fd);
     }
-
-    ///int client_event_logged_in(char const *user_uuid, const char *user_name);
-    ///LOGGED_IN = 100,
-    response_t new_response;
-    new_response.request_type = LOGGED_IN;
-    new_response.status_code = STATUS_OK;
-    strcpy(new_response.name, (req->name));
-    strcpy(new_response.user_uuid, (get_user_by_name(server, req->name)->info->user_uuid));
-    send(fd, &new_response, RESPONSE_SIZE, 0);
-    /*printf("type:#%d#\n", req->type);*/
-    /*printf("uuid #%s#\n", req->uuid);*/
-    /*printf("the massage in request was #%s#\n", req->message);*/
-    /*printf("the description was #%s#\n", req->description);*/
-    /*printf("the name was #%s#\n", req->name);*/
-    ///this was checking the client loop I will leave it for now
-    return NULL;
-}
-
-/* this is just a template to show easy use of uuid and the TAILQ stuff */
-int add_team(server_t *server, const char *name)
-{
-    uuid_t binuuid;
-    team_t *new_team = NULL;
-
-    uuid_generate_random(binuuid);
-    if ((new_team = (team_t *)malloc(sizeof(team_t))) == NULL)
-        return FAILURE;
-
-    strcpy(new_team->info->team_name, name);
-    uuid_unparse(binuuid, new_team->info->team_uuid);
-
-    TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
     return SUCCESS;
-}
-
-///generation example
-response_t generate_response(int fd)
-{
-    response_t response;
-    response.request_type = USERS; ///type of prev request which was answered
-    response.status_code = STATUS_OK; /// 200 OK for example)
-    response.extern_body_size = 2; /// the size of data list following (if the case))
-    response.extern_body_type = USER_TYPE;
-    strcpy(response.message, "Very good!"); /// comment message
-
-    return response;
 }
 
 void handle_connection(server_t *server, int fd, fd_set *current)
 {
-    char *message = NULL;
-    char **sp_message = NULL;
-    response_t response;
-
     if (fd == server->fd) {
         if (accept_new_connection(server, current) == FAILURE)
             return;
@@ -120,24 +64,8 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         FD_SET(fd, current);
         return;
     }
-    if ((message = get_request_from_client(server, fd)) == NULL)
-        return;
-    if ((sp_message = split_string(message)) == NULL)
-        return;
-
-    response = generate_response(fd); ///normally based on the request)))
-    send(fd, &response, RESPONSE_SIZE, 0);
-    //if ((sp_message = split_string(message)) == NULL)
-    //    return;
-    /*team_t *tmp;
-    if (strcmp(sp_message[0], "ls") == 0) {
-        TAILQ_FOREACH(tmp, &server->admin->team_head, next) {
-            printf("uuid: %s, name: %s\n", tmp->uuid, tmp->name);
-        }
-    } else {
-        add_team(server, sp_message[0]);
+    if (get_request_from_client(server, fd) == FAILURE) {
+        close(fd);
+        FD_CLR(fd, current);
     }
-
-    free_2d(sp_message);
-    free(message);*/
 }
