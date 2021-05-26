@@ -15,6 +15,7 @@
 
 ///from 1 ... client requests
 ///from 100 ... client events
+/* maybe split those up into request and events and then name them properly */
 typedef enum command_type {
     LOGIN = 1,
     LOGOUT,
@@ -63,6 +64,7 @@ typedef enum command_type {
     THREAD_CREAT
 }event_t;
 
+/* name these something like UCL_UNDEFINED ...*/
 typedef enum use_context_level {
     UNDEFINED,
     NONE,
@@ -71,6 +73,7 @@ typedef enum use_context_level {
     THREAD
 }use_level_t;
 
+/* name these something like ST_OK, ST_UNKN_TEAM ...*/
 typedef enum status_code {
     STATUS_OK = 200,
     ///int client_error_unknown_team(char const *team_uuid);
@@ -87,6 +90,7 @@ typedef enum status_code {
     KO_ERROR_EXISTS = 900
 }code_t;
 
+/* name these something like DT_USER, DT_MESSAGE ... */
 typedef enum data_type
 {
     USER_TYPE = 1, ///names only

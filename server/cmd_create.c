@@ -10,6 +10,7 @@
 #include "../libs/myteams/logging_server.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/queue.h>
 
 int cmd_create(server_t *server, request_t *req, int fd)
