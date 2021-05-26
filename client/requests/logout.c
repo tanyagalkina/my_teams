@@ -7,9 +7,10 @@
 
 #include "../../include/client.h"
 
-request_t logout_req(char *user_req, char *args, use_level_t *context_level)
+request_t logout_req(char *user_req, char *args, client_t *cl)
 {
     request_t new_req;
+    (void)cl;
 
     new_req.type = LOGOUT;
     return new_req;

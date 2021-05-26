@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     if (sock == -1)
         return (84);
     client_stuff->sd = sock;
-    client_stuff->context_level = NONE;
+    client_stuff->context.context_level = UNDEFINED;
     FD_ZERO(&client_stuff->master);
     FD_ZERO(&client_stuff->reading);
     FD_SET(sock, &client_stuff->master);

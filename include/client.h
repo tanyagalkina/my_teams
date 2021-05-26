@@ -27,20 +27,22 @@
 #define QUOTES      "please, include all arguments in quotes\n"
 #define BAD_INPUT   "invalid command line input\n"
 #define INVALID_UUID "invalid uuid\n"
+#define NO_USE "please, define the context with /use command\n"
 
 static volatile sig_atomic_t go = 1;
 
-typedef struct req
-{
-    char *req;
-    request_t (*func)(char *, char *, use_level_t *);
 
-}req_t;
+typedef struct context {
+    use_level_t context_level;
+    char team_uuid[UUID_STR_LEN];
+    char channel_uuid[UUID_STR_LEN];
+    char thread_uuid[UUID_STR_LEN];
+}context_t;
 
 typedef struct client
 {
     int sd;
-    use_level_t context_level;
+    context_t context;
     fd_set master;
     fd_set reading;
     int logged_in;
@@ -49,19 +51,26 @@ typedef struct client
 
 }client_t;
 
-request_t login_req(char *user_req, char *args, use_level_t *context_level);
-request_t logout_req(char *user_req, char *args, use_level_t *context_level);
-request_t users_req(char *user_req, char *args, use_level_t *context_level);
-request_t user_req(char *user_req, char *args, use_level_t *context_level);
-request_t send_req(char *user_req, char *args, use_level_t *context_level);
-request_t messages_req(char *user_req, char *args, use_level_t *context_level);
-request_t subscribe_req(char *user_req, char *args, use_level_t *context_level);
-request_t subscribed_req(char *user_req, char *args, use_level_t *context_level);
-request_t unsubscribe_req(char *user_req, char *args, use_level_t *context_level);
-request_t create_req(char *user_req, char *args, use_level_t *context_level);
-request_t list_req(char *user_req, char *args, use_level_t *context_level);
-request_t info_req(char *user_req, char *args, use_level_t *context_level);
-request_t use_req(char *user_req, char *args, use_level_t *context_level);
+typedef struct req
+{
+    char *req;
+    request_t (*func)(char *, char *, client_t *);
+
+}req_t;
+
+request_t login_req(char *user_req, char *args, client_t *cl);
+request_t logout_req(char *user_req, char *args, client_t *cl);
+request_t users_req(char *user_req, char *args, client_t *cl);
+request_t user_req(char *user_req, char *args, client_t *cl);
+request_t send_req(char *user_req, char *args, client_t *cl);
+request_t messages_req(char *user_req, char *args, client_t *cl);
+request_t subscribe_req(char *user_req, char *args, client_t *cl);
+request_t subscribed_req(char *user_req, char *args, client_t *cl);
+request_t unsubscribe_req(char *user_req, char *args, client_t *cl);
+request_t create_req(char *user_req, char *args, client_t *cl);
+request_t list_req(char *user_req, char *args, client_t *cl);
+request_t info_req(char *user_req, char *args, client_t *cl);
+request_t use_req(char *user_req, char *args, client_t *cl);
 
 static const req_t req_table[] = {
         {"/login", &login_req},

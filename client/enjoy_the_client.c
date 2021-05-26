@@ -30,7 +30,7 @@ void show_help()
 }
 
 ///if the input is invalid returns request of type 84))
-request_t generate_request(char *input, use_level_t *context_level)
+request_t generate_request(char *input, client_t *cl)
 {
     request_t req;
     int i = 0;
@@ -43,7 +43,7 @@ request_t generate_request(char *input, use_level_t *context_level)
     }
     while (req_table[i].req != NULL) {
         if (!strcmp(req_table[i].req, user_req[0])) {
-            req = req_table[i].func(user_req[0], input, context_level);
+            req = req_table[i].func(user_req[0], input, cl);
             break;
         }
         ++i;
@@ -63,7 +63,6 @@ void sig_handler(int sig)
     go = 0;
 }
 
-
 void set_signals(void)
 {
     signal(SIGINT, sig_handler);
@@ -71,20 +70,22 @@ void set_signals(void)
     signal(SIGTERM, sig_handler);
 }
 
-void process_cli_request(int sd, use_level_t *context_level)
+void process_cli_request(int sd, client_t *cl)
 {
     size_t size = INPUT_SIZE;
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
     getline(&input, &size, stdin);
-    new_request = generate_request(input, context_level);
+    new_request = generate_request(input, cl);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
         printf(new_request.message);
         return;
     }
-    if (new_request.type == 42)
+    if (new_request.type == 42 || new_request.type == USE) {
+        printf("the request type was use if not help\n");
         return;
+    }
     else
         send(sd, &new_request, sizeof(request_t), 0);
 }
@@ -103,7 +104,7 @@ void enjoy_the_client(client_t *cl)
         for (int i = 0; i < (cl->sd + 1); i++) {
             if (FD_ISSET(i, &cl->reading)) {
                 if (i == 0)
-                    process_cli_request(cl->sd, &cl->context_level);
+                    process_cli_request(cl->sd, cl);
                 else {
                     valread = read(cl->sd, &buffer, RESPONSE_SIZE);
                     process_resp_or_event(cl->sd, buffer, valread);

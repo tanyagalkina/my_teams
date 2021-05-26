@@ -7,11 +7,13 @@
 
 #include "../../include/client.h"
 
-request_t login_req(char *user_req, char *input, use_level_t *context_level)
+request_t login_req(char *user_req, char *input, client_t *cl)
 {
     request_t new_req;
+    (void)cl;
+
     if (!count_quotes(2, input))
-        return bad_request("please, include all the arguments in quotes\n");
+        return bad_request(QUOTES);
     char **req_args = get_args(input, 1);
 
     new_req.type = LOGIN;

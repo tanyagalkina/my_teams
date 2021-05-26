@@ -64,6 +64,7 @@ typedef enum command_type {
 }event_t;
 
 typedef enum use_context_level {
+    UNDEFINED,
     NONE,
     TEAM,
     CHANNEL,
@@ -119,7 +120,10 @@ typedef struct request {
     char name[32];
     char description[255];
     char message[512];
-    char uuid[UUID_STR_LEN];
+    char team_uuid[UUID_STR_LEN];
+    char user_uuid[UUID_STR_LEN];
+    char channel_uuid[UUID_STR_LEN];
+    char thread_uuid[UUID_STR_LEN];
 }request_t;
 #pragma pack(0)
 
