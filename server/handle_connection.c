@@ -40,7 +40,6 @@ static int accept_new_connection(server_t *server, fd_set *current)
 ///maybe change it to get_request from client...
 static char *get_message_from_client(server_t *server, int fd)
 {
-    //@todo get the struct from the user + parse it or something idk
     int r;
     char buffer[REQUEST_SIZE];
 
@@ -57,12 +56,14 @@ static char *get_message_from_client(server_t *server, int fd)
 
     printf("type:%d\n", req->type);
     printf("uuid %s\n", req->uuid);
-    printf("the massage in request was %s\n", req->message);
-    printf("the description was %s\n", req->description);
-    printf("the name was %s\n", req->name);
+    printf("the massage in request was #%s#\n", req->message);
+    printf("the description was #%s#\n", req->description);
+    printf("the name was #%s#\n", req->name);
     ///this was checking the client loop I will leave it for now
-    ///if (req->type == SEND)
-    ///    send(fd - 1, &req->message, MAX_BODY_LENGTH, 0);
+    if (req->type == SEND) {
+        //send(fd - 1, &req->message, MAX_BODY_LENGTH, 0);
+        printf("type was actually send\n");
+    }
 
 
     return strdup("haha");

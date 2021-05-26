@@ -22,9 +22,6 @@
 #define COLOR_RESET   "\x1b[0m"
 #define COLOR_YELLOW  "\x1b[33m"
 
-#define MAX_NAME_LENGTH 32
-#define MAX_DESCRIPTION_LENGTH 255
-#define MAX_BODY_LENGTH 512
 #define SERVER_BACKLOG 10
 #define FAILURE 1
 #define SUCCESS 0
@@ -43,50 +40,37 @@ static const char debug_state_print[3][10] = {
 
 typedef struct comment_t {
     TAILQ_ENTRY(comment_t) next;
-    char author_name[MAX_NAME_LENGTH];          /* name of the author */
-    char body[MAX_BODY_LENGTH];                 /* message */
-    time_t timestamp;                           /* timestamp of creation */
+    reply_info_t *info;
 } comment_t;
 
 typedef struct thread_t {
     TAILQ_ENTRY(thread_t) next;
-    char author_name[MAX_NAME_LENGTH];          /* name of the thread author */
-    char title[MAX_DESCRIPTION_LENGTH];         /* title of the thread */
-    char body[MAX_BODY_LENGTH];                 /* message of the thread */
-    time_t timestamp;                           /* timestamp of creation */
+    thread_info_t *info;
     comment_t *comments;                        /* list of comment */
     TAILQ_HEAD(, comment_t) comments_head;      /* comments of this thread */
 } thread_t;
 
 typedef struct channel_t {
     TAILQ_ENTRY(channel_t) next;
-    char name[MAX_NAME_LENGTH];                 /* name of the channel */
-    char uuid[UUID_STR_LEN];                    /* uuid of the channel */
-    char description[MAX_DESCRIPTION_LENGTH];   /* description of channel */
+    channel_info_t *info;
     TAILQ_HEAD(, thread_t) thread_head;         /* list of threads */
 } channel_t;
 
 typedef struct team_t {
     TAILQ_ENTRY(team_t) next;
-    char name[MAX_NAME_LENGTH];                 /* name of the team */
-    char uuid[UUID_STR_LEN];                    /* uuid of the team */
-    char description[MAX_DESCRIPTION_LENGTH];   /* description of the team */
+    team_info_t *info;
     channel_t *channels;                        /* list of channels */
     TAILQ_HEAD(, channel_t) channel_head;
 } team_t;
 
 typedef struct user_t {
-    char name[MAX_NAME_LENGTH];     /* name of the user */
-    char uuid[UUID_STR_LEN];        /* uuid of the user */
     uuid_t *subscribed_teams;       /* list of subscribed teams */
-    int isLoggedIn;                /* true if the user is loggged in */
+    user_info_t *info;
 } user_t;
 
 typedef struct message_t {
     TAILQ_ENTRY(message_t) next;    /* 'linked list next pointer */
-    time_t timestamp;               /* timestamp of the message */
-    char from[UUID_STR_LEN];        /* uuid of the sender */
-    char body[MAX_BODY_LENGTH];     /* body of the message */
+    private_message_info_t *info;
 } message_t;
 
 typedef struct direct_message_t {
