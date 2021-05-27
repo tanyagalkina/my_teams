@@ -1,8 +1,8 @@
 ##
-## EPITECH PROJECT, 2019
-## d
+## EPITECH PROJECT, 2020
+## Makefile
 ## File description:
-## d
+## Makes
 ##
 
 END        		= \033[0m
@@ -58,7 +58,8 @@ CLIENT_SRC 		= 	client/main.c 				\
 					client/requests/use.c		\
 					client/requests/user.c		\
 					client/requests/users.c		\
-					client/requests/request_tools.c
+					client/requests/request_tools.c		\
+					client/event_prints/response_print_wrapper.c
 
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)

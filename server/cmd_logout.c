@@ -56,7 +56,6 @@ int cmd_logout(server_t *server, request_t *req, int fd)
             user->fds[i] = 0;
         }
     }
-    /*printf("name of logout: %s\n", req->name);*/
     if (!is_still_logged_in(user))
         user->info->user_status = US_LOGGED_OUT;
     server_event_user_logged_out(user->info->user_uuid);

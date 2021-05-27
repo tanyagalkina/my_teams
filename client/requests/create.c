@@ -15,7 +15,7 @@ static request_t create_reply(char *input, client_t *cl)
     if (NULL == (req_args = get_args(input, 1)))
         return (bad_request(BAD_INPUT));
     new_req.type = CT_CREATE;
-    new_req.context_level = THREAD;
+    new_req.context_level = REPLY;
     strcpy(new_req.message, req_args[0]);
     strcpy(new_req.team_uuid, cl->context.team_uuid);
     strcpy(new_req.channel_uuid, cl->context.channel_uuid);
@@ -31,7 +31,7 @@ static request_t create_thread(char *input, client_t *cl)
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
     new_req.type = CT_CREATE;
-    new_req.context_level = CHANNEL;
+    new_req.context_level = THREAD;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);
     strcpy(new_req.team_uuid, cl->context.team_uuid);
@@ -47,7 +47,7 @@ static request_t create_channel(char *input, client_t *cl)
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
     new_req.type = CT_CREATE;
-    new_req.context_level = TEAM;
+    new_req.context_level = CHANNEL;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);
     strcpy(new_req.team_uuid, cl->context.team_uuid);
@@ -62,7 +62,7 @@ static request_t create_team(char *input)
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
     new_req.type = CT_CREATE;
-    new_req.context_level = NONE;
+    new_req.context_level = TEAM;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);
     return new_req;
@@ -72,21 +72,21 @@ request_t create_req(char *user_req, char *input, client_t *cl)
 {
     switch (cl->context.context_level)
     {
-        case (NONE):
-            printf("the context level was NONE\n");
-            cl->context.context_level = UNDEFINED;
-            return create_team(input);
         case (TEAM):
             printf("the context level was TEAM\n");
             cl->context.context_level = UNDEFINED;
-            return create_channel(input, cl);
+            return create_team(input);
         case (CHANNEL):
             printf("the context level was CHANNEL\n");
             cl->context.context_level = UNDEFINED;
-            return create_thread(input, cl);
-            break;
+            return create_channel(input, cl);
         case (THREAD):
             printf("the context level was THREAD\n");
+            cl->context.context_level = UNDEFINED;
+            return create_thread(input, cl);
+            break;
+        case (REPLY):
+            printf("the context level was REPLY\n");
             cl->context.context_level = UNDEFINED;
             return create_reply(input, cl);
             break;

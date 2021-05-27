@@ -9,40 +9,21 @@
 
 void process_resp_or_event(int sd, char *buffer, int valread)
 {
-    //prinf("the response was : %s\n", buffer);
-    char user_buffer[sizeof(user_info_t)];
-
-    if (valread < 0)
-    {
-        printf("C + d\n");
-    }
     if (valread == 0) {
         printf("our server is gone on vacation, what a pitty...\n");
         go = 0;
         return;
     }
     response_t *resp = (void *)buffer;
-    switch (resp->request_type) {
-        //case (CT_LOGIN):
 
-        case (ET_LOGGED_IN):
-            client_event_logged_in(resp->user_uuid, resp->name);
+    int i = 0;
+    while (event_table[i].event != 0) {
+        if (event_table[i].event == resp->request_type) {
+            event_table[i].func(sd, resp);
             break;
-        case (ET_LOGGED_OUT):
-            client_event_logged_out(resp->user_uuid, resp->name);
-            break;
-        case (CT_USERS):
-            for (int i = 0; i < resp->extern_body_size; ++i) {
-                read(sd, &user_buffer, sizeof(user_info_t));
-                user_info_t *user = (void *)user_buffer;
-                client_print_users(user->user_uuid, user->user_name, user->user_status);
-            }
-            break;
+        }
+        ++i;
     }
-    /*printf("the request type was: %d\n", resp->request_type);
-    printf("the response code was: %d\n", resp->status_code);
-    printf("the message was: %s\n", resp->message);
-    client_print_channel("uuid", resp->message, resp->description);*/
 }
 
 void show_help()
@@ -117,15 +98,13 @@ void process_cli_request(int sd, client_t *cl)
         send(sd, &new_request, sizeof(request_t), 0);
 }
 
-void enjoy_the_client(client_t *cl)
+int enjoy_the_client(client_t *cl)
 {
-    int valread = 0;
-    char buffer[RESPONSE_SIZE];
     while (go) {
         cl->reading = cl->master;
         if (select(cl->sd + 1, &cl->reading, NULL, NULL, NULL) < 0) {
             if (go)
-                exit(84);
+                return (84);
             else continue;
         }
         for (int i = 0; i < (cl->sd + 1); i++) {
@@ -133,12 +112,13 @@ void enjoy_the_client(client_t *cl)
                 if (i == 0)
                     process_cli_request(cl->sd, cl);
                 else {
-                    valread = read(cl->sd, &buffer, RESPONSE_SIZE);
-                    process_resp_or_event(cl->sd, buffer, valread);
-                    memset(buffer, 0, RESPONSE_SIZE);
+                    cl->bytes_read = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
+                    process_resp_or_event(cl->sd, cl->re_buffer, cl->bytes_read);
+                    memset(cl->re_buffer, 0, RESPONSE_SIZE);
                 }
             }
         }
     }
     printf("here i would free the stuff... but what?\n");
+    return (0);
 }

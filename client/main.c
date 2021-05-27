@@ -68,6 +68,18 @@ int do_connection(char *ip, int port)
     return sock;
 }
 
+void init_client_stuff(client_t *client_stuff, int sock)
+{
+    client_stuff->sd = sock;
+    client_stuff->context.context_level = UNDEFINED;
+    client_stuff->bytes_read = 0;
+    client_stuff->own_name[0] = '\0';
+    FD_ZERO(&client_stuff->master);
+    FD_ZERO(&client_stuff->reading);
+    FD_SET(sock, &client_stuff->master);
+    FD_SET(0, &client_stuff->master);
+}
+
 int main(int argc, char **argv)
 {
     int sock;
@@ -76,13 +88,8 @@ int main(int argc, char **argv)
     sock = do_connection(argv[1], atoi(argv[2]));
     if (sock == -1)
         return (84);
-    client_stuff->sd = sock;
-    client_stuff->context.context_level = UNDEFINED;
-    FD_ZERO(&client_stuff->master);
-    FD_ZERO(&client_stuff->reading);
-    FD_SET(sock, &client_stuff->master);
-    FD_SET(0, &client_stuff->master);
+    init_client_stuff(client_stuff, sock);
     set_signals();
-    enjoy_the_client(client_stuff);
-    return 0;
+    return (enjoy_the_client(client_stuff));
+    //return 0;
 }

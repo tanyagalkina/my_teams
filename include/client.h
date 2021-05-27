@@ -21,6 +21,7 @@
 
 #include "commons.h"
 #include "common_structs.h"
+#include "events_reponses.h"
 #include "../libs/myteams/logging_client.h"
 
 #define INPUT_SIZE 2048
@@ -28,6 +29,7 @@
 #define BAD_INPUT   "invalid command line input\n"
 #define INVALID_UUID "invalid uuid\n"
 #define NO_USE "please, define the context with /use command\n"
+#define ONE_USER "only one user can use the console\n"
 
 static volatile sig_atomic_t go = 1;
 
@@ -47,7 +49,9 @@ typedef struct client
     fd_set reading;
     int logged_in;
     uuid_t own_uuid;
+    int bytes_read;
     char own_name[MAX_NAME_LENGTH];
+    char re_buffer[RESPONSE_SIZE];
 
 }client_t;
 
@@ -89,8 +93,30 @@ static const req_t req_table[] = {
         {NULL, NULL}
 };
 
+/*typedef struct event_print
+{
+    event_t event;
+    void (*func)(int sd, response_t *response);
+
+}event_print_t;
+
+void ct_login_print(int sd, response_t *response);
+void ct_logout_print(int sd, response_t *response);
+void ct_users_print(int sd, response_t *response);
+void ct_user_print(int sd, response_t *response);
+
+static const event_print_t event_table[] = {
+        //{CT_LOGIN,  &ct_login_print},
+        //{CT_LOGOUT, &ct_logout_print},
+        {ET_LOGGED_IN, &et_logged_in_print},
+        {ET_LOGGED_OUT, &et_logged_out_print},
+        {CT_USERS, &ct_users_print},
+        {CT_USER, &ct_user_print},
+        {0, NULL}
+};*/
+
 void set_signals(void);
-void enjoy_the_client(client_t *client_stuff);
+int enjoy_the_client(client_t *client_stuff);
 char **my_str_to_word_array(char const *str);
 
 ///request_tools.c

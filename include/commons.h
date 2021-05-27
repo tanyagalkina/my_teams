@@ -67,10 +67,10 @@ typedef enum command_type {
 /* name these something like UCL_UNDEFINED ...*/
 typedef enum use_context_level {
     UNDEFINED,
-    NONE,
     TEAM,
     CHANNEL,
-    THREAD
+    THREAD,
+    REPLY
 }use_level_t;
 
 /* name these something like ST_OK, ST_UNKN_TEAM ...*/
