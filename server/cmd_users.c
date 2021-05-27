@@ -32,15 +32,27 @@ static void send_status(server_t *server, int fd)
     send(fd, &r, RESPONSE_SIZE, 0);
 }
 
+static void send_each(user_info_t *info, int fd)
+{
+    user_info_t u;
+
+    strcpy(u.user_name, info->user_name);
+    strcpy(u.user_uuid, info->user_uuid);
+    u.user_status = info->user_status;
+
+    send(fd, &u, sizeof(user_info_t), 0);
+}
+
 static void send_response(server_t *server, int fd)
 {
     user_t *user = NULL;
     response_t r;
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        r.status_code = STATUS_OK;
-        strcpy(r.name, user->info->user_name);
-        send(fd, &r, RESPONSE_SIZE, 0);
+        /*r.status_code = STATUS_OK;*/
+        /*strcpy(r.name, user->info->user_name);*/
+        /*send(fd, &r, RESPONSE_SIZE, 0);*/
+        send_each(user->info, fd);
     }
 }
 
