@@ -9,8 +9,13 @@
 
 void process_resp_or_event(int sd, char *buffer, int valread)
 {
+    //prinf("the response was : %s\n", buffer);
     char user_buffer[sizeof(user_info_t)];
 
+    if (valread < 0)
+    {
+        printf("C + d\n");
+    }
     if (valread == 0) {
         printf("our server is gone on vacation, what a pitty...\n");
         go = 0;
@@ -76,7 +81,6 @@ request_t generate_request(char *input, client_t *cl)
 
 void sig_handler(int sig)
 {
-    printf("the sidnal was %d", sig);
     write(1, "\nGoodbye!\n", 10);
     //exit(0);
     go = 0;
@@ -94,7 +98,11 @@ void process_cli_request(int sd, client_t *cl)
     size_t size = INPUT_SIZE;
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
-    getline(&input, &size, stdin);
+    if (getline(&input, &size, stdin) == -1) {
+        printf ("Goodbye!\n");
+        go = 0;
+        return;
+    }
     new_request = generate_request(input, cl);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
