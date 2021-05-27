@@ -9,6 +9,8 @@
 
 void process_resp_or_event(int sd, char *buffer, int valread)
 {
+    char user_buffer[sizeof(user_info_t)];
+
     if (valread == 0) {
         printf("our server is gone on vacation, what a pitty...\n");
         go = 0;
@@ -18,11 +20,17 @@ void process_resp_or_event(int sd, char *buffer, int valread)
     switch (resp->request_type) {
         case (LOGGED_IN):
             client_event_logged_in(resp->user_uuid, resp->name);
+            break;
         case (LOGGED_OUT):
             client_event_logged_out(resp->user_uuid, resp->name);
-        //case (USERS):
-        //    resp->extern_body_size
-
+            break;
+        case (USERS):
+            for (int i = 0; i < resp->extern_body_size; ++i) {
+                read(sd, &user_buffer, sizeof(user_info_t));
+                user_info_t *user = (void *)user_buffer;
+                client_print_users(user->user_uuid, user->user_name, user->user_status);
+            }
+            break;
     }
     /*printf("the request type was: %d\n", resp->request_type);
     printf("the response code was: %d\n", resp->status_code);
