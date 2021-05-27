@@ -15,10 +15,19 @@ void process_resp_or_event(int sd, char *buffer, int valread)
         return;
     }
     response_t *resp = (void *)buffer;
-    printf("the request type was: %d\n", resp->request_type);
+    switch (resp->request_type) {
+        case (LOGGED_IN):
+            client_event_logged_in(resp->user_uuid, resp->name);
+        case (LOGGED_OUT):
+            client_event_logged_out(resp->user_uuid, resp->name);
+        //case (USERS):
+        //    resp->extern_body_size
+
+    }
+    /*printf("the request type was: %d\n", resp->request_type);
     printf("the response code was: %d\n", resp->status_code);
     printf("the message was: %s\n", resp->message);
-    client_print_channel("uuid", resp->message, resp->description);
+    client_print_channel("uuid", resp->message, resp->description);*/
 }
 
 void show_help()
