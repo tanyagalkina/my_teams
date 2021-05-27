@@ -14,7 +14,7 @@ static request_t create_reply(char *input, client_t *cl)
 
     if (NULL == (req_args = get_args(input, 1)))
         return (bad_request(BAD_INPUT));
-    new_req.type = CREATE;
+    new_req.type = CT_CREATE;
     new_req.context_level = THREAD;
     strcpy(new_req.message, req_args[0]);
     strcpy(new_req.team_uuid, cl->context.team_uuid);
@@ -30,7 +30,7 @@ static request_t create_thread(char *input, client_t *cl)
 
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
-    new_req.type = CREATE;
+    new_req.type = CT_CREATE;
     new_req.context_level = CHANNEL;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);
@@ -46,7 +46,7 @@ static request_t create_channel(char *input, client_t *cl)
 
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
-    new_req.type = CREATE;
+    new_req.type = CT_CREATE;
     new_req.context_level = TEAM;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);
@@ -61,7 +61,7 @@ static request_t create_team(char *input)
 
     if (NULL == (req_args = get_args(input, 2)))
         return (bad_request(BAD_INPUT));
-    new_req.type = CREATE;
+    new_req.type = CT_CREATE;
     new_req.context_level = NONE;
     strcpy(new_req.name, req_args[0]);
     strcpy(new_req.description, req_args[1]);

@@ -11,6 +11,6 @@ request_t info_req(char *user_req, char *args, client_t *cl)
 {
     request_t new_req;
 
-    new_req.type = INFOS;
+    new_req.type = CT_INFO;
     return new_req;
 }

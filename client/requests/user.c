@@ -18,7 +18,7 @@ request_t user_req(char *user_req, char *input, client_t *cl)
     if (NULL == (req_args = get_args(input, 1)))
         return bad_request(BAD_INPUT);
 
-    new_req.type = USER;
+    new_req.type = CT_USER;
     strcpy(new_req.user_uuid, req_args[0]);
     return new_req;
 }

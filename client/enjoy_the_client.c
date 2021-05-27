@@ -18,13 +18,15 @@ void process_resp_or_event(int sd, char *buffer, int valread)
     }
     response_t *resp = (void *)buffer;
     switch (resp->request_type) {
-        case (LOGGED_IN):
+        //case (CT_LOGIN):
+
+        case (ET_LOGGED_IN):
             client_event_logged_in(resp->user_uuid, resp->name);
             break;
-        case (LOGGED_OUT):
+        case (ET_LOGGED_OUT):
             client_event_logged_out(resp->user_uuid, resp->name);
             break;
-        case (USERS):
+        case (CT_USERS):
             for (int i = 0; i < resp->extern_body_size; ++i) {
                 read(sd, &user_buffer, sizeof(user_info_t));
                 user_info_t *user = (void *)user_buffer;
@@ -74,7 +76,7 @@ request_t generate_request(char *input, client_t *cl)
 
 void sig_handler(int sig)
 {
-    (void) sig;
+    printf("the sidnal was %d", sig);
     write(1, "\nGoodbye!\n", 10);
     //exit(0);
     go = 0;
@@ -99,7 +101,7 @@ void process_cli_request(int sd, client_t *cl)
         printf(new_request.message);
         return;
     }
-    if (new_request.type == 42 || new_request.type == USE) {
+    if (new_request.type == 42 || new_request.type == CT_USE) {
         printf("the request type was use if not help\n");
         return;
     }

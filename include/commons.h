@@ -17,51 +17,51 @@
 ///from 100 ... client events
 /* maybe split those up into request and events and then name them properly */
 typedef enum command_type {
-    LOGIN = 1,
-    LOGOUT,
-    USERS,
-    USER,
-    SEND,
-    MESSAGES,
-    SUBSCRIBE,
-    SUBSCRIBED_UUID,
-    SUBSCRIBED_BLANK,
-    UNSUBSCRIBE,
-    CREATE,
-    LIST,
-    INFOS,
-    USE,
+    CT_LOGIN = 1,
+    CT_LOGOUT,
+    CT_USERS,
+    CT_USER,
+    CT_SEND,
+    CT_MESSAGES,
+    CT_SUBSCRIBE,
+    CT_SUBSCRIBED_UUID,
+    CT_SUBSCRIBED_BLANK,
+    CT_UNSUBSCRIBE,
+    CT_CREATE,
+    CT_LIST,
+    CT_INFO,
+    CT_USE,
     ///int client_event_logged_in(char const *user_uuid, const char *user_name);
-    LOGGED_IN = 100,
+    ET_LOGGED_IN = 100,
     ///int client_event_logged_out(char const *user_uuid, const char *user_name);
-    LOGGED_OUT,
+    ET_LOGGED_OUT,
     ///int client_event_private_message_received(
          ///char const *user_uuid,
          ///char const *message_body);
-    MESSAGE_REC,
+    ET_MESSAGE_REC,
     ///int client_event_thread_reply_received(
         ///char const *team_uuid,
         ///char const *thread_uuid,
         ///char const *user_uuid,
         ///char const *reply_body);
-    REPLY_REC,
+    ET_REPLY_REC,
     ///int client_event_team_created(
         ///char const *team_uuid,
         ///char const *team_name,
         ///char const *team_description);
-    TEAM_CREAT,
+    ET_TEAM_CREAT,
     ///int client_event_channel_created(
         ///char const *channel_uuid,
         ///char const *channel_name,
         ///char const *channel_description);
-    CHANNEL_CREAT,
+    ET_CHANNEL_CREAT,
     ///int client_event_thread_created(
         ///char const *thread_uuid,
         ///char const *user_uuid,
         ///time_t thread_timestamp,
         ///char const *thread_title,
         ///char const *thread_body);
-    THREAD_CREAT
+    ET_THREAD_CREAT
 }event_t;
 
 /* name these something like UCL_UNDEFINED ...*/
@@ -105,10 +105,10 @@ typedef enum data_type
 typedef struct response {
     char message[MAX_BODY_LENGTH];
     char name[MAX_NAME_LENGTH];
-    int request_type;
-    int status_code;
+    event_t request_type;
+    code_t status_code;
     int extern_body_size;
-    int extern_body_type;
+    datatype_t extern_body_type;
     use_level_t level;
     char description[MAX_DESCRIPTION_LENGTH];
     time_t timestamp;

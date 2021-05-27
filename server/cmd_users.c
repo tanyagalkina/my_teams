@@ -25,7 +25,7 @@ static void send_status(server_t *server, int fd)
 {
     response_t r;
 
-    r.request_type = USERS;
+    r.request_type = CT_USERS;
     r.status_code = STATUS_OK;
     r.extern_body_size = how_many_users(server);
     r.extern_body_type = USER_TYPE;

@@ -11,6 +11,6 @@ request_t list_req(char *user_req, char *args, client_t *cl)
 {
     request_t new_req;
 
-    new_req.type = LIST;
+    new_req.type = CT_LIST;
     return new_req;
 }

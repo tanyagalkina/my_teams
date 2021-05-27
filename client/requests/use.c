@@ -23,7 +23,7 @@ request_t use_req(char *user_req, char *input, client_t *cl)
 {
     request_t new_req;
     char **req_args;
-    new_req.type = USE;
+    new_req.type = CT_USE;
 
     switch (get_count_quotes(input))
     {

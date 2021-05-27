@@ -12,6 +12,6 @@ request_t users_req(char *user_req, char *args, client_t *cl)
     request_t new_req;
     (void)cl;
 
-    new_req.type = USERS;
+    new_req.type = CT_USERS;
     return new_req;
 }

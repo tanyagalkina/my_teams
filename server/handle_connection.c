@@ -43,7 +43,7 @@ static int get_request_from_client(server_t *server, int fd)
 
     if (r == 0) {
         server_debug_print(INFO, "a client disconnected");
-        get_user_by_fd(server, fd)->info->user_status = LOGGED_OUT;
+        get_user_by_fd(server, fd)->info->user_status = ET_LOGGED_OUT;
         return FAILURE;
     }
     req = (void *)buffer;

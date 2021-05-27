@@ -23,6 +23,6 @@ request_t send_req(char *user_req, char *input, client_t *cl)
 
     strcpy(new_req.user_uuid, req_args[0]);
     strcpy(new_req.message, req_args[1]);
-    new_req.type = SEND;
+    new_req.type = CT_SEND;
     return new_req;
 }

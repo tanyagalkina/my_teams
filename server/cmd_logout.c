@@ -20,7 +20,7 @@ int cmd_logout(server_t *server, request_t *req, int fd)
         return FAILURE;
 
     user->current_fd = -1;
-    user->info->user_status = LOGGED_OUT;
+    user->info->user_status = ET_LOGGED_OUT;
     server_event_user_logged_out(user->info->user_uuid);
     return SUCCESS;
 }
