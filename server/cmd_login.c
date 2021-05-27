@@ -23,8 +23,12 @@ static void send_response(server_t *server, const char *name)
     strcpy(r.user_uuid, get_user_by_name(server, name)->info->user_uuid);
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        if (user->info->user_status == ET_LOGGED_IN) {
-            send(user->current_fd, &r, RESPONSE_SIZE, 0);
+        if (user->info->user_status == US_LOGGED_IN) {
+            for (int i = 0; i < MAX_FD_PER_USER; i++) {
+                if (user->fds[i] != 0) {
+                    send(user->fds[i], &r, RESPONSE_SIZE, 0);
+                }
+            }
         }
     }
 }
@@ -54,8 +58,11 @@ static int add_new_user(server_t *server, request_t *req, int fd)
     uuid_generate_random(binuuid);
     strcpy(user->info->user_name, req->name);
     uuid_unparse(binuuid, user->info->user_uuid);
-    user->info->user_status = ET_LOGGED_IN;
-    user->current_fd = fd;
+    user->info->user_status = US_LOGGED_IN;
+    user->fd_count = 0;
+    memset(user->fds, 0, MAX_FD_PER_USER);
+    user->fds[user->fd_count] = fd;
+    user->fd_count++;
     server_event_user_created(user->info->user_uuid, user->info->user_name);
     TAILQ_INSERT_TAIL(&server->admin->user_head, user, next);
     send_response(server, user->info->user_name);
@@ -69,11 +76,9 @@ int cmd_login(server_t *server, request_t *req, int fd)
     if (is_existing(server, req->name)) {
         if ((user = get_user_by_name(server, req->name)) == NULL)
             return FAILURE;
-        if (user->info->user_status == ET_LOGGED_IN) {
-            server_debug_print(WARNING, "The user is already logged in");
-        }
-        user->info->user_status = ET_LOGGED_IN;
-        user->current_fd = fd;
+        user->info->user_status = US_LOGGED_IN;
+        user->fds[user->fd_count] = fd;
+        user->fd_count++;
         server_event_user_logged_in(user->info->user_uuid);
         send_response(server, user->info->user_name);
         return SUCCESS;

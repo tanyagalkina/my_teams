@@ -32,7 +32,6 @@ int run_server(server_t *server)
         ready = current;
         if (select(FD_SETSIZE, &ready, 0, 0, 0) < 0) {
             if (!done) {
-                ///perror("select()"); i have removed that because of erroroutput use
                 printf("select error\n");
                 return FAILURE;
             }

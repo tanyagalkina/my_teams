@@ -46,12 +46,8 @@ static void send_each(user_info_t *info, int fd)
 static void send_response(server_t *server, int fd)
 {
     user_t *user = NULL;
-    response_t r;
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        /*r.status_code = STATUS_OK;*/
-        /*strcpy(r.name, user->info->user_name);*/
-        /*send(fd, &r, RESPONSE_SIZE, 0);*/
         send_each(user->info, fd);
     }
 }

@@ -25,6 +25,12 @@
 #define SERVER_BACKLOG 10
 #define FAILURE 1
 #define SUCCESS 0
+#define MAX_FD_PER_USER 10
+
+typedef enum user_status_t {
+    US_LOGGED_OUT,
+    US_LOGGED_IN
+} user_status_t;
 
 typedef enum debug_state_t {
     INFO,
@@ -67,7 +73,8 @@ typedef struct user_t {
     TAILQ_ENTRY(user_t) next;       /* 'linked list next pointer */
     uuid_t *subscribed_teams;       /* list of subscribed teams */
     user_info_t *info;
-    int current_fd;                 /* keeps track of the current fd */
+    int fds[MAX_FD_PER_USER];       /* list of the currents fds */
+    int fd_count;
 } user_t;
 
 typedef struct message_t {

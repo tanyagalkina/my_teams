@@ -55,23 +55,6 @@ static int get_request_from_client(server_t *server, int fd)
     return (0);
 }
 
-/* this is just a template to show easy use of uuid and the TAILQ stuff */
-int add_team(server_t *server, const char *name)
-{
-    uuid_t binuuid;
-    team_t *new_team = NULL;
-
-    uuid_generate_random(binuuid);
-    if ((new_team = (team_t *)malloc(sizeof(team_t))) == NULL)
-        return FAILURE;
-
-    strcpy(new_team->info->team_name, name);
-    uuid_unparse(binuuid, new_team->info->team_uuid);
-
-    TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
-    return SUCCESS;
-}
-
 void handle_connection(server_t *server, int fd, fd_set *current)
 {
     if (fd == server->fd) {

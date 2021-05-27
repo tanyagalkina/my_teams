@@ -26,8 +26,9 @@ user_t *get_user_by_fd(server_t *server, int fd)
     user_t *user = NULL;
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        if (user->current_fd == fd) {
-            return user;
+        for (int i = 0; i < MAX_FD_PER_USER; i++) {
+            if (user->fds[i] == fd)
+                return user;
         }
     }
     server_debug_print(WARNING, "There is no user existing with that fd");
