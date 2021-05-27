@@ -34,6 +34,7 @@ static int accept_new_connection(server_t *server, fd_set *current)
 static int get_request_from_client(server_t *server, int fd)
 {
     int r;
+    user_t *our_user;
     request_t *req = NULL;
     char buffer[REQUEST_SIZE];
 
@@ -42,9 +43,15 @@ static int get_request_from_client(server_t *server, int fd)
         return SUCCESS;
 
     if (r == 0) {
-        server_debug_print(INFO, "a client disconnected");
-        get_user_by_fd(server, fd)->info->user_status = ET_LOGGED_OUT;
-        return FAILURE;
+        server_debug_print(INFO, "client disconnected");
+        if (NULL == (our_user = get_user_by_fd(server, fd)))
+            return FAILURE;
+        else {
+            our_user->info->user_status = 0;
+            /// ///int client_event_logged_out(char const *user_uuid, const char *user_name);
+            //    ET_LOGGED_OUT,
+            return FAILURE;
+        }
     }
     req = (void *)buffer;
 

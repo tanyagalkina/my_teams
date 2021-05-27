@@ -28,18 +28,18 @@ request_t use_req(char *user_req, char *input, client_t *cl)
     switch (get_count_quotes(input))
     {
         case 0:
-            cl->context.context_level = NONE;
+            cl->context.context_level = TEAM;
             return new_req;
             break;
         case 2:
-            cl->context.context_level = TEAM;
+            cl->context.context_level = CHANNEL;
             if (NULL == (req_args = get_args(input, 1)))
                 return (bad_request(BAD_INPUT));
             strcpy(cl->context.team_uuid, req_args[0]);
             return new_req;
             break;
         case 4:
-            cl->context.context_level = CHANNEL;
+            cl->context.context_level = THREAD;
             if (NULL == (req_args = get_args(input, 2)))
                 return (bad_request(BAD_INPUT));
             strcpy(cl->context.team_uuid, req_args[0]);
@@ -48,7 +48,7 @@ request_t use_req(char *user_req, char *input, client_t *cl)
 
             break;
         case 6:
-            cl->context.context_level = CHANNEL;
+            cl->context.context_level = REPLY;
             if (NULL == (req_args = get_args(input, 3)))
                 return (bad_request(BAD_INPUT));
             strcpy(cl->context.team_uuid, req_args[0]);
