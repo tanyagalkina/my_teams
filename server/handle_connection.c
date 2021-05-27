@@ -31,10 +31,18 @@ static int accept_new_connection(server_t *server, fd_set *current)
     return SUCCESS;
 }
 
+static void check_disconnected(server_t *server, int fd)
+{
+    user_t *user = NULL;
+
+    if ((user = get_user_by_fd(server, fd)) != NULL) {
+        cmd_logout(server, NULL, fd);
+    }
+}
+
 static int get_request_from_client(server_t *server, int fd)
 {
     int r;
-    user_t *our_user;
     request_t *req = NULL;
     char buffer[REQUEST_SIZE];
 
@@ -44,14 +52,8 @@ static int get_request_from_client(server_t *server, int fd)
 
     if (r == 0) {
         server_debug_print(INFO, "client disconnected");
-        if (NULL == (our_user = get_user_by_fd(server, fd)))
-            return FAILURE;
-        else {
-            our_user->info->user_status = 0;
-            /// ///int client_event_logged_out(char const *user_uuid, const char *user_name);
-            //    ET_LOGGED_OUT,
-            return FAILURE;
-        }
+        check_disconnected(server, fd);
+        return FAILURE;
     }
     req = (void *)buffer;
 
