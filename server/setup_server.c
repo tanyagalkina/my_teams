@@ -31,6 +31,17 @@ static int setup_users(server_t **server)
     return SUCCESS;
 }
 
+static int setup_messages(server_t **server)
+{
+    if (((*server)->admin->messages = malloc(sizeof(direct_message_t))) == NULL)
+        return FAILURE;
+
+    memset((*server)->admin->messages, 0, sizeof(direct_message_t));
+
+    TAILQ_INIT(&(*server)->admin->message_head);
+    return SUCCESS;
+}
+
 server_t *setup_server(server_t *server)
 {
     if ((server->admin = (admin_t *)malloc(sizeof(admin_t))) == NULL)
@@ -38,6 +49,8 @@ server_t *setup_server(server_t *server)
     if (setup_teams(&server) == FAILURE)
         return NULL;
     if (setup_users(&server) == FAILURE)
+        return NULL;
+    if (setup_messages(&server) == FAILURE)
         return NULL;
 
     return server;
