@@ -7,19 +7,26 @@
 
 #include "../include/client.h"
 
-void process_resp_or_event(int sd, char *buffer, int valread)
+void process_resp_or_event(client_t *cl)
 {
-    if (valread == 0) {
+    int i = 0;
+    if (cl->bytes_read == 0) {
         printf("our server is gone on vacation, what a pitty...\n");
         go = 0;
         return;
     }
-    response_t *resp = (void *)buffer;
-
-    int i = 0;
+    response_t *resp = (void *)cl->re_buffer;
+    if (resp->request_type == ET_LOGGED_OUT) {
+        client_event_logged_out(resp->user_uuid, resp->name);
+        if (!strcmp(resp->name, cl->own_name)) {
+            printf("I HAVE HAD GREAT TIME WITH YOU, GUYS!\n");
+            go = 0;
+        }
+        return;
+    }
     while (event_table[i].event != 0) {
         if (event_table[i].event == resp->request_type) {
-            event_table[i].func(sd, resp);
+            event_table[i].func(cl->sd, resp);
             break;
         }
         ++i;
@@ -85,6 +92,7 @@ void process_cli_request(int sd, client_t *cl)
         return;
     }
     new_request = generate_request(input, cl);
+    memset(input, 0, INPUT_SIZE);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
         printf(new_request.message);
@@ -113,12 +121,12 @@ int enjoy_the_client(client_t *cl)
                     process_cli_request(cl->sd, cl);
                 else {
                     cl->bytes_read = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
-                    process_resp_or_event(cl->sd, cl->re_buffer, cl->bytes_read);
+                    process_resp_or_event(cl);
                     memset(cl->re_buffer, 0, RESPONSE_SIZE);
                 }
             }
         }
     }
-    printf("here i would free the stuff... but what?\n");
+    printf("SEE U LATER...\n");
     return (0);
 }
