@@ -136,5 +136,6 @@ void restore_data(server_t *server);
 /* get_user_by.c */
 user_t *get_user_by_fd(server_t *server, int fd);
 user_t *get_user_by_name(server_t *server, const char *name);
+user_t *get_user_by_uuid(server_t *server, const char *uuid);
 
 #endif //SERVER_H_

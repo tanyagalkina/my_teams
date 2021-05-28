@@ -8,6 +8,19 @@
 #include "../include/server.h"
 #include <string.h>
 
+user_t *get_user_by_uuid(server_t *server, const char *uuid)
+{
+    user_t *user = NULL;
+
+    TAILQ_FOREACH(user, &server->admin->user_head, next) {
+        if (strcmp(user->info->user_uuid, uuid) == 0) {
+            return user;
+        }
+    }
+    server_debug_print(WARNING, "There is no user existing with that uuid");
+    return NULL;
+}
+
 user_t *get_user_by_name(server_t *server, const char *name)
 {
     user_t *user = NULL;
