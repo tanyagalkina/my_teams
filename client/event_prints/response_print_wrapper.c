@@ -7,14 +7,16 @@
 
 #include "../../include/client.h"
 
-void ct_users_print (int sd, response_t *resp)
+void ct_users_print(int sd, response_t *resp)
 {
     char user_buffer[sizeof(user_info_t)];
+    user_info_t *user;
 
     for (int i = 0; i < resp->extern_body_size; ++i) {
         read(sd, &user_buffer, sizeof(user_info_t));
-        user_info_t *user = (void *)user_buffer;
-        client_print_users(user->user_uuid, user->user_name, user->user_status);
+        user = (void *)user_buffer;
+        client_print_users(user->user_uuid, \
+user->user_name, user->user_status);
     }
 }
 
