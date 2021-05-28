@@ -70,7 +70,7 @@ typedef enum use_context_level {
     TEAM,
     CHANNEL,
     THREAD,
-    REPLY
+    REPLY_OR_LOGGED
 }use_level_t;
 
 /* name these something like ST_OK, ST_UNKN_TEAM ...*/
@@ -120,7 +120,7 @@ typedef struct response {
 
 typedef struct request {
     int type;
-    int context_level;
+    use_level_t context_level;
     char name[32];
     char description[255];
     char message[512];

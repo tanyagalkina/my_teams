@@ -48,7 +48,7 @@ request_t use_req(char *user_req, char *input, client_t *cl)
 
             break;
         case 6:
-            cl->context.context_level = REPLY;
+            cl->context.context_level = REPLY_OR_LOGGED;
             if (NULL == (req_args = get_args(input, 3)))
                 return (bad_request(BAD_INPUT));
             strcpy(cl->context.team_uuid, req_args[0]);

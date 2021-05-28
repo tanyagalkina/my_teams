@@ -19,7 +19,7 @@ request_t login_req(char *user_req, char *input, client_t *cl)
     new_req.type = CT_LOGIN;
     strcpy(new_req.name, strdup(req_args[0]));
     if (cl->own_name[0] == '\0') {
-        strcpy(cl->own_name, req_args[0]);
+        strcpy(cl->own_name, strdup(req_args[0]));
         cl->logged_in = 1;
         return new_req;
     }else
