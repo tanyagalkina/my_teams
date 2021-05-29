@@ -69,12 +69,17 @@ typedef struct team_t {
     TAILQ_HEAD(, channel_t) channel_head;
 } team_t;
 
+typedef struct user_subscribed_teams_t {
+    TAILQ_ENTRY(user_subscribed_teams_t) next;
+    char team_uuid[UUID_STR_LEN];
+} user_subscribed_teams_t;
+
 typedef struct user_t {
     TAILQ_ENTRY(user_t) next;       /* 'linked list next pointer */
-    uuid_t *subscribed_teams;       /* list of subscribed teams */
     user_info_t *info;
     int fds[MAX_FD_PER_USER];       /* list of the currents fds */
     int fd_count;
+    TAILQ_HEAD(, user_subscribed_teams_t) subscribed_teams_head;
 } user_t;
 
 typedef struct message_t {
@@ -137,5 +142,8 @@ void restore_data(server_t *server);
 user_t *get_user_by_fd(server_t *server, int fd);
 user_t *get_user_by_name(server_t *server, const char *name);
 user_t *get_user_by_uuid(server_t *server, const char *uuid);
+
+/* get_team_by.c */
+team_t *get_team_by_uuid(server_t *server, const char *uuid);
 
 #endif //SERVER_H_

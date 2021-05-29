@@ -5,9 +5,9 @@
 ** cmd_create
 */
 
-#include "../include/server.h"
-#include "../include/commons.h"
-#include "../libs/myteams/logging_server.h"
+#include "../../include/server.h"
+#include "../../include/commons.h"
+#include "../../libs/myteams/logging_server.h"
 #include <string.h>
 #include <stdio.h>
 

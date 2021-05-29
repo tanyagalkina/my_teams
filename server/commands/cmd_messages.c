@@ -5,9 +5,9 @@
 ** server
 */
 
-#include "../include/server.h"
-#include "../include/commons.h"
-#include "../libs/myteams/logging_server.h"
+#include "../../include/server.h"
+#include "../../include/commons.h"
+#include "../../libs/myteams/logging_server.h"
 #include <sys/queue.h>
 #include <string.h>
 

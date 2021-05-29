@@ -5,9 +5,9 @@
 ** handle_connection
 */
 
-#include "../include/server.h"
-#include "../include/commons.h"
-#include "../libs/myteams/logging_server.h"
+#include "../../include/server.h"
+#include "../../include/commons.h"
+#include "../../libs/myteams/logging_server.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/queue.h>

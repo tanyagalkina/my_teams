@@ -25,23 +25,25 @@ LIB 			+= ./libs/myteams/libmyteams.so -luuid
 
 SERVER_NAME 	= 	myteams_server
 
-SERVER_SRC 		= 	server/main.c 				\
-					server/init_server.c		\
-					server/setup_server.c		\
-					server/cleanup.c			\
-					server/handle_connection.c	\
-					server/utils.c				\
-					server/run_server.c			\
-					server/save_data.c			\
-					server/restore_data.c		\
-					server/cmd_login.c			\
-					server/get_user_by.c		\
-					server/cmd_logout.c			\
-					server/cmd_create.c			\
-					server/cmd_users.c			\
-					server/cmd_user.c			\
-					server/cmd_send.c			\
-					server/cmd_messages.c		\
+SERVER_SRC 		= 	server/main.c 						\
+					server/init_server.c				\
+					server/setup_server.c				\
+					server/cleanup.c					\
+					server/handle_connection.c			\
+					server/utils.c						\
+					server/run_server.c					\
+					server/save_data.c					\
+					server/restore_data.c				\
+					server/get_user_by.c				\
+					server/get_team_by.c				\
+					server/commands/cmd_login.c			\
+					server/commands/cmd_logout.c		\
+					server/commands/cmd_create.c		\
+					server/commands/cmd_users.c			\
+					server/commands/cmd_user.c			\
+					server/commands/cmd_send.c			\
+					server/commands/cmd_messages.c		\
+					server/commands/cmd_subscribe.c		\
 
 CLIENT_NAME 	= 	myteams_cli
 

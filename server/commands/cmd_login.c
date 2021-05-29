@@ -5,9 +5,9 @@
 ** handle_connection
 */
 
-#include "../include/commons.h"
-#include "../include/server.h"
-#include "../libs/myteams/logging_server.h"
+#include "../../include/commons.h"
+#include "../../include/server.h"
+#include "../../libs/myteams/logging_server.h"
 #include <stdlib.h>
 #include <string.h>
 #include <sys/queue.h>
@@ -50,10 +50,8 @@ static int add_new_user(server_t *server, request_t *req, int fd)
     user_t *user = NULL;
     uuid_t binuuid;
 
-    if ((user = malloc(sizeof(user_t))) == NULL)
-        return FAILURE;
-    if ((user->info = malloc(sizeof(user_info_t))) == NULL)
-        return FAILURE;
+    if ((user = malloc(sizeof(user_t))) == NULL) return FAILURE;
+    if ((user->info = malloc(sizeof(user_info_t))) == NULL) return FAILURE;
 
     uuid_generate_random(binuuid);
     strcpy(user->info->user_name, req->name);
@@ -64,6 +62,7 @@ static int add_new_user(server_t *server, request_t *req, int fd)
     user->fds[user->fd_count] = fd;
     user->fd_count++;
     server_event_user_created(user->info->user_uuid, user->info->user_name);
+    TAILQ_INIT(&user->subscribed_teams_head);
     TAILQ_INSERT_TAIL(&server->admin->user_head, user, next);
     send_response(server, user->info->user_name);
     return SUCCESS;

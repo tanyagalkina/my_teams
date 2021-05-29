@@ -11,7 +11,7 @@
 #include "server.h"
 #include "commons.h"
 
-#define COMMANDS 7
+#define COMMANDS 8
 
 typedef int (*cmd_func)(server_t *, request_t *, int);
 
@@ -27,6 +27,7 @@ int cmd_users(server_t *server, request_t *req, int fd);
 int cmd_user(server_t *server, request_t *req, int fd);
 int cmd_send(server_t *server, request_t *req, int fd);
 int cmd_messages(server_t *server, request_t *req, int fd);
+int cmd_subscribe(server_t *server, request_t *req, int fd);
 
 static const command_t cmd_table[COMMANDS] = {
     { CT_LOGIN, cmd_login },
@@ -35,7 +36,8 @@ static const command_t cmd_table[COMMANDS] = {
     { CT_USERS, cmd_users},
     { CT_USER, cmd_user},
     { CT_SEND, cmd_send},
-    { CT_MESSAGES, cmd_messages}
+    { CT_MESSAGES, cmd_messages},
+    { CT_SUBSCRIBE, cmd_subscribe}
 };
 
 #endif //COMMANDS_H
