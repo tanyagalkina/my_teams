@@ -20,7 +20,7 @@ static void save_teams(server_t *server)
     server_debug_print(INFO, "saving teams ...");
 
     if ((file = fopen("save_teams.txt", "w")) == NULL) {
-        server_debug_print(ERROR, "Cannot open database file (write)");
+        server_debug_print(ERROR, "Cannot open database file (write teams)");
         return;
     }
 
@@ -33,10 +33,27 @@ static void saving_users(server_t *server)
 {
     FILE *file = NULL;
     user_t *user = NULL;
+    user_subscribed_teams_t *team = NULL;
+
+    server_debug_print(INFO, "saving users ...");
+
+    if ((file = fopen("save_users.txt", "w")) == NULL) {
+        server_debug_print(ERROR, "Cannot open database file (write users)");
+        return;
+    }
+
+    TAILQ_FOREACH(user, &server->admin->user_head, next) {
+        fprintf(file, "uuid:%s,name:%s,teams:", user->info->user_uuid, user->info->user_name);
+        TAILQ_FOREACH(team, &user->subscribed_teams_head, next) {
+            fprintf(file, "%s,", team->team_uuid);
+        }
+        fprintf(file, "\n");
+    }
 }
 
 void save_data(server_t *server)
 {
     server_debug_print(INFO, "starting to save now");
-    save_teams(server);
+    saving_users(server);
+    //save_teams(server);
 }

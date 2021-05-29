@@ -131,7 +131,7 @@ char **split_string(char *str);
 void free_2d(char **s);
 
 /* run_server.c */
-int run_server(server_t *server);
+int run_server(server_t *server, fd_set current, fd_set ready);
 
 /* handle_connection.c */
 void handle_connection(server_t *server, int fd, fd_set *current);

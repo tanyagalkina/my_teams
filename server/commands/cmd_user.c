@@ -11,7 +11,6 @@
 #include <string.h>
 #include <stdio.h>
 
-//@todo this is not working on client side i guess
 int cmd_user(server_t *server, request_t *req, int fd)
 {
     response_t r;

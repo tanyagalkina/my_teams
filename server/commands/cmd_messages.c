@@ -52,12 +52,13 @@ int cmd_messages(server_t *server, request_t *req, int fd)
     const char *suuid = get_user_by_fd(server, fd)->info->user_uuid;
     const char *ruuid = req->user_uuid;
     direct_message_t *dm;
-    bool found_pair;
+    bool fst;
+    bool snd;
 
     TAILQ_FOREACH(dm, &server->admin->message_head, next) {
-        found_pair = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0) ||
-            (strcmp(dm->user1, ruuid) == 0 && strcmp(dm->user2, suuid) == 0);
-        if (found_pair) {
+        fst = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0);
+        snd = (strcmp(dm->user1, ruuid) == 0 && strcmp(dm->user2, suuid) == 0);
+        if (fst || snd) {
             send_messages(dm, fd);
         }
     }

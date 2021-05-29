@@ -23,7 +23,7 @@ static int unsubscribe_from_team(user_t *user, const char *team_uuid)
         }
     }
     if (found == false) {
-        server_debug_print(INFO, "There is no team with that uuid");
+        server_debug_print(WARNING, "There is no team with that uuid");
         return FAILURE;
     }
 

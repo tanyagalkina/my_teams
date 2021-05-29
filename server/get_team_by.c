@@ -18,6 +18,6 @@ team_t *get_team_by_uuid(server_t *server, const char *uuid)
             return team;
         }
     }
-    server_debug_print(INFO, "There is no team with that uuid");
+    server_debug_print(WARNING, "There is no team with that uuid");
     return NULL;
 }

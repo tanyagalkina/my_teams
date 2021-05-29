@@ -44,6 +44,8 @@ listens.\n");
 int main(int ac, char **av)
 {
     server_t *server = NULL;
+    fd_set current;
+    fd_set ready;
 
     if (errorhandling(ac, av) != SUCCESS)
         return 84;
@@ -54,8 +56,7 @@ int main(int ac, char **av)
         return 84;
 
     restore_data(server);
-    run_server(server);
-
+    run_server(server, current, ready);
     save_data(server);
     cleanup(server);
     return 0;

@@ -29,7 +29,6 @@ static void send_response(server_t *server, const char *r_uuid, request_t *req)
         server_debug_print(WARNING, "no given user to that receiver uuid");
         return;
     }
-
     r.request_type = CT_SEND;
     r.status_code = STATUS_OK;
     strcpy(r.user_uuid, req->user_uuid);
@@ -40,7 +39,8 @@ static void send_response(server_t *server, const char *r_uuid, request_t *req)
     }
 }
 
-static void append_message(direct_message_t *dm, request_t *req, private_message_info_t *dm_info)
+static void append_message(direct_message_t *dm, request_t *req, \
+private_message_info_t *dm_info)
 {
     message_t *new_message = NULL;
     private_message_info_t *info = NULL;
@@ -59,7 +59,8 @@ static void append_message(direct_message_t *dm, request_t *req, private_message
     TAILQ_INSERT_TAIL(&dm->message_head, new_message, next);
 }
 
-static void create_new_dm(server_t *server, const char *ruuid, request_t *req, const char *suuid)
+static void create_new_dm(server_t *server, const char *ruuid, \
+request_t *req, const char *suuid)
 {
     direct_message_t *dm;
 
@@ -79,17 +80,18 @@ static void create_new_dm(server_t *server, const char *ruuid, request_t *req, c
     TAILQ_INSERT_TAIL(&server->admin->message_head, dm, next);
 }
 
-static void process_message(server_t *server, request_t *req, private_message_info_t *dm_info, const char *ruuid)
+static void process_message(server_t *server, request_t *req, \
+private_message_info_t *dm_info, const char *ruuid)
 {
     direct_message_t *dm;
     const char *suuid = dm_info->sender_uuid;
-    bool found_pair;
+    bool snd;
+    bool fst;
 
     TAILQ_FOREACH(dm, &server->admin->message_head, next) {
-        found_pair = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0) ||
-            (strcmp(dm->user1, ruuid) == 0 && strcmp(dm->user2, suuid) == 0);
-
-        if (found_pair) {
+        fst = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0);
+        snd = (strcmp(dm->user1, ruuid) == 0 && strcmp(dm->user2, suuid) == 0);
+        if (fst || snd) {
             append_message(dm, req, dm_info);
             return;
         }
