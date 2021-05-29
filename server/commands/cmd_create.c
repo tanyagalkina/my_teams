@@ -54,5 +54,5 @@ int cmd_create(server_t *server, request_t *req, int fd)
     printf("the context level was %d", req->context_level);
     printf("the name was %s\n", req->name);
     printf("description was %s\n", req->description);
-    return (0);
+    return 0;
 }

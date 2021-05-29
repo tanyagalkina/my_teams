@@ -74,11 +74,15 @@ typedef struct user_subscribed_teams_t {
     char team_uuid[UUID_STR_LEN];
 } user_subscribed_teams_t;
 
+typedef struct user_fds_t {
+    TAILQ_ENTRY(user_fds_t) next;       /* 'linked list next pointer */
+    int fd;
+} user_fds_t;
+
 typedef struct user_t {
     TAILQ_ENTRY(user_t) next;       /* 'linked list next pointer */
     user_info_t *info;
-    int fds[MAX_FD_PER_USER];       /* list of the currents fds */
-    int fd_count;
+    TAILQ_HEAD(, user_fds_t) user_fds_head;
     TAILQ_HEAD(, user_subscribed_teams_t) subscribed_teams_head;
 } user_t;
 

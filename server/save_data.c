@@ -29,6 +29,12 @@ static void save_teams(server_t *server)
     }
 }
 
+static void saving_users(server_t *server)
+{
+    FILE *file = NULL;
+    user_t *user = NULL;
+}
+
 void save_data(server_t *server)
 {
     server_debug_print(INFO, "starting to save now");

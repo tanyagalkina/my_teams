@@ -17,7 +17,7 @@ static bool is_subscribed_to_team(server_t *server, request_t *req, int fd)
     user_t *user = get_user_by_fd(server, fd);
     TAILQ_FOREACH(sub, &user->subscribed_teams_head, next) {
         if (strcmp(sub->team_uuid, req->team_uuid) == 0) {
-            server_debug_print(INFO, "User is already subscribed to this team");
+            server_debug_print(INFO, "User is already subscribed to the team");
             return true;
         }
     }
@@ -32,7 +32,6 @@ static int append_team_to_user(user_t *user, const char *team_uuid)
 
     strcpy(sub->team_uuid, team_uuid);
     TAILQ_INSERT_TAIL(&user->subscribed_teams_head, sub, next);
-
     return SUCCESS;
 }
 

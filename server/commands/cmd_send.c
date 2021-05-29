@@ -19,6 +19,7 @@ static void send_response(server_t *server, const char *r_uuid, request_t *req)
 {
     response_t r;
     user_t *user = NULL;
+    user_fds_t *fds = NULL;
 
     if (!r_uuid) {
         server_debug_print(WARNING, "no given receiver uuid for the dm");
@@ -33,9 +34,9 @@ static void send_response(server_t *server, const char *r_uuid, request_t *req)
     r.status_code = STATUS_OK;
     strcpy(r.user_uuid, req->user_uuid);
     strcpy(r.message, req->message);
-    for (int i = 0; i < MAX_FD_PER_USER; i++) {
-        if (user->fds[i] != 0)
-            send(user->fds[i], &r, RESPONSE_SIZE, 0);
+
+    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
+        send(fds->fd, &r, RESPONSE_SIZE, 0);
     }
 }
 

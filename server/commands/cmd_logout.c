@@ -14,8 +14,9 @@
 
 static void send_response(server_t *server, int fd)
 {
-    user_t *user;
+    user_t *user = NULL;
     response_t r;
+    user_fds_t *fds = NULL;
 
     r.request_type = ET_LOGGED_OUT;
     r.status_code = STATUS_OK;
@@ -24,10 +25,8 @@ static void send_response(server_t *server, int fd)
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
         if (user->info->user_status == US_LOGGED_IN) {
-            for (int i = 0; i < MAX_FD_PER_USER; i++) {
-                if (user->fds[i] != 0) {
-                    send(user->fds[i], &r, RESPONSE_SIZE, 0);
-                }
+            TAILQ_FOREACH(fds, &user->user_fds_head, next) {
+                send(fds->fd, &r, RESPONSE_SIZE, 0);
             }
         }
     }
@@ -35,29 +34,29 @@ static void send_response(server_t *server, int fd)
 
 static bool is_still_logged_in(user_t *user)
 {
-    for (int i = 0; i < MAX_FD_PER_USER; i++) {
-        if (user->fds[i] != 0) {
-            return true;
-        }
-    }
-    return false;
+    return !TAILQ_EMPTY(&user->user_fds_head);
 }
 
 int cmd_logout(server_t *server, request_t *req, int fd)
 {
     user_t *user = NULL;
+    user_fds_t *fds = NULL;
+    user_fds_t *cp_fds = NULL;
 
     if ((user = get_user_by_fd(server, fd)) == NULL)
         return FAILURE;
 
     send_response(server, fd);
-    for (int i = 0; i < MAX_FD_PER_USER; i++) {
-        if (user->fds[i] == fd) {
-            user->fds[i] = 0;
+
+    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
+        if (fds->fd == fd) {
+            cp_fds = fds;
         }
     }
-    if (!is_still_logged_in(user))
+    TAILQ_REMOVE(&user->user_fds_head, cp_fds, next);
+    if (!is_still_logged_in(user)) {
         user->info->user_status = US_LOGGED_OUT;
+    }
     server_event_user_logged_out(user->info->user_uuid);
     return SUCCESS;
 }
