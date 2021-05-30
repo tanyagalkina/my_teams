@@ -43,12 +43,12 @@ static void saving_users(server_t *server)
     }
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        fprintf(file, "uuid:%s,name:%s,\nteams:", user->info->user_uuid, \
+        fprintf(file, "uuid:%s,name:%s,\n", user->info->user_uuid, \
 user->info->user_name);
         TAILQ_FOREACH(team, &user->subscribed_teams_head, next) {
-            fprintf(file, "%s,", team->team_uuid);
+            fprintf(file, "%s,\n", team->team_uuid);
         }
-        fprintf(file, "\n");
+        fprintf(file, "--- Teams End ---\n");
     }
 }
 

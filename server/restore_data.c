@@ -9,6 +9,8 @@
 #include "../libs/myteams/logging_server.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/queue.h>
+#include <string.h>
 
 static void restore_teams(server_t *server)
 {
@@ -47,7 +49,21 @@ static user_t *init_user()
     return user;
 }
 
-//@todo add something to read in all the subscribed teams
+static void load_team_for_user(FILE *file, user_t *user)
+{
+    char *line = NULL;
+    size_t len = 0;
+    user_subscribed_teams_t *sub = NULL;
+
+    while (getline(&line, &len, file) != -1) {
+        if (strncmp(line, "--- Teams End ---", 17) == 0)
+            return;
+        sub = malloc(sizeof(user_subscribed_teams_t));
+        sscanf(line, "%36[^,],", sub->team_uuid);
+        TAILQ_INSERT_TAIL(&user->subscribed_teams_head, sub, next);
+    }
+}
+
 static void restore_users(server_t *server)
 {
     FILE *file = NULL;
@@ -64,6 +80,7 @@ static void restore_users(server_t *server)
             return;
         sscanf(line, "uuid:%36[^,],name:%32[^,]", user->info->user_uuid, \
 user->info->user_name);
+        load_team_for_user(file, user);
         server_event_user_loaded(user->info->user_uuid, user->info->user_name);
         TAILQ_INSERT_TAIL(&server->admin->user_head, user, next);
     }
