@@ -32,6 +32,8 @@ void restore_teams(server_t *server)
         sscanf(line, "uuid:%36[^,],name:%32[^,],desc:%255[^,],", \
 new_team->info->team_uuid, new_team->info->team_name, \
 new_team->info->team_description);
+        TAILQ_INIT(&new_team->channel_head);
+        TAILQ_INIT(&new_team->user_info_head);
         TAILQ_INSERT_TAIL(&server->admin->team_head, new_team, next);
     }
     fclose(file);

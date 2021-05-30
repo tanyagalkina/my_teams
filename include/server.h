@@ -63,11 +63,17 @@ typedef struct channel_t {
     TAILQ_HEAD(, thread_t) thread_head;         /* list of threads */
 } channel_t;
 
+typedef struct team_user_info_t {
+    TAILQ_ENTRY(team_user_info_t) next;
+    char user_uuid[UUID_STR_LEN];
+} team_user_info_t;
+
 typedef struct team_t {
     TAILQ_ENTRY(team_t) next;
     team_info_t *info;
     channel_t *channels;                        /* list of channels */
     TAILQ_HEAD(, channel_t) channel_head;
+    TAILQ_HEAD(, team_user_info_t) user_info_head;
 } team_t;
 
 typedef struct user_subscribed_teams_t {
@@ -158,5 +164,9 @@ void save_teams(server_t *server);
 /* restoring/.c */
 void restore_users(server_t *server);
 void restore_teams(server_t *server);
+/* create/errors.c */
+void error_already_exist(user_t *user);
+void error_unauthorized(user_t *user);
+void error_not_exist(const char *uuid, user_t *user, int code, int level);
 
 #endif //SERVER_H_
