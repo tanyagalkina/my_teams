@@ -22,7 +22,7 @@ message->message_timestamp, message->message_body);
 
 void ct_subscribed_uuid_print(int sd, response_t *resp)
 {
-    char subscribed_buffer[sizeof(private_message_info_t)];
+    char subscribed_buffer[sizeof(user_info_t)];
     user_info_t *user;
 
     for (int i = 0; i < resp->extern_body_size; ++i) {
@@ -90,10 +90,11 @@ void ct_list_print(int sd, response_t *resp)
     switch (resp->level)
     {
         case (TEAM):
-            ///int client_error_unknown_team(char const *team_uuid);
+            //printf("I am getting teams_list\n");
             ct_subscribed_blank_print(sd, resp);
             break;
         case (CHANNEL):
+            ///int client_error_unknown_team(char const *team_uuid);
             print_channels(sd, resp);
             break;
         case (THREAD):
@@ -107,20 +108,28 @@ void ct_list_print(int sd, response_t *resp)
     }
 }
 
-void ct_info_print(int sd, response_t *resp)
+/*void ct_info_print(int sd, response_t *resp)
 {
     switch (resp->level)
     {
         case (TEAM):
-           /// int client_error_unknown_team(char const *team_uuid);
-            break;
+           /* ** /info
+            **/
+            /*int client_print_user(
+                    char const *user_uuid,
+                    char const *user_name,
+                    int user_status);*/
+
+            /// int client_error_unknown_team(char const *team_uuid);
+/*            break;
         case (CHANNEL):
             break;
         case (THREAD):
             break;
         case (REPLY_OR_LOGGED):
+            get_info_logged(sd, resp);
             break;
         default:
             break;
     }
-}
+}*/

@@ -96,11 +96,9 @@ void process_cli_request(int sd, client_t *cl)
     free(input);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
-        printf(new_request.message);
         return;
     }
     if (new_request.type == 42 || new_request.type == CT_USE) {
-        printf("the request type was use if not help\n");
         return;
     }
     else

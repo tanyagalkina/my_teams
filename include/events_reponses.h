@@ -31,7 +31,7 @@ void ct_subscribed_uuid_print(int sd, response_t *response);
 void ct_subscribed_blank_print(int sd, response_t *response);
 void ct_list_print(int sd, response_t *response);
 void ct_info_print(int sd, response_t *response);
-
+void ct_creat_print(int sd, response_t *response);
 ///todo: check eventual error prints
 /*void ct_send_print(int sd, response_t *response);
 void ct_subscribe_print(int sd, response_t *response);
@@ -57,6 +57,7 @@ static const event_print_t event_table[] = {
         {CT_SUBSCRIBED_BLANK, &ct_subscribed_blank_print},
         {CT_LIST, &ct_list_print},
         {CT_INFO, &ct_info_print},
+        {CT_CREATE, &ct_creat_print},
         {0, NULL}
 };
 

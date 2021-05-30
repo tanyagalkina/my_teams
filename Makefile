@@ -76,8 +76,9 @@ CLIENT_SRC 		= 	client/main.c 				\
 					client/requests/request_tools.c		\
 					client/event_prints/response_print_wrapper.c	\
 					client/event_prints/creat_rec_wrapper.c		\
-					client/event_prints/info_prints.c
-
+					client/event_prints/info_prints.c		\
+					client/event_prints/info_req_print.c	\
+					client/event_prints/creat_resp_print.c
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
 CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)
