@@ -29,6 +29,7 @@ int cmd_send(server_t *server, request_t *req, int fd);
 int cmd_messages(server_t *server, request_t *req, int fd);
 int cmd_subscribe(server_t *server, request_t *req, int fd);
 int cmd_unsubscribe(server_t *server, request_t *req, int fd);
+void send_error_response(server_t *server, request_t *req, int fd);
 
 static const command_t cmd_table[COMMANDS] = {
     { CT_LOGIN, cmd_login },

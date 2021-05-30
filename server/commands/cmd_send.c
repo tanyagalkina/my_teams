@@ -7,6 +7,7 @@
 
 #include "../../include/server.h"
 #include "../../include/commons.h"
+#include "../../include/commands.h"
 #include "../../libs/myteams/logging_server.h"
 #include <string.h>
 #include <stdio.h>
@@ -29,7 +30,7 @@ static void send_response(server_t *server, const char *r_uuid, request_t *req)
         server_debug_print(WARNING, "no given user to that receiver uuid");
         return;
     }
-    r.request_type = CT_SEND;
+    r.request_type = ET_MESSAGE_REC;
     r.status_code = STATUS_OK;
     strcpy(r.user_uuid, req->user_uuid);
     strcpy(r.message, req->message);
@@ -63,13 +64,13 @@ static void create_new_dm(server_t *server, const char *ruuid, \
 request_t *req, const char *suuid)
 {
     direct_message_t *dm;
+    private_message_info_t *info;
 
     if ((dm = malloc(sizeof(direct_message_t))) == NULL)
         return;
     strcpy(dm->user1, get_user_by_uuid(server, ruuid)->info->user_name);
     strcpy(dm->user2, get_user_by_uuid(server, suuid)->info->user_name);
 
-    private_message_info_t *info;
     if ((info = malloc(sizeof(private_message_info_t))) == NULL)
         return;
     strcpy(info->message_body, req->message);
@@ -100,12 +101,18 @@ private_message_info_t *dm_info, const char *ruuid)
     create_new_dm(server, ruuid, req, suuid);
 }
 
+
 int cmd_send(server_t *server, request_t *req, int fd)
 {
     private_message_info_t dm_info;
     const char *sender_uuid = get_user_by_fd(server, fd)->info->user_uuid;
     const char *receiver_uuid = req->user_uuid;
     const char *message = req->message;
+
+    if (get_user_by_uuid(server, receiver_uuid) == NULL) {
+        send_error_response(server, req, fd);
+        return SUCCESS;
+    }
 
     strcpy(dm_info.sender_uuid, sender_uuid);
     strcpy(dm_info.message_body, message);
@@ -114,6 +121,5 @@ int cmd_send(server_t *server, request_t *req, int fd)
     process_message(server, req, &dm_info, receiver_uuid);
     server_event_private_message_sended(sender_uuid, receiver_uuid, message);
     send_response(server, receiver_uuid, req);
-
     return SUCCESS;
 }

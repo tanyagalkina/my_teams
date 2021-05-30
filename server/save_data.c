@@ -25,7 +25,8 @@ static void save_teams(server_t *server)
     }
 
     TAILQ_FOREACH(tmp, &server->admin->team_head, next) {
-        fprintf(file, "uuid:%s,name:%s,\n", tmp->info->team_uuid, tmp->info->team_name);
+        fprintf(file, "uuid:%s,name:%s,\n", tmp->info->team_uuid, \
+tmp->info->team_name);
     }
 }
 
@@ -36,14 +37,14 @@ static void saving_users(server_t *server)
     user_subscribed_teams_t *team = NULL;
 
     server_debug_print(INFO, "saving users ...");
-
     if ((file = fopen("save_users.txt", "w")) == NULL) {
         server_debug_print(ERROR, "Cannot open database file (write users)");
         return;
     }
 
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        fprintf(file, "uuid:%s,name:%s,teams:", user->info->user_uuid, user->info->user_name);
+        fprintf(file, "uuid:%s,name:%s,\nteams:", user->info->user_uuid, \
+user->info->user_name);
         TAILQ_FOREACH(team, &user->subscribed_teams_head, next) {
             fprintf(file, "%s,", team->team_uuid);
         }
@@ -55,5 +56,4 @@ void save_data(server_t *server)
 {
     server_debug_print(INFO, "starting to save now");
     saving_users(server);
-    //save_teams(server);
 }
