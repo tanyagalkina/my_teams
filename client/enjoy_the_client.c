@@ -91,8 +91,8 @@ void process_cli_request(int sd, client_t *cl)
         go = 0;
         return;
     }
-    new_request = generate_request(input, cl);
-    memset(input, 0, INPUT_SIZE);
+    new_request = generate_request(strdup(input), cl);
+    free(input);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
         printf(new_request.message);
