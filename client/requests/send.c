@@ -9,6 +9,7 @@
 
 request_t send_req(char *user_req, char *input, client_t *cl)
 {
+    printf("Input send was %s\n", input);
     char **req_args;
     request_t new_req;
     (void)cl;
@@ -17,6 +18,8 @@ request_t send_req(char *user_req, char *input, client_t *cl)
         return bad_request(QUOTES);
     if (NULL == (req_args = get_args(input, 2)))
         return bad_request(BAD_INPUT);
+    printf("first arg: %s\n", req_args[0]);
+    printf("second arg: %s\n", req_args[1]);
 
     if (is_not_valid_uuid(req_args[0]))
         return bad_request(INVALID_UUID);

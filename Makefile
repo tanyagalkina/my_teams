@@ -46,7 +46,7 @@ SERVER_SRC 		= 	server/main.c 						\
 					server/commands/cmd_messages.c		\
 					server/commands/cmd_subscribe.c		\
 					server/commands/cmd_unsubscribe.c	\
-
+					server/commands/cmd_list.c
 CLIENT_NAME 	= 	myteams_cli
 
 CLIENT_SRC 		= 	client/main.c 				\

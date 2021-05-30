@@ -11,7 +11,7 @@
 #include "server.h"
 #include "commons.h"
 
-#define COMMANDS 9
+#define COMMANDS 10
 
 typedef int (*cmd_func)(server_t *, request_t *, int);
 
@@ -29,6 +29,7 @@ int cmd_send(server_t *server, request_t *req, int fd);
 int cmd_messages(server_t *server, request_t *req, int fd);
 int cmd_subscribe(server_t *server, request_t *req, int fd);
 int cmd_unsubscribe(server_t *server, request_t *req, int fd);
+int cmd_list(server_t *server, request_t *req, int fd);
 void send_error_response(server_t *server, request_t *req, int fd);
 
 static const command_t cmd_table[COMMANDS] = {
@@ -40,7 +41,8 @@ static const command_t cmd_table[COMMANDS] = {
     { CT_SEND, cmd_send},
     { CT_MESSAGES, cmd_messages},
     { CT_SUBSCRIBE, cmd_subscribe},
-    { CT_UNSUBSCRIBE, cmd_unsubscribe}
+    { CT_UNSUBSCRIBE, cmd_unsubscribe},
+    { CT_LIST, cmd_list}
 };
 
 #endif //COMMANDS_H

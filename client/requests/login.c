@@ -10,11 +10,15 @@
 request_t login_req(char *user_req, char *input, client_t *cl)
 {
     request_t new_req;
+    char **req_args;
     (void)cl;
 
     if (!count_quotes(2, input))
         return bad_request(QUOTES);
-    char **req_args = get_args(input, 1);
+    if (NULL == (req_args = get_args(strdup(input), 1)))
+        return (bad_request(BAD_INPUT));
+    printf("first arg: %s\n", req_args[0]);
+
 
     new_req.type = CT_LOGIN;
     strcpy(new_req.name, strdup(req_args[0]));
