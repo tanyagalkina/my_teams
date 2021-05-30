@@ -33,7 +33,6 @@
 
 static volatile sig_atomic_t go = 1;
 
-
 typedef struct context {
     use_level_t context_level;
     char team_uuid[UUID_STR_LEN];
@@ -92,28 +91,6 @@ static const req_t req_table[] = {
         {"/use", &use_req},
         {NULL, NULL}
 };
-
-/*typedef struct event_print
-{
-    event_t event;
-    void (*func)(int sd, response_t *response);
-
-}event_print_t;
-
-void ct_login_print(int sd, response_t *response);
-void ct_logout_print(int sd, response_t *response);
-void ct_users_print(int sd, response_t *response);
-void ct_user_print(int sd, response_t *response);
-
-static const event_print_t event_table[] = {
-        //{CT_LOGIN,  &ct_login_print},
-        //{CT_LOGOUT, &ct_logout_print},
-        {ET_LOGGED_IN, &et_logged_in_print},
-        {ET_LOGGED_OUT, &et_logged_out_print},
-        {CT_USERS, &ct_users_print},
-        {CT_USER, &ct_user_print},
-        {0, NULL}
-};*/
 
 void set_signals(void);
 int enjoy_the_client(client_t *client_stuff);

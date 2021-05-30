@@ -44,6 +44,7 @@ void show_help()
 ///if the input is invalid returns request of type 84))
 request_t generate_request(char *input, client_t *cl)
 {
+    printf("the input was %s\n", input);
     request_t req;
     int i = 0;
 
@@ -60,6 +61,7 @@ request_t generate_request(char *input, client_t *cl)
         }
         ++i;
     }
+    printf("the couter was %d\n", i);
     if (i == 13) {
         printf("invalid request\n");
         req.type = 84;

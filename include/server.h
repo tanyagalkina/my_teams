@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <sys/queue.h>
 #include <uuid/uuid.h>
+#include <assert.h>
 #include "common_structs.h"
 
 #define COLOR_BLUE    "\x1b[34m"
