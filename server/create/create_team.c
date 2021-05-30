@@ -34,7 +34,7 @@ static void send_response(server_t *server, team_t *team, user_t *user)
 {
     response_t r;
     user_fds_t *fds;
-    r.request_type = ET_TEAM_CREAT;
+    r.request_type = CT_CREATE;
     r.level = TEAM;
     strcpy(r.team_uuid, team->info->team_uuid);
     strcpy(r.name, team->info->team_name);

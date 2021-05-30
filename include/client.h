@@ -95,6 +95,7 @@ static const req_t req_table[] = {
 void set_signals(void);
 int enjoy_the_client(client_t *client_stuff);
 char **my_str_to_word_array(char const *str);
+char **my_str_to_special_array(char const *str, char const *sep);
 
 ///request_tools.c
 int is_not_valid_uuid(char *str);

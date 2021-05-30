@@ -88,11 +88,9 @@ void process_cli_request(int sd, client_t *cl)
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
     if (-1 == getline(&input, &size, stdin)) {
-        printf ("Goodbye!\n");
-        go = 0;
-        return;
+        new_request.type = CT_LOGOUT;
     }
-    new_request = generate_request(strdup(input), cl);
+    else new_request = generate_request(strdup(input), cl);
     free(input);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");

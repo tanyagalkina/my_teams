@@ -7,7 +7,6 @@
 
 #include "../../include/client.h"
 
-
 void get_info_thread(int sd, response_t *resp)
 {
     if (resp->status_code == KO_UNKN_THREAD)

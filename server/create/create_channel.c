@@ -47,6 +47,7 @@ static void send_to_all(server_t *server, team_t *team, channel_t *ch)
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
         if (!is_user_in_team(user, ch->info->channel_uuid))
             continue;
+        r.request_type = ET_CHANNEL_CREAT;
         strcpy(r.channel_uuid, ch->info->channel_uuid);
         strcpy(r.name, ch->info->channel_name);
         strcpy(r.description, ch->info->channel_description);
