@@ -12,7 +12,7 @@
 #include <sys/queue.h>
 #include <string.h>
 
-void restore_channel(FILE *file, team_t *team)
+static void restore_channel(FILE *file, team_t *team)
 {
     channel_t *ch;
     char *line = NULL;
@@ -28,6 +28,24 @@ void restore_channel(FILE *file, team_t *team)
         sscanf(line, "uuid:%36[^,],name:%32[^,],desc:%255[^,]", \
 ch->info->channel_uuid, ch->info->channel_name, ch->info->channel_description);
         TAILQ_INSERT_TAIL(&team->channel_head, ch, next);
+    }
+}
+
+static void restore_user_of_team(FILE *file, team_t *team)
+{
+    team_user_info_t *info;
+
+    char *line = NULL;
+    size_t len = 0;
+
+    while (getline(&line, &len, file) != -1) {
+        if (strncmp(line, "--- Team User End ---", 21) == 0)
+            return;
+        if (strncmp(line, "--- Team User Start ---", 23) == 0)
+            continue;
+        info = malloc(sizeof(team_user_info_t));
+        sscanf(line, "uuid:%36[^,],", info->user_uuid);
+        TAILQ_INSERT_TAIL(&team->user_info_head, info, next);
     }
 }
 
@@ -57,6 +75,7 @@ void restore_teams(server_t *server)
         if ((team->info = malloc(sizeof(team_info_t))) == NULL)
             return;
         setup_team(team, line);
+        restore_user_of_team(file, team);
         restore_channel(file, team);
         TAILQ_INSERT_TAIL(&server->admin->team_head, team, next);
     }
