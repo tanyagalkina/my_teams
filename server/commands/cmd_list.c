@@ -66,9 +66,8 @@ int cmd_list(server_t *server, request_t *req, int fd)
             server_debug_print(ERROR, "listing teams");
             list_teams(server, fd);
             break;
+        default:
+            server_debug_print(ERROR, "List not implemented");
     }
-    printf("the context level was %d\n", req->context_level);
-    //printf("the name was %s\n", req->name);
-    //printf("description was %s\n", req->description);
     return SUCCESS;
 }
