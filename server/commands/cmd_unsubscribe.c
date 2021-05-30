@@ -31,6 +31,21 @@ static int unsubscribe_from_team(user_t *user, const char *team_uuid)
     return SUCCESS;
 }
 
+static int delete_user_from_team(const char *user_uuid, team_t *team)
+{
+    team_user_info_t *info;
+    team_user_info_t *to_del;
+
+    TAILQ_FOREACH(info, &team->user_info_head, next) {
+        if (strcmp(info->user_uuid, user_uuid) == 0) {
+            to_del = info;
+        }
+    }
+
+    TAILQ_REMOVE(&team->user_info_head, to_del, next);
+    return SUCCESS;
+}
+
 int cmd_unsubscribe(server_t *server, request_t *req, int fd)
 {
     user_t *user = get_user_by_fd(server, fd);
@@ -42,6 +57,7 @@ int cmd_unsubscribe(server_t *server, request_t *req, int fd)
 
     if (unsubscribe_from_team(user, team_uuid) == FAILURE)
         return FAILURE;
+
     server_event_user_unsubscribed(team_uuid, user->info->user_uuid);
     return SUCCESS;
 }

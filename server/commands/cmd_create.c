@@ -23,6 +23,7 @@ int cmd_create(server_t *server, request_t *req, int fd)
             create_new_team(server, req, fd);
             break;
         case CHANNEL:
+            create_new_channel(server, req, fd);
             break;
         case THREAD:
             break;
