@@ -151,4 +151,11 @@ user_t *get_user_by_uuid(server_t *server, const char *uuid);
 /* get_team_by.c */
 team_t *get_team_by_uuid(server_t *server, const char *uuid);
 
+/* saving/.c */
+void saving_users(server_t *server);
+void save_teams(server_t *server);
+
+/* restoring/.c */
+void restore_users(server_t *server);
+
 #endif //SERVER_H_
