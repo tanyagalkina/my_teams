@@ -164,5 +164,9 @@ void save_teams(server_t *server);
 /* restoring/.c */
 void restore_users(server_t *server);
 void restore_teams(server_t *server);
+/* create/errors.c */
+void error_already_exist(user_t *user);
+void error_unauthorized(user_t *user);
+void error_not_exist(const char *uuid, user_t *user, int code, int level);
 
 #endif //SERVER_H_

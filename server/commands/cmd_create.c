@@ -30,9 +30,5 @@ int cmd_create(server_t *server, request_t *req, int fd)
         case REPLY_OR_LOGGED:
             break;
     }
-    printf("Why am I here?\n");
-    printf("the context level was %d", req->context_level);
-    printf("the name was %s\n", req->name);
-    printf("description was %s\n", req->description);
     return 0;
 }

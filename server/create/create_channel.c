@@ -78,61 +78,34 @@ ch->info->channel_uuid, ch->info->channel_name);
     return SUCCESS;
 }
 
-static void team_not_exist(const char *team_uuid, user_t *user)
+static bool is_authorized(team_t *team, const char *user_uuid)
 {
-    response_t r;
-    user_fds_t *fds;
+    team_user_info_t *info;
 
-    r.status_code = KO_UNKN_TEAM;
-    r.level = CHANNEL;
-    r.request_type = CT_CREATE;
-    strcpy(r.team_uuid, team_uuid);
-
-    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
+    TAILQ_FOREACH(info, &team->user_info_head, next) {
+        if (strcmp(info->user_uuid, user_uuid) == 0)
+            return true;
     }
-}
-
-static void team_unauthorized(user_t *user)
-{
-    response_t r;
-    user_fds_t *fds;
-
-    r.status_code = KO_UNAUTHOR;
-    r.level = CHANNEL;
-    r.request_type = CT_CREATE;
-
-    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
-    }
-}
-
-static void channel_already_exist(user_t *user)
-{
-    response_t r;
-    user_fds_t *fds;
-
-    r.status_code = KO_ERROR_EXISTS;
-    r.level = CHANNEL;
-    r.request_type = CT_CREATE;
-
-    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
-    }
+    return false;
 }
 
 void create_new_channel(server_t *server, request_t *req, int fd)
 {
     team_t *team = NULL;
+    user_t *user = get_user_by_fd(server, fd);
     const char *ch_name = req->name;
     const char *ch_desc = req->description;
 
     if ((team = get_team_by_uuid(server, req->team_uuid)) == NULL) {
-        team_not_exist(req->team_uuid, get_user_by_fd(server, fd));
+        error_not_exist(req->team_uuid, user, KO_UNKN_TEAM, CHANNEL);
         return;
     }
     if (get_channel_by_name(team, ch_name)) {
-        server_debug_print(WARNING, "This channel already exists");
+        error_already_exist(user);
+        return;
+    }
+    if (!is_authorized(team, user->info->user_uuid)) {
+        error_unauthorized(user);
         return;
     }
     add_new_channel(team, req);

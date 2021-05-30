@@ -53,6 +53,7 @@ SERVER_SRC 		= 	server/main.c 						\
 					server/restoring/restore_teams.c	\
 					server/create/create_team.c			\
 					server/create/create_channel.c		\
+					server/create/errors.c		\
 
 CLIENT_NAME 	= 	myteams_cli
 
