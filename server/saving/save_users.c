@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <sys/queue.h>
 
-void saving_users(server_t *server)
+void save_users(server_t *server)
 {
     FILE *file = NULL;
     user_t *user = NULL;

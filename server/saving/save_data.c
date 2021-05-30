@@ -16,6 +16,7 @@
 void save_data(server_t *server)
 {
     server_debug_print(INFO, "starting to save now");
-    saving_users(server);
+    save_teams(server);
+    save_users(server);
     server_debug_print(INFO, "finished saving data");
 }

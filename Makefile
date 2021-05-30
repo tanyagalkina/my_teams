@@ -50,6 +50,7 @@ SERVER_SRC 		= 	server/main.c 						\
 					server/saving/save_users.c			\
 					server/restoring/restore_data.c		\
 					server/restoring/restore_users.c	\
+					server/restoring/restore_teams.c	\
 
 CLIENT_NAME 	= 	myteams_cli
 
