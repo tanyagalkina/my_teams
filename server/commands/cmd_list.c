@@ -41,21 +41,19 @@ static void send_status(server_t *server, user_t *user)
 
 static void list_teams(server_t *server, int fd)
 {
-    response_t r;
     team_t *team = NULL;
     user_fds_t *fds;
     user_t *user = get_user_by_fd(server, fd);
     send_status(server, user);
+    team_info_t t;
 
     TAILQ_FOREACH(team, &server->admin->team_head, next) {
-        r.request_type = CT_LIST;
-        r.status_code = STATUS_OK;
-        strcpy(r.team_uuid, team->info->team_uuid);
-        strcpy(r.name, team->info->team_name);
-        strcpy(r.description, team->info->team_description);
         printf("teamname: %s\n", team->info->team_name);
+        strcpy(t.team_description, team->info->team_description);
+        strcpy(t.team_uuid, team->info->team_uuid);
+        strcpy(t.team_name, team->info->team_name);
         TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-            send(fds->fd, &r, RESPONSE_SIZE, 0);
+            send(fds->fd, &t, sizeof(team_info_t), 0);
         }
     }
 }
