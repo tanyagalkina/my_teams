@@ -44,11 +44,11 @@ void show_help()
 ///if the input is invalid returns request of type 84))
 request_t generate_request(char *input, client_t *cl)
 {
-    printf("the input was %s\n", input);
     request_t req;
     int i = 0;
-
-    char **user_req = my_str_to_word_array(input);
+    char **user_req = my_str_to_word_array(strdup(input));
+    if (NULL == user_req[0])
+        return bad_request("type something!\n");
     if (!strcmp("/help", user_req[0])) {
         show_help();
         req.type = 42;
@@ -61,7 +61,6 @@ request_t generate_request(char *input, client_t *cl)
         }
         ++i;
     }
-    printf("the couter was %d\n", i);
     if (i == 13) {
         printf("invalid request\n");
         req.type = 84;
@@ -88,7 +87,7 @@ void process_cli_request(int sd, client_t *cl)
     size_t size = INPUT_SIZE;
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
-    if (getline(&input, &size, stdin) == -1) {
+    if (-1 == getline(&input, &size, stdin)) {
         printf ("Goodbye!\n");
         go = 0;
         return;

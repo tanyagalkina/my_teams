@@ -32,7 +32,6 @@ static request_t list_threads(client_t *cl)
 
 static request_t list_channels(client_t *cl)
 {
-    char **req_args;
     request_t new_req;
 
     new_req.type = CT_CREATE;
@@ -52,23 +51,21 @@ static request_t list_teams(void)
 
 request_t list_req(char *user_req, char *args, client_t *cl)
 {
+    (void)args;
+    (void)user_req;
+
     switch (cl->context.context_level)
     {
         case (TEAM):
-            printf("the context level was TEAM\n");
-            //new_req.context_level = TEAM;
             cl->context.context_level = UNDEFINED;
             return list_teams();
         case (CHANNEL):
-            //new_req.context_level = CHANNEL;
             cl->context.context_level = UNDEFINED;
             return list_channels(cl);
         case (THREAD):
-            printf("the context level was THREAD\n");
             cl->context.context_level = UNDEFINED;
             return list_threads(cl);
         case (REPLY_OR_LOGGED):
-            printf("the context level was REPLY\n");
             cl->context.context_level = UNDEFINED;
             return list_replies(cl);
         default:
