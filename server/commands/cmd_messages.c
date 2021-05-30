@@ -47,6 +47,16 @@ static void send_messages(direct_message_t *dm, int fd)
     }
 }
 
+static void cmd_messages_error(server_t *server, request_t *req, int fd)
+{
+    response_t r;
+
+    r.request_type = CT_MESSAGES;
+    r.status_code = KO_UNKN_USER;
+    strcpy(r.user_uuid, req->user_uuid);
+    send(fd, &r, RESPONSE_SIZE, 0);
+}
+
 int cmd_messages(server_t *server, request_t *req, int fd)
 {
     const char *suuid = get_user_by_fd(server, fd)->info->user_uuid;
@@ -54,6 +64,11 @@ int cmd_messages(server_t *server, request_t *req, int fd)
     direct_message_t *dm;
     bool fst;
     bool snd;
+
+    if (get_user_by_uuid(server, ruuid) == NULL) {
+        cmd_messages_error(server, req, fd);
+        return SUCCESS;
+    }
 
     TAILQ_FOREACH(dm, &server->admin->message_head, next) {
         fst = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0);
