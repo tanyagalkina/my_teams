@@ -26,6 +26,7 @@ static void list_teams(server_t *server, int fd)
         strcpy(r.team_uuid, team->info->team_uuid);
         strcpy(r.name, team->info->team_name);
         strcpy(r.description, team->info->team_description);
+        printf("teamname: %s\n", team->info->team_name);
         TAILQ_FOREACH(fds, &user->user_fds_head, next) {
             send(fds->fd, &r, RESPONSE_SIZE, 0);
         }
@@ -36,6 +37,7 @@ int cmd_list(server_t *server, request_t *req, int fd)
 {
     switch(req->context_level) {
         case TEAM:
+            server_debug_print(ERROR, "listing teams");
             list_teams(server, fd);
             break;
     }
