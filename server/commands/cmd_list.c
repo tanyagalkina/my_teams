@@ -30,6 +30,7 @@ static void send_status(server_t *server, user_t *user)
     user_fds_t *fds;
 
     r.request_type = CT_LIST;
+    r.level = TEAM;
     r.status_code = STATUS_OK;
     r.extern_body_size = how_many_teams(server);
     r.extern_body_type = TEAM_TYPE;
