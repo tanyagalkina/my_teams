@@ -12,9 +12,12 @@
 void send_error_response(server_t *server, request_t *req, int fd)
 {
     response_t r;
+    user_fds_t *fds;
 
     r.request_type = CT_SEND;
     r.status_code = KO_UNKN_USER;
     strcpy(r.user_uuid, req->user_uuid);
-    send(fd, &r, RESPONSE_SIZE, 0);
+    TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
+        send(fds->fd, &r, RESPONSE_SIZE, 0);
+    }
 }

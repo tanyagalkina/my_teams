@@ -25,17 +25,22 @@ static int how_many(direct_message_t *dm)
 static void send_status(server_t *server, int fd, direct_message_t *dm)
 {
     response_t r;
+    user_fds_t *fds;
 
     r.request_type = CT_MESSAGES;
     r.status_code = STATUS_OK;
     r.extern_body_size = how_many(dm);
     r.extern_body_type = MESSAGE_TYPE;
-    send(fd, &r, RESPONSE_SIZE, 0);
+
+    TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
+        send(fds->fd, &r, RESPONSE_SIZE, 0);
+    }
 }
 
-static void send_messages(direct_message_t *dm, int fd)
+static void send_messages(direct_message_t *dm, int fd, server_t *server)
 {
     message_t *msg;
+    user_fds_t *fds;
 
     TAILQ_FOREACH(msg, &dm->message_head, next) {
         response_t r;
@@ -43,18 +48,23 @@ static void send_messages(direct_message_t *dm, int fd)
         strcpy(r.user_uuid, msg->info->sender_uuid);
         strcpy(r.message, msg->info->message_body);
         r.timestamp = msg->info->message_timestamp;
-        send(fd, &r, RESPONSE_SIZE, 0);
+        TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
+            send(fds->fd, &r, RESPONSE_SIZE, 0);
+        }
     }
 }
 
 static void cmd_messages_error(server_t *server, request_t *req, int fd)
 {
     response_t r;
+    user_fds_t *fds;
 
     r.request_type = CT_MESSAGES;
     r.status_code = KO_UNKN_USER;
     strcpy(r.user_uuid, req->user_uuid);
-    send(fd, &r, RESPONSE_SIZE, 0);
+    TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
+        send(fds->fd, &r, RESPONSE_SIZE, 0);
+    }
 }
 
 int cmd_messages(server_t *server, request_t *req, int fd)
@@ -74,7 +84,7 @@ int cmd_messages(server_t *server, request_t *req, int fd)
         fst = (strcmp(dm->user1, suuid) == 0 && strcmp(dm->user2, ruuid) == 0);
         snd = (strcmp(dm->user1, ruuid) == 0 && strcmp(dm->user2, suuid) == 0);
         if (fst || snd) {
-            send_messages(dm, fd);
+            send_messages(dm, fd, server);
         }
     }
     return SUCCESS;
