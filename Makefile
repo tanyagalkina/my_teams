@@ -32,8 +32,6 @@ SERVER_SRC 		= 	server/main.c 						\
 					server/handle_connection.c			\
 					server/utils.c						\
 					server/run_server.c					\
-					server/save_data.c					\
-					server/restore_data.c				\
 					server/get_user_by.c				\
 					server/get_team_by.c				\
 					server/commands/cmd_login.c			\
@@ -46,7 +44,14 @@ SERVER_SRC 		= 	server/main.c 						\
 					server/commands/cmd_messages.c		\
 					server/commands/cmd_subscribe.c		\
 					server/commands/cmd_unsubscribe.c	\
-					server/commands/cmd_list.c
+					server/commands/cmd_list.c			\
+					server/saving/save_data.c			\
+					server/saving/save_teams.c			\
+					server/saving/save_users.c			\
+					server/restoring/restore_data.c		\
+					server/restoring/restore_users.c	\
+					server/restoring/restore_teams.c	\
+
 CLIENT_NAME 	= 	myteams_cli
 
 CLIENT_SRC 		= 	client/main.c 				\
