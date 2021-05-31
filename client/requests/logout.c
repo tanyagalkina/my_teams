@@ -10,6 +10,7 @@
 request_t logout_req(char *user_req, char *args, client_t *cl)
 {
     request_t new_req;
+    free(args);
 
     new_req.type = CT_LOGOUT;
     cl->logged_in = 0;

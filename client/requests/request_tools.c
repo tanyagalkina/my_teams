@@ -21,42 +21,24 @@ static int not_only_spases(char *str)
 
 char **get_args(char *input, int nb_args)
 {
-    char delim[] = {'"'};
-    char **args = my_str_to_special_array(input, delim);
-    char **result = malloc(sizeof(char *) * nb_args);
-
-    int i = 1;
     int count = 0;
-    while (args[i] != NULL && (count < nb_args)) {
-        if (not_only_spases(args[i])) {
-            result[count] = strdup(args[i]);
-            ++count;
-        }
-        ++i;
-    }
-    free(args);
-
-    int x = 0;
-    while (result[x]) {
-        printf("res %s\n", result[x]);
-        ++x;
-    }
-    if (count == nb_args)
-        return (result);
-    return (NULL);
-}
-    /*int count = 0;
-    char delim[] = {'"'};
-    char *token =  strtok(input, delim);
-
+    char **result = malloc(sizeof(char *) * nb_args);
+    char delim[] = {'"', 0};
+    char *token;
+    if (!count_quotes(nb_args * 2, input))
+        return (NULL);
+    token =  strtok(input, delim);
     while (count < nb_args && token != NULL) {
         token = strtok(NULL, delim);
         if (token != NULL && not_only_spases(token)) {
             result[count] = strdup(token);
             ++count;
         }
-    }*/
-//}
+    }
+    if (count == nb_args)
+        return (result);
+    return (NULL);
+}
 
 request_t bad_request(char *comment)
 {
