@@ -20,6 +20,12 @@ typedef struct command_t {
     cmd_func f;
 } command_t;
 
+void send_error_response(server_t *server, request_t *req, int fd);
+int create_new_team(server_t *server, request_t *req, int fd);
+void create_new_channel(server_t *server, request_t *req, int fd);
+int cmd_login_error(server_t *server, int fd);
+bool cmd_login_check_existing_fd(server_t *server, int fd);
+
 int cmd_logout(server_t *server, request_t *req, int fd);
 int cmd_login(server_t *server, request_t *req, int fd);
 int cmd_create(server_t *server, request_t *req, int fd);
@@ -30,9 +36,7 @@ int cmd_messages(server_t *server, request_t *req, int fd);
 int cmd_subscribe(server_t *server, request_t *req, int fd);
 int cmd_unsubscribe(server_t *server, request_t *req, int fd);
 int cmd_list(server_t *server, request_t *req, int fd);
-void send_error_response(server_t *server, request_t *req, int fd);
-int create_new_team(server_t *server, request_t *req, int fd);
-void create_new_channel(server_t *server, request_t *req, int fd);
+
 
 static const command_t cmd_table[COMMANDS] = {
     { CT_LOGIN, cmd_login },

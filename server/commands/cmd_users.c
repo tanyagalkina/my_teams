@@ -58,8 +58,23 @@ static void send_response(server_t *server, int fd)
     }
 }
 
+/* @todo implement this in client and ask how this should be. Think about if i can put this into the generic error functions */
+static void cmd_users_unauthorized(int fd)
+{
+    response_t r;
+
+    r.status_code = KO_UNAUTHOR;
+    r.request_type = CT_USERS;
+
+    send(fd, &r, RESPONSE_SIZE, 0);
+}
+
 int cmd_users(server_t *server, request_t *req, int fd)
 {
+    if (get_user_by_fd(server, fd) == NULL) {
+        cmd_users_unauthorized(fd);
+        return SUCCESS;
+    }
     send_status(server, fd);
     send_response(server, fd);
     return SUCCESS;

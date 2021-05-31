@@ -6,6 +6,7 @@
 */
 
 #include "../../include/commons.h"
+#include "../../include/commands.h"
 #include "../../include/server.h"
 #include "../../libs/myteams/logging_server.h"
 #include <stdlib.h>
@@ -83,6 +84,11 @@ static int add_new_user(server_t *server, request_t *req, int fd)
 int cmd_login(server_t *server, request_t *req, int fd)
 {
     user_t *user;
+
+    if (cmd_login_check_existing_fd(server, fd)) {
+        cmd_login_error(server, fd);
+        return SUCCESS;
+    }
 
     if (is_existing(server, req->name)) {
         if ((user = get_user_by_name(server, req->name)) == NULL)

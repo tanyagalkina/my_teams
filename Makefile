@@ -34,6 +34,7 @@ SRC_SERVER =      					server/init_server.c				\
                  					server/commands/cmd_subscribe.c		\
                  					server/commands/cmd_unsubscribe.c	\
                  					server/commands/cmd_list.c			\
+                 					server/commands/cmd_login_error.c	\
                  					server/saving/save_data.c			\
                  					server/saving/save_teams.c			\
                  					server/saving/save_users.c			\
