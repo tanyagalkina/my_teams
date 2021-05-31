@@ -30,9 +30,7 @@ static void send_status(server_t *server, int fd)
     r.status_code = STATUS_OK;
     r.extern_body_size = how_many_users(server);
     r.extern_body_type = USER_TYPE;
-    TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
-    }
+    send(fd, &r, RESPONSE_SIZE, 0);
 }
 
 static void send_each(user_info_t *info, int fd, server_t *server)
@@ -44,9 +42,7 @@ static void send_each(user_info_t *info, int fd, server_t *server)
     strcpy(u.user_uuid, info->user_uuid);
     u.user_status = info->user_status;
 
-    TAILQ_FOREACH(fds, &get_user_by_fd(server, fd)->user_fds_head, next) {
-        send(fds->fd, &u, sizeof(user_info_t), 0);
-    }
+    send(fd, &u, sizeof(user_info_t), 0);
 }
 
 static void send_response(server_t *server, int fd)
@@ -58,23 +54,8 @@ static void send_response(server_t *server, int fd)
     }
 }
 
-/* @todo implement this in client and ask how this should be. Think about if i can put this into the generic error functions */
-static void cmd_users_unauthorized(int fd)
-{
-    response_t r;
-
-    r.status_code = KO_UNAUTHOR;
-    r.request_type = CT_USERS;
-
-    send(fd, &r, RESPONSE_SIZE, 0);
-}
-
 int cmd_users(server_t *server, request_t *req, int fd)
 {
-    if (get_user_by_fd(server, fd) == NULL) {
-        cmd_users_unauthorized(fd);
-        return SUCCESS;
-    }
     send_status(server, fd);
     send_response(server, fd);
     return SUCCESS;
