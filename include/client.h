@@ -103,4 +103,10 @@ int count_quotes(int nb_quotes, char *input);
 request_t bad_request(char *comment);
 char **get_args(char *input, int nb_args);
 
+///very_small_tools.c
+void set_signals(void);
+void sig_handler(int sig);
+void show_help();
+void free_2d(char **s);
+
 #endif //TEAMS_CLIENT_H

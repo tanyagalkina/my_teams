@@ -79,7 +79,8 @@ CLIENT_SRC 		= 	client/main.c 				\
 					client/event_prints/info_prints.c		\
 					client/event_prints/info_req_print.c	\
 					client/event_prints/creat_resp_print.c	\
-					client/my_str_to_special_array.c
+					client/my_str_to_special_array.c	\
+					client/very_small_tools.c
 
 SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
 CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)

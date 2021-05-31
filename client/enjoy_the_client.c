@@ -11,17 +11,14 @@ void process_resp_or_event(client_t *cl)
 {
     int i = 0;
     if (cl->bytes_read == 0) {
-        printf("our server is gone on vacation, what a pitty...\n");
         go = 0;
         return;
     }
     response_t *resp = (void *)cl->re_buffer;
     if (resp->request_type == ET_LOGGED_OUT) {
         client_event_logged_out(resp->user_uuid, resp->name);
-        if (!strcmp(resp->name, cl->own_name)) {
-            printf("I HAVE HAD GREAT TIME WITH YOU, GUYS!\n");
+        if (!strcmp(resp->name, cl->own_name))
             go = 0;
-        }
         return;
     }
     while (event_table[i].event != 0) {
@@ -33,27 +30,23 @@ void process_resp_or_event(client_t *cl)
     }
 }
 
-void show_help()
+request_t help_request(void)
 {
-    printf("USAGE: ./myteams_cli ip port\n");
-    printf("\t\tip\tis the server ip address on which the server socket listens\n");
-    printf("\t\tport\tis the port number on which the server socket listens\n");
-    printf("the protocol and the commands to be updated...\n");
+    request_t req;
+    show_help();
+    req.type = 42;
+    return req;
 }
 
-///if the input is invalid returns request of type 84))
 request_t generate_request(char *input, client_t *cl)
 {
     request_t req;
     int i = 0;
-    char **user_req = my_str_to_word_array(strdup(input));
+    char **user_req = my_str_to_word_array(input);
     if (NULL == user_req[0])
         return bad_request("type something!\n");
-    if (!strcmp("/help", user_req[0])) {
-        show_help();
-        req.type = 42;
-        return req;
-    }
+    if (!strcmp("/help", user_req[0]))
+        return (help_request());
     while (req_table[i].req != NULL) {
         if (!strcmp(req_table[i].req, user_req[0])) {
             req = req_table[i].func(user_req[0], input, cl);
@@ -61,25 +54,10 @@ request_t generate_request(char *input, client_t *cl)
         }
         ++i;
     }
-    if (i == 13) {
-        printf("invalid request\n");
-        req.type = 84;
-    }
+    if (i == 13)
+        return bad_request(BAD_INPUT);
+    free_2d(user_req);
     return req;
-}
-
-void sig_handler(int sig)
-{
-    write(1, "\nGoodbye!\n", 10);
-    //exit(0);
-    go = 0;
-}
-
-void set_signals(void)
-{
-    signal(SIGINT, sig_handler);
-    signal(SIGPIPE, sig_handler);
-    signal(SIGTERM, sig_handler);
 }
 
 void process_cli_request(int sd, client_t *cl)
