@@ -1,120 +1,111 @@
 ##
 ## EPITECH PROJECT, 2020
-## Makefile
+## PSU_nmobjdump_2019
 ## File description:
-## Makes
+## Makefile
 ##
 
-END        		= \033[0m
-BOLD        	= \033[1m
-GREY        	= \033[30m
-RED        		= \033[31m
-GREEN        	= \033[32m
-YELLOW        	= \033[33m
-BLUE        	= \033[34m
-PURPLE        	= \033[35m
-CYAN        	= \033[36m
-WHITE        	= \033[37m
+OUTPUT_SERVER = myteams_server
+OUTPUT_CLI = myteams_cli
 
-EXTENSION 		= .c
-CC 				= @gcc
-CXX 			= @g++
-LINKLIB			+= -L ./libs/myteams/ -lmyteams -luuid
-LIB 			+= ./libs/myteams/libmyteams.so -luuid
-# CFLAGS 			+= -Wall -Werror -Wextra
+BUILD_DIR = build
 
-SERVER_NAME 	= 	myteams_server
+CC = cc
+CFLAGS += -Wall -Wextra -I./libs/myteams -I./include
+LDFLAGS += -L ./libs/myteams -lmyteams -luuid
 
-SERVER_SRC 		= 	server/main.c 						\
-					server/init_server.c				\
-					server/setup_server.c				\
-					server/cleanup.c					\
-					server/handle_connection.c			\
-					server/utils.c						\
-					server/run_server.c					\
-					server/get_user_by.c				\
-					server/get_team_by.c				\
-					server/commands/cmd_login.c			\
-					server/commands/cmd_logout.c		\
-					server/commands/cmd_create.c		\
-					server/commands/cmd_users.c			\
-					server/commands/cmd_user.c			\
-					server/commands/cmd_send.c			\
-					server/commands/cmd_send_error.c	\
-					server/commands/cmd_messages.c		\
-					server/commands/cmd_subscribe.c		\
-					server/commands/cmd_unsubscribe.c	\
-					server/commands/cmd_list.c			\
-					server/saving/save_data.c			\
-					server/saving/save_teams.c			\
-					server/saving/save_users.c			\
-					server/restoring/restore_data.c		\
-					server/restoring/restore_users.c	\
-					server/restoring/restore_teams.c	\
-					server/create/create_team.c			\
-					server/create/create_channel.c		\
-					server/create/errors.c		\
+OBJ_SERVER = $(SRC_SERVER_MAIN:%.c=$(BUILD_DIR)/%.o)
+SRC_SERVER =      					server/init_server.c				\
+                 					server/setup_server.c				\
+                 					server/cleanup.c					\
+                 					server/handle_connection.c			\
+                 					server/utils.c						\
+                 					server/run_server.c					\
+                 					server/get_user_by.c				\
+                 					server/get_team_by.c				\
+                 					server/commands/cmd_login.c			\
+                 					server/commands/cmd_logout.c		\
+                 					server/commands/cmd_create.c		\
+                 					server/commands/cmd_users.c			\
+                 					server/commands/cmd_user.c			\
+                 					server/commands/cmd_send.c			\
+                 					server/commands/cmd_send_error.c	\
+                 					server/commands/cmd_messages.c		\
+                 					server/commands/cmd_subscribe.c		\
+                 					server/commands/cmd_unsubscribe.c	\
+                 					server/commands/cmd_list.c			\
+                 					server/saving/save_data.c			\
+                 					server/saving/save_teams.c			\
+                 					server/saving/save_users.c			\
+                 					server/restoring/restore_data.c		\
+                 					server/restoring/restore_users.c	\
+                 					server/restoring/restore_teams.c	\
+                 					server/create/create_team.c			\
+                 					server/create/create_channel.c		\
+                 					server/create/errors.c		\
 
-CLIENT_NAME 	= 	myteams_cli
+SRC_SERVER_MAIN =	server/main.c \
+				$(SRC_SERVER)
 
-CLIENT_SRC 		= 	client/main.c 				\
-					client/enjoy_the_client.c	\
-					client/my_str_to_word.c		\
-					client/requests/info.c		\
-					client/requests/list.c		\
-					client/requests/login.c		\
-					client/requests/logout.c	\
-					client/requests/messages.c	\
-					client/requests/send.c		\
-					client/requests/subscribe.c	\
-					client/requests/create.c	\
-					client/requests/subscribed.c	\
-					client/requests/unsubscribe.c	\
-					client/requests/use.c		\
-					client/requests/user.c		\
-					client/requests/users.c		\
-					client/requests/request_tools.c		\
-					client/event_prints/response_print_wrapper.c	\
-					client/event_prints/creat_rec_wrapper.c		\
-					client/event_prints/info_prints.c		\
-					client/event_prints/info_req_print.c	\
-					client/event_prints/creat_resp_print.c	\
-					client/my_str_to_special_array.c	\
-					client/very_small_tools.c
+OBJ_CLI = $(SRC_CLI_MAIN:%.c=$(BUILD_DIR)/%.o)
+SRC_CLI =	client/enjoy_the_client.c	\
+            					client/my_str_to_word.c		\
+            					client/requests/info.c		\
+            					client/requests/list.c		\
+            					client/requests/login.c		\
+            					client/requests/logout.c	\
+            					client/requests/messages.c	\
+            					client/requests/send.c		\
+            					client/requests/subscribe.c	\
+            					client/requests/create.c	\
+            					client/requests/subscribed.c	\
+            					client/requests/unsubscribe.c	\
+            					client/requests/use.c		\
+            					client/requests/user.c		\
+            					client/requests/users.c		\
+            					client/requests/request_tools.c		\
+            					client/event_prints/response_print_wrapper.c	\
+            					client/event_prints/creat_rec_wrapper.c		\
+            					client/event_prints/info_prints.c		\
+            					client/event_prints/info_req_print.c	\
+            					client/event_prints/creat_resp_print.c	\
+            					client/my_str_to_special_array.c	\
+            					client/very_small_tools.c
 
-SERVER_OBJ 		= $(SERVER_SRC:.c=.o)
-CLIENT_OBJ 		= $(CLIENT_SRC:.c=.o)
+SRC_CLI_MAIN =	client/main.c \
+				$(SRC_CLI)
 
-all: 			myteams_server myteams_cli
+all: options server cli
 
-myteams_server:	$(SERVER_OBJ)
-	@$(CC) -o $(SERVER_NAME) $(SERVER_OBJ) $(LIB)
-	@echo -e "$(GREEN)* * * * * SERVER COMPLETED * * * * *$(END)\n"
+options:
+	@echo "  CC       $(CC)"
+	@echo "  CFLAGS   $(CFLAGS)"
+	@echo "  LDFLAGS  $(LDFLAGS)"
 
-myteams_cli:	$(CLIENT_OBJ)
-	@$(CC) -o $(CLIENT_NAME) $(CLIENT_OBJ) $(LIB)
-	@echo -e "$(GREEN)* * * * * CLIENT COMPLETED * * * * *$(END)"
+$(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	@echo "  CC       $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+server: $(OBJ_SERVER)
+	@echo "  BUILD    $(OUTPUT_SERVER)"
+	@$(CC) -o $(OUTPUT_SERVER) $(OBJ_SERVER) $(LDFLAGS)
+
+cli: $(OBJ_CLI)
+	@echo "  BUILD    $(OUTPUT_CLI)"
+	@$(CC) -o $(OUTPUT_CLI) $(OBJ_CLI) $(LDFLAGS)
 
 clean:
-	@rm -f $(SERVER_OBJ)
-	@rm -f $(CLIENT_OBJ)
-	@echo -e "$(RED)$(BOLD)* * * * *  CLEANED  * * * * *$(END)"
+	@rm -rf build
 
 fclean: clean
-	@rm -f $(SERVER_NAME)
-	@rm -f $(CLIENT_NAME)
-	@echo -e "$(RED)$(BOLD)* * * * *  CLEANED ALL  * * * * *$(END)"
+	@echo "  RM       $(OUTPUT_SERVER)"
+	@rm -f $(OUTPUT_SERVER)
+	@echo "  RM       $(OUTPUT_CLI)"
+	@rm -f $(OUTPUT_CLI)
 
-re: 	fclean all
+re:
+	@$(MAKE) fclean --no-print-directory
+	@$(MAKE) all --no-print-directory
 
-client/%.o:	client/%$(EXTENSION)
-	@$(CC) $(LINKLIB) $(CFLAGS) -c -o $@ $<							\
-	&& echo -e "$(GREEN)[- - OK - - - -]$(BOLD)" $< "$(END)"			\
-	|| echo -e "$(RED)[- - - - KO - -]$(BOLD)" $< "$(END)"
-
-server/%.o:	server/%$(EXTENSION)
-	@$(CC) $(LINKLIB) $(CFLAGS) -c -o $@ $<							\
-	&& echo -e "$(GREEN)[- - OK - - - -]$(BOLD)" $< "$(END)"			\
-	|| echo -e "$(RED)[- - - - KO - -]$(BOLD)" $< "$(END)"
-
-.PHONY: all clean fclean re
+.PHONY: all server cli clean fclean re
