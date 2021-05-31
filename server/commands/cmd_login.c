@@ -73,6 +73,7 @@ static int add_new_user(server_t *server, request_t *req, int fd)
     TAILQ_INIT(&user->user_fds_head);
     add_user_fd(user, fd);
     server_event_user_created(user->info->user_uuid, user->info->user_name);
+    server_event_user_logged_in(user->info->user_uuid);
     TAILQ_INIT(&user->subscribed_teams_head);
     TAILQ_INSERT_TAIL(&server->admin->user_head, user, next);
     send_response(server, user->info->user_name);

@@ -11,7 +11,7 @@ OUTPUT_CLI = myteams_cli
 BUILD_DIR = build
 
 CC = cc
-CFLAGS += -Wall -Wextra -I./libs/myteams -I./include
+CFLAGS += -I./libs/myteams -I./include
 LDFLAGS += -L ./libs/myteams -lmyteams -luuid
 
 OBJ_SERVER = $(SRC_SERVER_MAIN:%.c=$(BUILD_DIR)/%.o)
