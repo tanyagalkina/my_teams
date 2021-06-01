@@ -33,6 +33,7 @@ typedef enum command_type {
     ET_LOGGED_IN = 100,
     ///int client_event_logged_out
     /// (char const *user_uuid, const char *user_name);
+    ///int client_event_logged_out(char const *user_uuid,const char *user_name);
     ET_LOGGED_OUT,
     ///int client_event_private_message_received(
          ///char const *user_uuid,
