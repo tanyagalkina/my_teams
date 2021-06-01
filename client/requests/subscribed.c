@@ -7,7 +7,7 @@
 
 #include "../../include/client.h"
 
-request_t subscribed_req(char *user_req, char *input, client_t *cl)
+request_t subscribed_req(char *input, client_t *cl)
 {
     request_t new_req;
     char **req_args;

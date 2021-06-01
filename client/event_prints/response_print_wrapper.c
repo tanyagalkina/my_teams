@@ -29,9 +29,8 @@ void ct_user_print(int sd, response_t *resp)
         user_info_t *user = (void *) user_buffer;
         client_print_user(user->user_uuid, user->user_name, user->user_status);
     }
-    ///in case of error reply_status
     else
-    client_error_unknown_user(resp->user_uuid);
+        client_error_unknown_user(resp->user_uuid);
 }
 
 void et_logged_in_print(int sd, response_t *resp)

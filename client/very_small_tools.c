@@ -7,6 +7,14 @@
 
 #include "../include/client.h"
 
+request_t help_request(void)
+{
+    request_t req;
+    show_help();
+    req.type = 42;
+    return req;
+}
+
 void free_2d(char **s)
 {
     for (int i = 0; s[i]; i++) {
@@ -16,18 +24,15 @@ void free_2d(char **s)
     free(s);
 }
 
-void show_help()
+void show_help(void)
 {
-    printf("USAGE: ./myteams_cli ip port\n");
-    printf("\t\tip\tis the server ip address on which the server socket listens\n");
-    printf("\t\tport\tis the port number on which the server socket listens\n");
     printf("the protocol and the commands to be updated...\n");
 }
 
 void sig_handler(int sig)
 {
+    (void)sig;
     write(1, "\nGoodbye!\n", 10);
-    //exit(0);
     go = 0;
 }
 

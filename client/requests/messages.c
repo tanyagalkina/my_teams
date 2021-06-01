@@ -7,7 +7,7 @@
 
 #include "../../include/client.h"
 
-request_t messages_req(char *user_req, char *input, client_t *cl)
+request_t messages_req(char *input, client_t *cl)
 {
     (void)cl;
     request_t new_req;

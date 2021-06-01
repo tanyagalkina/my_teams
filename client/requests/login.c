@@ -7,7 +7,7 @@
 
 #include "../../include/client.h"
 
-request_t login_req(char *user_req, char *input, client_t *cl)
+request_t login_req(char *input, client_t *cl)
 {
     request_t new_req;
 
@@ -21,7 +21,6 @@ request_t login_req(char *user_req, char *input, client_t *cl)
     if (cl->own_name[0] == '\0') {
         strcpy(cl->own_name, strdup(req_args[0]));
         cl->logged_in = 1;
-        free_2d(req_args);
         return new_req;
     } else {
         free_2d(req_args);

@@ -1,4 +1,3 @@
-
 /*
 ** EPITECH PROJECT, 2020
 ** my_teams
@@ -15,7 +14,6 @@ void creat_reply_print(response_t *resp)
     else
         client_print_reply_created(resp->thread_uuid, \
 resp->user_uuid, resp->timestamp, resp->message);
-
 }
 
 void creat_thread_print(response_t *resp)

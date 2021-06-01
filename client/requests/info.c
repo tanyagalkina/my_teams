@@ -48,7 +48,7 @@ request_t create_info_thread(char *input, client_t *cl)
     return new_req;
 }
 
-request_t info_req(char *user_req, char *input, client_t *cl)
+request_t info_req(char *input, client_t *cl)
 {
     switch (cl->context.context_level)
     {

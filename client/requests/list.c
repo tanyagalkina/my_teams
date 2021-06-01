@@ -49,10 +49,9 @@ static request_t list_teams(void)
     return new_req;
 }
 
-request_t list_req(char *user_req, char *args, client_t *cl)
+request_t list_req(char *args, client_t *cl)
 {
     (void)args;
-    (void)user_req;
 
     switch (cl->context.context_level)
     {

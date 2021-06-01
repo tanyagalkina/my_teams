@@ -48,7 +48,7 @@ typedef struct client
     fd_set reading;
     int logged_in;
     uuid_t own_uuid;
-    int bytes_read;
+    int bytes;
     char own_name[MAX_NAME_LENGTH];
     char re_buffer[RESPONSE_SIZE];
 
@@ -57,23 +57,23 @@ typedef struct client
 typedef struct req
 {
     char *req;
-    request_t (*func)(char *, char *, client_t *);
+    request_t (*func)(char *, client_t *);
 
 }req_t;
 
-request_t login_req(char *user_req, char *args, client_t *cl);
-request_t logout_req(char *user_req, char *args, client_t *cl);
-request_t users_req(char *user_req, char *args, client_t *cl);
-request_t user_req(char *user_req, char *args, client_t *cl);
-request_t send_req(char *user_req, char *args, client_t *cl);
-request_t messages_req(char *user_req, char *args, client_t *cl);
-request_t subscribe_req(char *user_req, char *args, client_t *cl);
-request_t subscribed_req(char *user_req, char *args, client_t *cl);
-request_t unsubscribe_req(char *user_req, char *args, client_t *cl);
-request_t create_req(char *user_req, char *args, client_t *cl);
-request_t list_req(char *user_req, char *args, client_t *cl);
-request_t info_req(char *user_req, char *args, client_t *cl);
-request_t use_req(char *user_req, char *args, client_t *cl);
+request_t login_req(char *args, client_t *cl);
+request_t logout_req(char *args, client_t *cl);
+request_t users_req(char *args, client_t *cl);
+request_t user_req(char *args, client_t *cl);
+request_t send_req(char *args, client_t *cl);
+request_t messages_req(char *args, client_t *cl);
+request_t subscribe_req(char *args, client_t *cl);
+request_t subscribed_req(char *args, client_t *cl);
+request_t unsubscribe_req(char *args, client_t *cl);
+request_t create_req(char *args, client_t *cl);
+request_t list_req(char *args, client_t *cl);
+request_t info_req(char *args, client_t *cl);
+request_t use_req(char *args, client_t *cl);
 
 static const req_t req_table[] = {
         {"/login", &login_req},
@@ -108,5 +108,9 @@ void set_signals(void);
 void sig_handler(int sig);
 void show_help();
 void free_2d(char **s);
+request_t help_request(void);
+
+///init_client_stuff.c
+void init_client_stuff(client_t *client_stuff, int sock);
 
 #endif //TEAMS_CLIENT_H

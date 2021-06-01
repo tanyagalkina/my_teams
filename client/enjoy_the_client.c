@@ -10,7 +10,7 @@
 void process_resp_or_event(client_t *cl)
 {
     int i = 0;
-    if (cl->bytes_read == 0) {
+    if (cl->bytes == 0) {
         go = 0;
         return;
     }
@@ -30,17 +30,9 @@ void process_resp_or_event(client_t *cl)
     }
 }
 
-request_t help_request(void)
+request_t check_if_logged_in(request_t req, int logged_in)
 {
-    request_t req;
-    show_help();
-    req.type = 42;
-    return req;
-}
-
-request_t check_if_logged_in(request_t req, client_t *cl)
-{
-    if (req.type != CT_LOGIN && cl->logged_in == 0) {
+    if (req.type != CT_LOGIN && logged_in == 0) {
         client_error_unauthorized();
         req.type = 84;
     }
@@ -58,7 +50,7 @@ request_t generate_request(char *input, client_t *cl)
         return (help_request());
     while (req_table[i].req != NULL) {
         if (!strcmp(req_table[i].req, user_req[0])) {
-            req = req_table[i].func(user_req[0], input, cl);
+            req = req_table[i].func(input, cl);
             break;
         }
         ++i;
@@ -66,7 +58,7 @@ request_t generate_request(char *input, client_t *cl)
     if (i == 13)
         return bad_request(BAD_INPUT);
     free_2d(user_req);
-    return check_if_logged_in(req, cl);
+    return check_if_logged_in(req, cl->logged_in);
 }
 
 void process_cli_request(int sd, client_t *cl)
@@ -77,7 +69,7 @@ void process_cli_request(int sd, client_t *cl)
     if (-1 == getline(&input, &size, stdin)) {
         new_request.type = CT_LOGOUT;
     }
-    else new_request = generate_request(strdup(input), cl);
+    else new_request = generate_request(input, cl);
     free(input);
     if (new_request.type == 84) {
         printf("Your request is invalid\n");
@@ -104,13 +96,8 @@ int enjoy_the_client(client_t *cl)
                 if (i == 0)
                     process_cli_request(cl->sd, cl);
                 else {
-                    cl->bytes_read = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
+                    cl->bytes = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
                     process_resp_or_event(cl);
-                    memset(cl->re_buffer, 0, RESPONSE_SIZE);
-                }
-            }
-        }
-    }
-    printf("SEE U LATER...\n");
+                    memset(cl->re_buffer, 0, RESPONSE_SIZE);}}}}
     return (0);
 }

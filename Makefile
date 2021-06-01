@@ -51,6 +51,7 @@ SRC_SERVER_MAIN =	server/main.c \
 OBJ_CLI = $(SRC_CLI_MAIN:%.c=$(BUILD_DIR)/%.o)
 SRC_CLI =	client/enjoy_the_client.c	\
             					client/my_str_to_word.c		\
+            					client/init_client_stuff.c	\
             					client/requests/info.c		\
             					client/requests/list.c		\
             					client/requests/login.c		\
@@ -67,8 +68,9 @@ SRC_CLI =	client/enjoy_the_client.c	\
             					client/requests/request_tools.c		\
             					client/event_prints/response_print_wrapper.c	\
             					client/event_prints/creat_rec_wrapper.c		\
-            					client/event_prints/info_prints.c		\
+            					client/event_prints/list_prints.c		\
             					client/event_prints/info_req_print.c	\
+            					client/event_prints/subscribed_and_messages_print.c	\
             					client/event_prints/creat_resp_print.c	\
             					client/my_str_to_special_array.c	\
             					client/very_small_tools.c

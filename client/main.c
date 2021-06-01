@@ -26,7 +26,8 @@ static int is_valid_port(char *av)
 void display_help(void)
 {
     printf("USAGE: ./myteams_cli ip port\n");
-    printf("\t\tip\tis the server ip address on which the server socket listens\n");
+    printf("\t\tip\tis the server ip address");
+    printf(" on which the server socket listens\n");
     printf("\t\tport\tis the port number on which the server socket listens\n");
 }
 
@@ -68,22 +69,10 @@ int do_connection(char *ip, int port)
     return sock;
 }
 
-void init_client_stuff(client_t *client_stuff, int sock)
-{
-    client_stuff->sd = sock;
-    client_stuff->context.context_level = TEAM;
-    client_stuff->bytes_read = 0;
-    client_stuff->logged_in = 0;
-    client_stuff->own_name[0] = '\0';
-    FD_ZERO(&client_stuff->master);
-    FD_ZERO(&client_stuff->reading);
-    FD_SET(sock, &client_stuff->master);
-    FD_SET(0, &client_stuff->master);
-}
-
 int main(int argc, char **argv)
 {
     int sock;
+    int ret;
     client_t *client_stuff;
     check_args(argc, argv);
     sock = do_connection(argv[1], atoi(argv[2]));
@@ -91,6 +80,7 @@ int main(int argc, char **argv)
         return (84);
     init_client_stuff(client_stuff, sock);
     set_signals();
-    return (enjoy_the_client(client_stuff));
-    //return 0;
+    ret = enjoy_the_client(client_stuff);
+    close(sock);
+    return (ret);
 }

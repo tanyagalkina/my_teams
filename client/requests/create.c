@@ -77,27 +77,21 @@ static request_t create_team(char *input)
     return new_req;
 }
 
-request_t create_req(char *user_req, char *input, client_t *cl)
+request_t create_req(char *input, client_t *cl)
 {
     switch (cl->context.context_level)
     {
         case (TEAM):
-            printf("the context level was TEAM\n");
             return create_team(input);
         case (CHANNEL):
-            printf("the context level was CHANNEL\n");
             cl->context.context_level = TEAM;
             return create_channel(input, cl);
         case (THREAD):
-            printf("the context level was THREAD\n");
             cl->context.context_level = TEAM;
             return create_thread(input, cl);
-            break;
         case (REPLY_OR_LOGGED):
-            printf("the context level was REPLY\n");
             cl->context.context_level = TEAM;
             return create_reply(input, cl);
-            break;
         default:
             return bad_request(NO_USE);
     }
