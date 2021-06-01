@@ -12,12 +12,16 @@
 #include <stdlib.h>
 #include <sys/queue.h>
 
-void server_debug_print(debug_state_t state, const char *msg)
-{
+/*void server_debug_print(debug_state_t state, const char *msg)*/
+/*{*/
     /*printf("%s", debug_state_print[state]);*/
     /*printf("[SERVER] " COLOR_RESET);*/
     /*printf("%s\n", msg);*/
     /*fflush(stdout);*/
+/*}*/
+
+void server_debug_print(debug_state_t state, const char *msg)
+{
 }
 
 int errorhandling(int ac, char **av)

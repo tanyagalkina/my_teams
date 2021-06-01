@@ -79,17 +79,6 @@ ch->info->channel_uuid, ch->info->channel_name);
     return SUCCESS;
 }
 
-static bool is_authorized(team_t *team, const char *user_uuid)
-{
-    team_user_info_t *info;
-
-    TAILQ_FOREACH(info, &team->user_info_head, next) {
-        if (strcmp(info->user_uuid, user_uuid) == 0)
-            return true;
-    }
-    return false;
-}
-
 void create_new_channel(server_t *server, request_t *req, int fd)
 {
     team_t *team = NULL;
@@ -105,7 +94,7 @@ void create_new_channel(server_t *server, request_t *req, int fd)
         error_already_exist(user);
         return;
     }
-    if (!is_authorized(team, user->info->user_uuid)) {
+    if (!create_new_channel_is_authorized(team, user->info->user_uuid)) {
         error_unauthorized(user);
         return;
     }

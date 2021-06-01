@@ -26,6 +26,17 @@ void error_not_exist(const char *uuid, user_t *user, int code, int level)
     }
 }
 
+bool create_new_channel_is_authorized(team_t *team, const char *user_uuid)
+{
+    team_user_info_t *info;
+
+    TAILQ_FOREACH(info, &team->user_info_head, next) {
+        if (strcmp(info->user_uuid, user_uuid) == 0)
+            return true;
+    }
+    return false;
+}
+
 void error_unauthorized(user_t *user)
 {
     response_t r;

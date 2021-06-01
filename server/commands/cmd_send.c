@@ -101,7 +101,6 @@ private_message_info_t *dm_info, const char *ruuid)
     create_new_dm(server, ruuid, req, suuid);
 }
 
-
 int cmd_send(server_t *server, request_t *req, int fd)
 {
     private_message_info_t dm_info;
