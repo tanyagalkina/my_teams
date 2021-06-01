@@ -73,6 +73,7 @@ void init_client_stuff(client_t *client_stuff, int sock)
     client_stuff->sd = sock;
     client_stuff->context.context_level = UNDEFINED;
     client_stuff->bytes_read = 0;
+    client_stuff->logged_in = 0;
     client_stuff->own_name[0] = '\0';
     FD_ZERO(&client_stuff->master);
     FD_ZERO(&client_stuff->reading);
