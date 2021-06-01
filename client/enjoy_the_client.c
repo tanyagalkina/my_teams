@@ -38,6 +38,15 @@ request_t help_request(void)
     return req;
 }
 
+request_t check_if_logged_in(request_t req, client_t *cl)
+{
+    if (req.type != CT_LOGIN && cl->logged_in == 0) {
+        client_error_unauthorized();
+        req.type = 84;
+    }
+    return req;
+}
+
 request_t generate_request(char *input, client_t *cl)
 {
     request_t req;
@@ -57,7 +66,7 @@ request_t generate_request(char *input, client_t *cl)
     if (i == 13)
         return bad_request(BAD_INPUT);
     free_2d(user_req);
-    return req;
+    return check_if_logged_in(req, cl);
 }
 
 void process_cli_request(int sd, client_t *cl)

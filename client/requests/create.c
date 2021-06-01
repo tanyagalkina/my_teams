@@ -83,20 +83,19 @@ request_t create_req(char *user_req, char *input, client_t *cl)
     {
         case (TEAM):
             printf("the context level was TEAM\n");
-            cl->context.context_level = UNDEFINED;
             return create_team(input);
         case (CHANNEL):
             printf("the context level was CHANNEL\n");
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_channel(input, cl);
         case (THREAD):
             printf("the context level was THREAD\n");
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_thread(input, cl);
             break;
         case (REPLY_OR_LOGGED):
             printf("the context level was REPLY\n");
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_reply(input, cl);
             break;
         default:
