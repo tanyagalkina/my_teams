@@ -53,16 +53,15 @@ request_t info_req(char *user_req, char *input, client_t *cl)
     switch (cl->context.context_level)
     {
         case (TEAM):
-            cl->context.context_level = UNDEFINED;
             return create_info_logged(input, cl);
         case (CHANNEL):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_info_team(input, cl);
         case (THREAD):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_info_channel(input, cl);
         case (REPLY_OR_LOGGED):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return create_info_thread(input, cl);
         default:
             return bad_request(NO_USE);

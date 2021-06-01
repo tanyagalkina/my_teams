@@ -57,16 +57,15 @@ request_t list_req(char *user_req, char *args, client_t *cl)
     switch (cl->context.context_level)
     {
         case (TEAM):
-            cl->context.context_level = UNDEFINED;
             return list_teams();
         case (CHANNEL):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return list_channels(cl);
         case (THREAD):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return list_threads(cl);
         case (REPLY_OR_LOGGED):
-            cl->context.context_level = UNDEFINED;
+            cl->context.context_level = TEAM;
             return list_replies(cl);
         default:
             return bad_request(NO_USE);
