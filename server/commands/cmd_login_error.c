@@ -25,7 +25,7 @@ bool cmd_login_check_existing_fd(server_t *server, int fd)
 
 int cmd_login_error(server_t *server, int fd)
 {
-    server_debug_print(ERROR, "TODO: Implement this on client side /* this will fix the problem if you try to /login while someone else is logged in on this fd*/");
+    server_debug_print(ERROR, "todo_done?\n");
     error_already_exist(get_user_by_fd(server, fd));
     return SUCCESS;
 }

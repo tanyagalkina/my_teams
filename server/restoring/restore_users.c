@@ -12,7 +12,7 @@
 #include <sys/queue.h>
 #include <string.h>
 
-static user_t *init_user()
+static user_t *init_user(void)
 {
     user_t *user = NULL;
     if ((user = (user_t *)malloc(sizeof(user_t))) == NULL)

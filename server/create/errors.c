@@ -11,6 +11,18 @@
 #include "../../include/commands.h"
 #include <string.h>
 
+bool if_user_exists(server_t *server, const char *name)
+{
+    user_t *user = NULL;
+
+    TAILQ_FOREACH(user, &server->admin->user_head, next) {
+        if (strcmp(user->info->user_name, name) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void error_not_exist(const char *uuid, user_t *user, int code, int level)
 {
     response_t r;

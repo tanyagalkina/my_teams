@@ -24,7 +24,7 @@ static void restore_channel(FILE *file, team_t *team)
         if (strncmp(line, "--- Channel Start ---", 21) == 0)
             continue;
         ch = malloc(sizeof(channel_t));
-        ch->info= malloc(sizeof(channel_info_t));
+        ch->info = malloc(sizeof(channel_info_t));
         sscanf(line, "uuid:%36[^,],name:%32[^,],desc:%255[^,]", \
 ch->info->channel_uuid, ch->info->channel_name, ch->info->channel_description);
         TAILQ_INSERT_TAIL(&team->channel_head, ch, next);

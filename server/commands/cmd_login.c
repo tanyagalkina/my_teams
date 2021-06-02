@@ -41,18 +41,6 @@ static void send_event(server_t *server, const char *name)
     }
 }
 
-static bool is_existing(server_t *server, const char *name)
-{
-    user_t *user = NULL;
-
-    TAILQ_FOREACH(user, &server->admin->user_head, next) {
-        if (strcmp(user->info->user_name, name) == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
 static int add_user_fd(user_t *user, int fd)
 {
     user_fds_t *fds = NULL;
@@ -74,7 +62,6 @@ static int add_new_user(server_t *server, request_t *req, int fd)
         return FAILURE;
     if ((user->info = malloc(sizeof(user_info_t))) == NULL)
         return FAILURE;
-
     uuid_generate_random(binuuid);
     strcpy(user->info->user_name, req->name);
     uuid_unparse(binuuid, user->info->user_uuid);
@@ -99,7 +86,7 @@ int cmd_login(server_t *server, request_t *req, int fd)
         return SUCCESS;
     }
 
-    if (is_existing(server, req->name)) {
+    if (if_user_exists(server, req->name)) {
         if ((user = get_user_by_name(server, req->name)) == NULL)
             return FAILURE;
         user->info->user_status = US_LOGGED_IN;

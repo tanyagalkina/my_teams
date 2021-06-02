@@ -26,7 +26,7 @@ void create_new_channel(server_t *server, request_t *req, int fd);
 int cmd_login_error(server_t *server, int fd);
 bool cmd_login_check_existing_fd(server_t *server, int fd);
 bool create_new_channel_is_authorized(team_t *team, const char *user_uuid);
-
+bool if_user_exists(server_t *server, const char *name);
 int cmd_logout(server_t *server, request_t *req, int fd);
 int cmd_login(server_t *server, request_t *req, int fd);
 int cmd_create(server_t *server, request_t *req, int fd);
@@ -37,7 +37,6 @@ int cmd_messages(server_t *server, request_t *req, int fd);
 int cmd_subscribe(server_t *server, request_t *req, int fd);
 int cmd_unsubscribe(server_t *server, request_t *req, int fd);
 int cmd_list(server_t *server, request_t *req, int fd);
-
 
 static const command_t cmd_table[COMMANDS] = {
     { CT_LOGIN, cmd_login },
