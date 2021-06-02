@@ -15,10 +15,8 @@ void process_resp_or_event(client_t *cl)
         return;
     }
     response_t *resp = (void *)cl->re_buffer;
-    if (resp->request_type == ET_LOGGED_OUT) {
-        client_event_logged_out(resp->user_uuid, resp->name);
-        if (!strcmp(resp->name, cl->own_name))
-            go = 0;
+    if (resp->request_type == CT_LOGOUT) {
+        go = 0;
         return;
     }
     while (event_table[i].event != 0) {

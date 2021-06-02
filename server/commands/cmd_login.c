@@ -13,7 +13,15 @@
 #include <string.h>
 #include <sys/queue.h>
 
-static void send_response(server_t *server, const char *name)
+static void send_response(int fd)
+{
+    response_t r;
+    r.request_type = CT_LOGIN;
+    r.status_code = STATUS_OK;
+    send(fd, &r, RESPONSE_SIZE, 0);
+}
+
+static void send_event(server_t *server, const char *name)
 {
     user_t *user = NULL;
     response_t r;
@@ -77,7 +85,8 @@ static int add_new_user(server_t *server, request_t *req, int fd)
     server_event_user_logged_in(user->info->user_uuid);
     TAILQ_INIT(&user->subscribed_teams_head);
     TAILQ_INSERT_TAIL(&server->admin->user_head, user, next);
-    send_response(server, user->info->user_name);
+    send_response(fd);
+    send_event(server, user->info->user_name);
     return SUCCESS;
 }
 
@@ -96,7 +105,7 @@ int cmd_login(server_t *server, request_t *req, int fd)
         user->info->user_status = US_LOGGED_IN;
         add_user_fd(user, fd);
         server_event_user_logged_in(user->info->user_uuid);
-        send_response(server, user->info->user_name);
+        send_event(server, user->info->user_name);
         return SUCCESS;
     }
     return add_new_user(server, req, fd);

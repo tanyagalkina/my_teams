@@ -12,7 +12,15 @@
 #include <string.h>
 #include <sys/queue.h>
 
-static void send_response(server_t *server, int fd)
+static void send_response(int fd)
+{
+    response_t r;
+    r.request_type = CT_LOGOUT;
+    r.status_code = STATUS_OK;
+    send(fd, &r, RESPONSE_SIZE, 0);
+}
+
+static void send_event(server_t *server, int fd)
 {
     user_t *user = NULL;
     response_t r;
@@ -46,7 +54,8 @@ int cmd_logout(server_t *server, request_t *req, int fd)
     if ((user = get_user_by_fd(server, fd)) == NULL)
         return FAILURE;
 
-    send_response(server, fd);
+    send_event(server, fd);
+    send_response(fd);
 
     TAILQ_FOREACH(fds, &user->user_fds_head, next) {
         if (fds->fd == fd) {
