@@ -58,7 +58,8 @@ static void send_to_all(server_t *server, team_t *team, channel_t *ch)
     }
 }
 
-static int add_new_channel(server_t *server, team_t *team, request_t *req, int fd)
+static int add_new_channel(server_t *server, team_t *team, \
+request_t *req, int fd)
 {
     channel_t *ch;
     channel_info_t *info;
