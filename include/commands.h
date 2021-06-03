@@ -23,6 +23,7 @@ typedef struct command_t {
 void send_error_response(server_t *server, request_t *req, int fd);
 int create_new_team(server_t *server, request_t *req, int fd);
 void create_new_channel(server_t *server, request_t *req, int fd);
+void create_new_thread(server_t *server, request_t *req, int fd);
 int cmd_login_error(server_t *server, int fd);
 bool cmd_login_check_existing_fd(server_t *server, int fd);
 bool create_new_channel_is_authorized(team_t *team, const char *user_uuid);
