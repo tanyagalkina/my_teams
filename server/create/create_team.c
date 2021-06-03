@@ -30,7 +30,7 @@ static void send_to_all(server_t *server, team_t *team)
     }
 }
 
-static void send_response(server_t *server, team_t *team, user_t *user)
+static void send_response(server_t *server, team_t *team, int fd)
 {
     response_t r;
     user_fds_t *fds;
@@ -39,10 +39,7 @@ static void send_response(server_t *server, team_t *team, user_t *user)
     strcpy(r.team_uuid, team->info->team_uuid);
     strcpy(r.name, team->info->team_name);
     strcpy(r.description, team->info->team_description);
-
-    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
-    }
+    send(fd, &r, RESPONSE_SIZE, 0);
 }
 
 static bool team_already_exists(server_t *server, const char *team_name)
@@ -87,7 +84,7 @@ int create_new_team(server_t *server, request_t *req, int fd)
     uuid_unparse(binuuid, team->info->team_uuid);
     server_event_team_created(team->info->team_uuid, req->name, user_uuid);
     send_to_all(server, team);
-    send_response(server, team, get_user_by_fd(server, fd));
+    send_response(server, team, fd);
     TAILQ_INSERT_TAIL(&server->admin->team_head, team, next);
     return SUCCESS;
 }
