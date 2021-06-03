@@ -26,6 +26,7 @@ int cmd_create(server_t *server, request_t *req, int fd)
             create_new_channel(server, req, fd);
             break;
         case THREAD:
+            create_new_thread(server, req, fd);
             break;
         case REPLY_OR_LOGGED:
             break;
