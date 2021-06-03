@@ -66,7 +66,5 @@ int count_quotes(int nb_quotes, char *input)
 int is_not_valid_uuid(char *str)
 {
     uuid_t test_uuid;
-    //if (-1 == (uuid_parse(str, test_uuid)))
-    //    return (1);
     return (0);
 }
