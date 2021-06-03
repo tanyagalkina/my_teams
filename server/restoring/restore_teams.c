@@ -49,6 +49,15 @@ static void restore_user_of_team(FILE *file, team_t *team)
     }
 }
 
+/*static void setup_team(team_t **new_team, char *line)*/
+/*{*/
+    /*sscanf(line, "uuid:%36[^,],name:%32[^,],desc:%255[^,],", \*/
+/*(*new_team)->info->team_uuid, (*new_team)->info->team_name, \*/
+/*(*new_team)->info->team_description);*/
+    /*TAILQ_INIT(&(*new_team)->channel_head);*/
+    /*TAILQ_INIT(&(*new_team)->user_info_head);*/
+/*}*/
+
 static void setup_team(team_t *new_team, char *line)
 {
     sscanf(line, "uuid:%36[^,],name:%32[^,],desc:%255[^,],", \
