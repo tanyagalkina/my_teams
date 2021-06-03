@@ -62,9 +62,9 @@ int do_connection(char *ip, int port)
         printf("\nInvalid address/ Address not supported \n");
         return -1;
     }
-    if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
         printf("\nConnection Failed \n");
-        return -1;
+        return (-1);
     }
     return sock;
 }
