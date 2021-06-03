@@ -62,8 +62,8 @@ static int send_error_response(server_t *server, int fd)
     response_t r;
 
     r.status_code = KO_ERROR_EXISTS;
-    r.request_type = ET_TEAM_CREAT;
-
+    r.request_type = CT_CREATE;
+    r.level = TEAM;
     send(fd, &r, RESPONSE_SIZE, 0);
 
     return SUCCESS;
