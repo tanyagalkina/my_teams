@@ -21,6 +21,7 @@ static channel_t *get_channel_by_uuid(team_t *team, const char *ch_uuid)
             return ch;
         }
     }
+    server_debug_print(WARNING, "There is no channel with that uuid");
     return NULL;
 }
 
@@ -32,9 +33,13 @@ void create_new_thread(server_t *server, request_t *req, int fd)
     team_t *team = get_team_by_uuid(server, team_uuid);
 
     if (team == NULL) {
+        server_debug_print(ERROR, "TODO implement s/c/create_thread.c");
+        return;
     }
 
     if ((ch = get_channel_by_uuid(team, req->channel_uuid)) == NULL) {
+        server_debug_print(ERROR, "TODO implement s/c/create_thread.c");
+        return;
     }
 
     server_event_thread_created(ch->info->channel_uuid, req->thread_uuid, \
