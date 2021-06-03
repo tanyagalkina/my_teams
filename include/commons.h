@@ -104,7 +104,6 @@ typedef enum data_type
     REPLY_TYPE
 }datatype_t;
 
-#pragma pack(1)
 typedef struct response {
     char message[MAX_BODY_LENGTH];
     char name[MAX_NAME_LENGTH];
@@ -132,7 +131,6 @@ typedef struct request {
     char channel_uuid[UUID_STR_LEN];
     char thread_uuid[UUID_STR_LEN];
 }request_t;
-#pragma pack(0)
 
 #define REQUEST_SIZE  sizeof(struct request)
 #define RESPONSE_SIZE sizeof(struct response)

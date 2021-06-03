@@ -49,17 +49,16 @@ static int get_request_from_client(server_t *server, int fd)
     memset(buffer, 0, REQUEST_SIZE);
     if ((r = read(fd, &buffer, REQUEST_SIZE)) == -1)
         return SUCCESS;
-
     if (r == 0) {
         server_debug_print(INFO, "client disconnected");
         check_disconnected(server, fd);
         return FAILURE;
     }
     req = (void *)buffer;
-
     for (int i = 0; i < COMMANDS; i++) {
         if (cmd_table[i].cmd_type == req->type)
-            cmd_table[i].f(server, req, fd);
+            if (cmd_table[i].f(server, req, fd) == -84)
+                return FAILURE;
     }
     return (0);
 }
@@ -74,6 +73,7 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         return;
     }
     if (get_request_from_client(server, fd) == FAILURE) {
+        printf("clearing the fd: %d\n", fd);
         close(fd);
         FD_CLR(fd, current);
     }

@@ -60,5 +60,5 @@ int cmd_logout(server_t *server, request_t *req, int fd)
         user->info->user_status = US_LOGGED_OUT;
     }
     server_event_user_logged_out(user->info->user_uuid);
-    return SUCCESS;
+    return -84;
 }
