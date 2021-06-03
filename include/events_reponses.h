@@ -32,6 +32,7 @@ void ct_subscribed_blank_print(int sd, response_t *response);
 void ct_list_print(int sd, response_t *response);
 void ct_info_print(int sd, response_t *response);
 void ct_creat_print(int sd, response_t *response);
+void ct_unauthorized(int sd, response_t *response);
 ///todo: check eventual error prints
 /*void ct_send_print(int sd, response_t *response);
 void ct_subscribe_print(int sd, response_t *response);
@@ -41,6 +42,7 @@ void ct_create_print(int sd, response_t *response);*/
 static const event_print_t event_table[] = {
         {CT_USERS, &ct_users_print},
         {CT_USER, &ct_user_print},
+        {CT_ERROR_UNAUTHOR, &ct_unauthorized},
         {CT_MESSAGES, &ct_messages_print},
         {CT_SUBSCRIBED_UUID, &ct_subscribed_uuid_print},
         {CT_SUBSCRIBED_BLANK, &ct_subscribed_blank_print},

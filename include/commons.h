@@ -29,6 +29,7 @@ typedef enum command_type {
     CT_LIST,
     CT_INFO,
     CT_USE,
+    CT_ERROR_UNAUTHOR,
     ///int client_event_logged_in(char const *user_uuid,
     /// const char *user_name);
     ET_LOGGED_IN = 100,

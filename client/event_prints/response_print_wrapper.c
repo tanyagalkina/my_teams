@@ -7,6 +7,13 @@
 
 #include "../../include/client.h"
 
+void ct_unauthorized(int sd, response_t *resp)
+{
+    (void)sd;
+    (void)resp;
+    client_error_unauthorized();
+}
+
 void ct_users_print(int sd, response_t *resp)
 {
     char user_buffer[sizeof(user_info_t)];

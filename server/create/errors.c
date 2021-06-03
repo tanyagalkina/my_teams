@@ -49,18 +49,13 @@ bool create_new_channel_is_authorized(team_t *team, const char *user_uuid)
     return false;
 }
 
-void error_unauthorized(user_t *user)
+void error_unauthorized(int fd)
 {
     response_t r;
     user_fds_t *fds;
 
-    r.status_code = KO_UNAUTHOR;
-    r.level = CHANNEL;
-    r.request_type = CT_CREATE;
-
-    TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-        send(fds->fd, &r, RESPONSE_SIZE, 0);
-    }
+    r.request_type = CT_ERROR_UNAUTHOR;
+    send(fd, &r, RESPONSE_SIZE, 0);
 }
 
 void error_already_exist(user_t *user)

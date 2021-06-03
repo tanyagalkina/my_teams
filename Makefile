@@ -45,6 +45,7 @@ SRC_SERVER	 =	server/init_server.c				\
 			server/create/create_channel.c		\
 			server/create/create_thread.c		\
 			server/create/errors.c		\
+			server/create/create_channel_send_response.c	\
 
 SRC_SERVER_MAIN =	server/main.c \
 				$(SRC_SERVER)

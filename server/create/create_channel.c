@@ -58,18 +58,6 @@ static void send_to_all(server_t *server, team_t *team, channel_t *ch)
     }
 }
 
-static void send_response(team_t *team, channel_t *ch, int fd)
-{
-    response_t r;
-    r.request_type = CT_CREATE;
-    r.level = CHANNEL;
-    strcpy(r.team_uuid, team->info->team_uuid);
-    strcpy(r.channel_uuid, ch->info->channel_uuid);
-    strcpy(r.name, ch->info->channel_name);
-    strcpy(r.description, ch->info->channel_description);
-    send(fd, &r, RESPONSE_SIZE, 0);
-}
-
 static int add_new_channel(server_t *server, team_t *team, request_t *req, int fd)
 {
     channel_t *ch;
@@ -90,7 +78,7 @@ static int add_new_channel(server_t *server, team_t *team, request_t *req, int f
 ch->info->channel_uuid, ch->info->channel_name);
     TAILQ_INSERT_TAIL(&team->channel_head, ch, next);
     send_to_all(server, team, ch);
-    send_response(team, ch, fd);
+    channel_send_response(team, ch, fd);
     return SUCCESS;
 }
 
@@ -110,7 +98,7 @@ void create_new_channel(server_t *server, request_t *req, int fd)
         return;
     }
     if (!create_new_channel_is_authorized(team, user->info->user_uuid)) {
-        error_unauthorized(user);
+        error_unauthorized(fd);
         return;
     }
     add_new_channel(server, team, req, fd);
