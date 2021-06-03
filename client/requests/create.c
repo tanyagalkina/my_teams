@@ -63,7 +63,6 @@ static request_t create_team(char *input)
     request_t new_req;
 
     if (NULL == (req_args = get_args(input, 2))) {
-        free(input);
         return (bad_request(BAD_INPUT));
     }
     new_req.type = CT_CREATE;
