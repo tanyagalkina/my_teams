@@ -52,13 +52,13 @@ static int get_request_from_client(server_t *server, int fd)
     if (r == 0) {
         server_debug_print(INFO, "client disconnected");
         check_disconnected(server, fd);
-        return FAILURE;
+        return LOG_OUT;
     }
     req = (void *)buffer;
     for (int i = 0; i < COMMANDS; i++) {
         if (cmd_table[i].cmd_type == req->type)
             if (cmd_table[i].f(server, req, fd) == -84)
-                return FAILURE;
+                return LOG_OUT;
     }
     return (0);
 }
@@ -72,7 +72,7 @@ void handle_connection(server_t *server, int fd, fd_set *current)
         FD_SET(fd, current);
         return;
     }
-    if (get_request_from_client(server, fd) == FAILURE) {
+    if (get_request_from_client(server, fd) == LOG_OUT) {
         printf("clearing the fd: %d\n", fd);
         close(fd);
         FD_CLR(fd, current);

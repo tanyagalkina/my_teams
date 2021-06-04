@@ -80,6 +80,14 @@ void process_cli_request(int sd, client_t *cl)
         send(sd, &new_request, sizeof(request_t), 0);
 }
 
+void checkout(client_t *cl)
+{
+    request_t new_request;
+
+    new_request.type = CT_LOGOUT;
+    send(cl->sd, &new_request, sizeof(request_t), 0);
+}
+
 int enjoy_the_client(client_t *cl)
 {
     while (go) {
@@ -91,8 +99,8 @@ int enjoy_the_client(client_t *cl)
         }
         for (int i = 0; i < (cl->sd + 1); i++) {
             if (FD_ISSET(i, &cl->reading)) {
-                if (i == 0)
-                    process_cli_request(cl->sd, cl);
+                if (i == 0) {
+                    process_cli_request(cl->sd, cl);}
                 else {
                     cl->bytes = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
                     process_resp_or_event(cl);

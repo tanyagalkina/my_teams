@@ -26,6 +26,7 @@
 #define SERVER_BACKLOG 10
 #define FAILURE 1
 #define SUCCESS 0
+#define LOG_OUT 2
 #define MAX_FD_PER_USER 10
 
 typedef enum user_status_t {

@@ -9,13 +9,16 @@
 #include <stdio.h>
 #include <signal.h>
 #include <string.h>
+#include <unistd.h>
 
 static volatile sig_atomic_t done;
 
-void signal_handle(__attribute__((unused))int sig_num)
+//void signal_handle(__attribute__((unused))int sig_num)
+void signal_handle(int sig)
 {
     server_debug_print(WARNING, "Gracefully stopping services...");
-    done = 1;
+    if (sig != SIGPIPE)
+        done = 1;
 }
 
 static void pre_loop(void)

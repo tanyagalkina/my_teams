@@ -20,7 +20,7 @@ static void send_response(int fd)
     send(fd, &r, RESPONSE_SIZE, 0);
 }
 
-static void send_event(server_t *server, int fd)
+static void send_event(server_t *server, int fd, int lost)
 {
     user_t *user = NULL;
     response_t r;
@@ -33,7 +33,11 @@ static void send_event(server_t *server, int fd)
     TAILQ_FOREACH(user, &server->admin->user_head, next) {
         if (user->info->user_status == US_LOGGED_IN) {
             TAILQ_FOREACH(fds, &user->user_fds_head, next) {
-                send(fds->fd, &r, RESPONSE_SIZE, 0);}}}}
+                if (fds->fd != fd)
+                    send(fds->fd, &r, RESPONSE_SIZE, 0);}}}
+    if (!lost)
+        send(fd, &r, RESPONSE_SIZE, 0);
+}
 
 static bool is_still_logged_in(user_t *user)
 {
@@ -45,11 +49,12 @@ int cmd_logout(server_t *server, request_t *req, int fd)
     user_t *user = NULL;
     user_fds_t *fds = NULL;
     user_fds_t *cp_fds = NULL;
-
+    int lost = req == NULL ? 1 : 0;
     if ((user = get_user_by_fd(server, fd)) == NULL)
         return FAILURE;
-    send_event(server, fd);
-    send_response(fd);
+    send_event(server, fd, lost);
+    if (req)
+        send_response(fd);
     TAILQ_FOREACH(fds, &user->user_fds_head, next) {
         if (fds->fd == fd) {
             cp_fds = fds;

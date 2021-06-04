@@ -31,7 +31,6 @@ void show_help(void)
 
 void sig_handler(int sig)
 {
-    (void)sig;
     write(1, "\nGoodbye!\n", 10);
     go = 0;
 }

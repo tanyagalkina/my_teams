@@ -24,6 +24,7 @@ void ct_users_print(int sd, response_t *resp)
         user = (void *)user_buffer;
         client_print_users(user->user_uuid, \
 user->user_name, user->user_status);
+        memset(user_buffer, 0, sizeof(user_info_t));
     }
 }
 
