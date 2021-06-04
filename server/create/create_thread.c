@@ -11,6 +11,7 @@
 #include "../../include/commands.h"
 #include <sys/queue.h>
 #include <string.h>
+#include <stdio.h>
 
 static channel_t *get_channel_by_uuid(team_t *team, const char *ch_uuid)
 {
@@ -27,6 +28,7 @@ static channel_t *get_channel_by_uuid(team_t *team, const char *ch_uuid)
 
 void create_new_thread(server_t *server, request_t *req, int fd)
 {
+    printf("why am i here");
     channel_t *ch = NULL;
     const char *team_uuid = req->team_uuid;
 

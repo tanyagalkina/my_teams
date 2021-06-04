@@ -103,6 +103,9 @@ int enjoy_the_client(client_t *cl)
                     process_cli_request(cl->sd, cl);}
                 else {
                     cl->bytes = read(cl->sd, &cl->re_buffer, RESPONSE_SIZE);
+                    if (cl->bytes == -1 || cl->bytes == 0) {
+                        return 0;
+                    }
                     process_resp_or_event(cl);
                     memset(cl->re_buffer, 0, RESPONSE_SIZE);}}}}
     return (0);
