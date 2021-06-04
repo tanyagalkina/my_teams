@@ -61,7 +61,7 @@ static void list_teams(server_t *server, int fd)
 
 int cmd_list(server_t *server, request_t *req, int fd)
 {
-    switch(req->context_level) {
+    switch (req->context_level) {
         case TEAM:
             server_debug_print(ERROR, "listing teams");
             list_teams(server, fd);

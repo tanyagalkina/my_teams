@@ -65,7 +65,7 @@ void process_cli_request(int sd, client_t *cl)
     char *input = (char *)malloc(INPUT_SIZE);
     request_t new_request;
     if (-1 == getline(&input, &size, stdin)) {
-       new_request.type = CT_LOGOUT;
+        new_request.type = CT_LOGOUT;
     }
     else new_request = generate_request(input, cl);
     free(input);
@@ -78,14 +78,6 @@ void process_cli_request(int sd, client_t *cl)
     }
     else
         send(sd, &new_request, sizeof(request_t), 0);
-}
-
-void checkout(client_t *cl)
-{
-    request_t new_request;
-
-    new_request.type = CT_LOGOUT;
-    send(cl->sd, &new_request, sizeof(request_t), 0);
 }
 
 int enjoy_the_client(client_t *cl)

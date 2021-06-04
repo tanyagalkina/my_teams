@@ -52,6 +52,7 @@ SRC_SERVER_MAIN =	server/main.c \
 
 OBJ_CLI = $(SRC_CLI_MAIN:%.c=$(BUILD_DIR)/%.o)
 SRC_CLI =	client/enjoy_the_client.c	\
+			client/enjoy_the_client_checkout.c 	\
 		client/my_str_to_word.c		\
 		client/init_client_stuff.c	\
 		client/requests/info.c		\
