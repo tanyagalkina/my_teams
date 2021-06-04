@@ -34,7 +34,7 @@ void ct_user_print(int sd, response_t *resp)
 
     if (resp->status_code == STATUS_OK) {
         read(sd, &user_buffer, sizeof(user_info_t));
-        user_info_t *user = (void *) user_buffer;
+        user_info_t *user = (void *)user_buffer;
         client_print_user(user->user_uuid, user->user_name, user->user_status);
     }
     else
