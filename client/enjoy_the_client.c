@@ -86,7 +86,7 @@ int enjoy_the_client(client_t *cl)
         cl->reading = cl->master;
         if (select(cl->sd + 1, &cl->reading, NULL, NULL, NULL) < 0) {
             if (go)
-                return (0);
+                return (84);
             else continue;
         }
         for (int i = 0; i < (cl->sd + 1); i++) {
