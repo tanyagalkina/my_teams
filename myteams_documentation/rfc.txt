@@ -53,17 +53,17 @@ Table of Contents
      2.1   Sending Request         . . . . . . . . . . . . . . . . . . 3
      2.1.1   Examples . . . . . . . . . . . . . . . . . . . . . . . .  4
      2.2   Sending Response . . . . . . . . . . . . . . . . . . . . .  4
-     2.2.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     2.2.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . .  5
      2.3   Receiving Data Client-side
-   3.  Events   . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
-     3.1   Examples . . . . . . . . . . . . . . . . . . . . . . . . .
-   4.  Closing the Connection . . . . . . . . . . . . . . . . . . . . **
-     4.1.  Abnormal Closures  . . . . . . . . . . . . . . . . . . . . **
-       4.1.1.  Client-Initiated Closure . . . . . . . . . . . . . . . **
-       4.1.2.  Server-Initiated Closure . . . . . . . . . . . . . . . **
-       4.1.3.  Recovering from Abnormal Closure . . . . . . . . . . . **
-     7.3.  Normal Closure of Connections  . . . . . . . . . . . . . . **
-   5.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . **
+   3.  Events   . . . . . . . . . . . . . . . . . . . . . . . . . . .  6
+     3.1   Examples . . . . . . . . . . . . . . . . . . . . . . . . .  6
+   4.  Closing the Connection . . . . . . . . . . . . . . . . . . . .  6
+     4.1.  Abnormal Closures  . . . . . . . . . . . . . . . . . . . .  6
+       4.1.1.  Client-Initiated Closure . . . . . . . . . . . . . . .  6
+       4.1.2.  Server-Initiated Closure . . . . . . . . . . . . . . .  6
+       4.1.3.  Recovering from Abnormal Closure . . . . . . . . . . .  6
+     7.3.  Normal Closure of Connections  . . . . . . . . . . . . . .  6
+   5.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . .  6
 
 
 
