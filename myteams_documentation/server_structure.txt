@@ -1,0 +1,46 @@
+# server structure
+
+
+server
+    +-- admin
+    |   +-- user_head
+    |   |   +-- user_info
+    |   |   |   +-- user_uuid
+    |   |   |   +-- user_name
+    |   |   |   \-- user_status
+    |   |   +-- user_fds_head
+    |   |   |   \-- fd
+    |   |   +-- subscribed_teams
+    |   |   |   \-- team_uuid
+    |   +-- team_head
+    |   |   +-- team_info
+    |   |   |   +-- team_description
+    |   |   |   +-- team_uuid
+    |   |   |   \-- team_name
+    |   |   +-- channel_head
+    |   |   |   +-- channel_info
+    |   |   |   |   +-- channel_description
+    |   |   |   |   +-- channel_uuid
+    |   |   |   |   \-- channel_name
+    |   |   |   +-- thread_head
+    |   |   |   |   +-- thread_info
+    |   |   |   |   |   +-- thread_uuid
+    |   |   |   |   |   +-- user_uuid
+    |   |   |   |   |   +-- thread_timestamp
+    |   |   |   |   |   +-- thread_title
+    |   |   |   |   |   \-- thread_body
+    |   |   |   |   \-- comments_head
+    |   |   |   |   |   +-- reply_info
+    |   |   |   |   |   |   +-- thread_uuid
+    |   |   |   |   |   |   +-- user_uuid
+    |   |   |   |   |   |   +-- reply_timestamp
+    |   |   |   |   |   |   \-- reply_body
+    |   +-- direct_messages
+    |   |   +-- user1
+    |   |   +-- user2
+    |   |   \-- message_head
+    |   |   |   \-- messages
+    |   |   |   |   +-- sender_uuid
+    |   |   |   |   +-- message_timestamp
+    |   |   |   |   \-- message_body
+--------------------------------------
