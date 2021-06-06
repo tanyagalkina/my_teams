@@ -335,7 +335,7 @@ RFC 20210606            The My Teams Project Protocol          June 2021
           our main supporter in this project.
 
           Special thanks also to the whole Epitech School, and
-          personally to units designers Gildas Vinson and Jeremy Andrey
+          personally to unit designers Gildas Vinson and Jeremy Andrey
           who provided us with such a relevant and fundamental topic
           as network programming.
 
