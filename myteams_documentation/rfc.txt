@@ -1,7 +1,342 @@
-                        
+
+Epitech School Berlin                                M.Taubert, T.Galkin
+Request for Comments: 20210606                    Epitech, Berlin Campus
+Category: B-NWP-400                               B4-Network Programming
+ISSN: 9999-9999                                          LinuxTeams Ltd.
+                                                               June 2021
 
 
-				my_teams project
+                         The My Teams Project Protocol
+
+Abstract
+
+   The My Teams Protocol enables two-way communication between a client
+   and a multi-client server running both on identical architectures.
+   The protocol is non-portable due to its binary nature. Serialization
+   technique is to be designed and implemented. It does not affect traffic
+   over pure tcp or using tunnel connection (like ngrok for example),
+   since both client and server applications are compiled identically.
+    The protocol consists of description of structures, which are used for
+   both request and response purposes, as well as data transfer layered
+   over TCP.
+     The goal of this technology is to provide a mechanism for terminal-
+   based collaborative communication applications for instant messaging
+   that need two-way communication and use a single TCP connection per
+   client for traffic in both directions.
+
+
+Status of This Memo
+
+   This is an Epitech School Project document.
+
+   This document is a product of the LinuxTeams Team Group, Epitech
+   School, Berlin Campus.
+
+Copyright Notice
+
+   Copyright (c) 2021 Epitech School Berlin and the persons identified
+   as the document authors.  All rights reserved.
 
 
 
+Taubert & Galkin             B-NWP-400                          [Page 1]
+
+RFC 20210606            The My Teams Project Protocol          June 2021
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Protocol Overview  . . . . . . . . . . . . . . . . . . . .  3
+     1.6.  Security Model . . . . . . . . . . . . . . . . . . . . . .  3
+     1.8.  Establishing a Connection  . . . . . . . . . . . . . . . .  3
+   2.  Sending and Receiving Data . . . . . . . . . . . . . . . . . .  3
+     2.1   Sending Request         . . . . . . . . . . . . . . . . . . 3
+     2.1.1   Examples . . . . . . . . . . . . . . . . . . . . . . . .  4
+     2.2   Sending Response . . . . . . . . . . . . . . . . . . . . .  4
+     2.2.1 Examples . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     2.3   Receiving Data Client-side
+   3.  Events   . . . . . . . . . . . . . . . . . . . . . . . . . . .  5
+     3.1   Examples . . . . . . . . . . . . . . . . . . . . . . . . .
+   4.  Closing the Connection . . . . . . . . . . . . . . . . . . . . **
+     4.1.  Abnormal Closures  . . . . . . . . . . . . . . . . . . . . **
+       4.1.1.  Client-Initiated Closure . . . . . . . . . . . . . . . **
+       4.1.2.  Server-Initiated Closure . . . . . . . . . . . . . . . **
+       4.1.3.  Recovering from Abnormal Closure . . . . . . . . . . . **
+     7.3.  Normal Closure of Connections  . . . . . . . . . . . . . . **
+   5.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . **
+
+
+
+
+Taubert & Galkin             B-NWP-400                          [Page 2]
+
+RFC 20210606            The My Teams Project Protocol          June 2021
+
+1.  Introduction
+     1.1.  Protocol Overview
+          Applications using the protocol are able to manage a
+          collaborative communication application like the well
+          known Microsoft Teams ®.
+          A collaborative communication application is a service
+          able to manage several communication teams,
+          where discussion are organised like following:
+          • threads (initial post and additional comments) in a specific channel
+          • discussion (personal messages)
+     1.2  The Logger
+            The server and the client are printing EVERY requested event on the
+            standard error output using special logging libraries.
+            Functions are described in /include/*.h files accordingly.
+
+     1.3.  Security Model
+            There is no password authentication required for using the
+            application, but:
+
+            A user that is not logged in should NOT be able to see connected users
+            for example.
+            Someone that is NOT subscribed to a team should not be able to create
+            a thread.
+            Someone that is NOT subscribed in a team should not receive events
+            related to that team (new threads
+            etc. . . )
+
+     1.4.  Establishing a Connection
+
+           The connection is established via Linux TCP Sockets, while multiplexing is
+           implemented using select(2): synchronous I/O multiplexing.
+
+   2.  Sending and Receiving Data
+     2.1   Sending Request
+
+           For sending/receiving a request the application uses following struct:
+           typedef struct request {
+               int type;
+               use_level_t context_level;
+               char name[32];
+               char description[255];
+               char message[512];
+               char team_uuid[UUID_STR_LEN];
+               char user_uuid[UUID_STR_LEN];
+               char channel_uuid[UUID_STR_LEN];
+               char thread_uuid[UUID_STR_LEN];
+           }request_t;
+
+           The corresponding request fields are filled with data, which the server is reading
+           based on the request type.
+           All request types are listed in the next chapter.
+
+
+
+
+Taubert & Galkin             B-NWP-400                          [Page 3]
+
+RFC 20210606            The My Teams Project Protocol          June 2021
+
+
+
+     2.1.1   Listing available requests
+            There are following request Macro's used for sending commands to the server:
+                CT_LOGIN for /login command,
+                CT_LOGOUT for /logout command,
+                CT_USERS for /users command,
+                CT_USER for /user command,
+                CT_SEND for /send command,
+                CT_MESSAGES for /messages command,
+                CT_SUBSCRIBE for /subscribe command,
+                CT_SUBSCRIBED_UUID for /subscribed command with an argument,
+                CT_SUBSCRIBED_BLANK for /subscribed command with no argument,
+                CT_UNSUBSCRIBE for /unsubscribe command,
+                CT_CREATE for create command,
+                CT_LIST for /list command,
+                CT_INFO for /info command.
+
+            All client features are provided in help.txt.
+
+     2.1.2   Examples
+
+            For example, sending a /send request would look like this:
+
+            request_t new_req;
+            strcpy(new_req.user_uuid, first_arg);
+                strcpy(new_req.message, second_arg);
+                new_req.type = CT_SEND;
+            send(sd, &new_request, sizeof(request_t), 0);
+
+     2.2   Sending Response
+            For sending/receiving a response the application uses following struct:
+
+                typedef struct response {
+                    char message[MAX_BODY_LENGTH];
+                    char name[MAX_NAME_LENGTH];
+                    event_t request_type;
+                    code_t status_code;
+                    int extern_body_size;
+                    datatype_t extern_body_type;
+                    use_level_t level;
+                    char description[MAX_DESCRIPTION_LENGTH];
+                    time_t timestamp;
+                    char team_uuid[UUID_STR_LEN];
+                    char user_uuid[UUID_STR_LEN];
+                    char channel_uuid[UUID_STR_LEN];
+                    char thread_uuid[UUID_STR_LEN];
+                }response_t;
+
+            This struct can serve as an independent event or as a
+            response 'header', where there is number of requested info_structs
+            specified (in the field 'extern_body_size'), which have to be
+            received and are following right after the 'header'. If the header
+            is a response to one of the info-requests like /list or /info for
+            example, there is a field 'level', which specifies which kind of
+            info_request it was, and the amount of entries to come after
+            the 'header'. Request_type field specifies the request to which
+            the server replies or the event type in case of client event.
+            Actual data transfer is described in 2.3 Receiving Data
+            Client-side. Independent events are described in 3. Events.
+
+
+
+Taubert & Galkin             B-NWP-400                          [Page 4]
+
+RFC 20210606            The My Teams Project Protocol          June 2021
+
+
+
+     2.2.1 Examples
+
+            For example, sending an info-response to /users request
+            would look
+            like this:
+
+            response_t r;
+            r.request_type = CT_USERS;
+            r.status_code = STATUS_OK;
+            r.extern_body_size = how_many_users;
+            r.extern_body_type = USER_TYPE;
+            send(client_fd, &r, RESPONSE_SIZE, 0);
+
+            The client when receiving such response 'header' should
+            then receive
+            (int)how_many_users
+            user_info_structs right after.
+
+     2.3   Receiving Data Client-side
+
+            There are 6 info-structures used for transferring data:
+
+            *** user_info
+            typedef struct info_user {
+                char user_uuid[UUID_STR_LEN];
+                char user_name[MAX_NAME_LENGTH];
+                int user_status;
+            }user_info_t;
+
+            *** team_info
+            typedef struct info_team {
+                char team_uuid[UUID_STR_LEN];
+                char team_name[MAX_NAME_LENGTH];
+                char team_description[MAX_DESCRIPTION_LENGTH];
+            }team_info_t;
+
+            *** channel_info
+            typedef struct info_channel {
+                char channel_uuid[UUID_STR_LEN];
+                char channel_name[MAX_NAME_LENGTH];
+                char channel_description[MAX_DESCRIPTION_LENGTH];
+            }channel_info_t;
+
+            *** thread_info
+            typedef struct info_thread {
+                char thread_uuid[UUID_STR_LEN];
+                char user_uuid[UUID_STR_LEN];
+                time_t thread_timestamp;
+                char thread_title[MAX_NAME_LENGTH];
+                char thread_body[MAX_BODY_LENGTH];
+            }thread_info_t;
+
+            *** reply_info
+            typedef struct info_reply {
+                char thread_uuid[UUID_STR_LEN];
+                char user_uuid[UUID_STR_LEN];
+                time_t reply_timestamp;
+                char reply_body[MAX_BODY_LENGTH];
+            }reply_info_t;
+
+            These structs are used to transfer the data of info_requests
+            like /list or /info.
+
+
+Taubert & Galkin             B-NWP-400                          [Page 5]
+
+RFC 20210606            The My Teams Project Protocol          June 2021
+
+
+   3.  Events
+     3.1.  Listing the events
+                ET_LOGGED_IN,
+                ET_LOGGED_OUT,
+                ET_MESSAGE_REC,
+                ET_REPLY_REC,
+                ET_TEAM_CREAT,
+                ET_CHANNEL_CREAT,
+                ET_THREAD_CREAT
+                and CT_ERROR_UNAUTHOR as independent event.
+     3.2.  Examples
+
+            For example, the server-side event:
+                response_t r;
+                r.request_type = ET_LOGGED_IN;
+                r.status_code = STATUS_OK;
+                strcpy(r.name, user_name);
+                strcpy(r.user_uuid, user_uuid);
+
+                which is then sent to all authorized users.
+
+            Client receives all the events in response struct, where the
+            response_type identifies the type of the event received and the
+            responsible function is called.
+
+   4.  Closing the Connection
+     4.1.  Abnormal Closures
+            The server-side has the SIGPIPE disabled for being more robust, while
+            there are SIGINT and SIGTERM patched with signal().
+
+            Further error handling
+            is to be designed and implemented.
+
+       4.1.1.  Client-Initiated Closure
+
+                Client is only responsible for own closure, which cannot
+                impact the server. When receiving EOF, it sends the /logout
+                request and is disconnected by the server.
+
+       4.1.2.  Server-Initiated Closure
+               Client is switching-off when receiving a SIGPIPE or read 0
+               on the server socket.
+               This is a sign that
+               the server socket is not available anymore.
+
+       4.1.3.  Recovering from Abnormal Closure
+               The server supports restoring of whole chat history,
+               private and public when
+               shutting down by error.
+               The history is then recovered on start-up.
+               There is only manual restart of services
+               possible at the moment.
+               Automated restart is to be designed.
+
+     4.3.  Normal Closure of Connections
+
+            For the server-side, the Ctrl-C is considered as normal
+            closure, while on
+            client-side the cli /logout command is provided.
+
+   5.  Acknowledgements
+
+            Special thanks are due to Thomas Kauffmann, who was
+          our main supporter in this project.
+
+          Special thanks also to the whole Epitech School, and
+          personally to units designers Gildas Vinson and Jeremy Andrey
+          who provided us with such a relevant and fundamental topic
+          as network programming.
+
+Taubert & Galkin             B-NWP-400                          [Page 6]
