@@ -1,0 +1,58 @@
+                            **********
+                             FEATURES
+                            **********
+
+/help : show help
+/login [“user_name”] : set the user_name used by client
+/logout : disconnect the client from the server
+/users : get the list of all users that exist on the domain
+/user [“user_uuid”] : get information about a user
+/send [“user_uuid”] [“message_body”] : send a message to a user
+/messages [“user_uuid”] : list all messages exchange with an user
+/subscribe [“team_uuid”] : subscribe to the event of a team and its sub directories (enable reception
+    of all events from a team)
+/subscribed ?[“team_uuid”] : list all subscribed teams or list all users subscribed to a team
+/unsubscribe [“team_uuid”] : unsubscribe from a team
+/use ?[“team_uuid”] ?[“channel_uuid”] ?[“thread_uuid”] : use specify a context team/channel/thread
+/create : based on what is being used create the sub resource (see below)
+/list : based on what is being used list all the sub resources (see below)
+/info : based on what is being used list the current (see below)
+
+                            ********
+                             CREATE
+                            ********
+
+When the context is not defined (/use):
+• /create [“team_name”] [“team_description”] : create a new team
+When team_uuid is defined (/use “team_uuid”):
+• /create [“channel_name”] [“channel_description”] : create a new channel
+When team_uuid and channel_uuid are defined (/use “team_uuid” “channel_uuid”):
+• /create [“thread_title”] [“thread_message”] : create a new thread
+When team_uuid, channel_uuid and thread_uuid are defined (/use “team_uuid” “channel_uuid” “thread_uuid”):
+• /create [“comment_body”] : create a new reply
+
+                             ******
+                              LIST
+                             ******
+
+When the context is not defined (/use):
+• /list : list all existing teams
+When team_uuid is defined (/use “team_uuid”):
+• /list : list all existing channels
+When team_uuid and channel_uuid are defined (/use “team_uuid” “channel_uuid”):
+• /list : list all existing threads
+When team_uuid, channel_uuid and thread_uuid are defined (/use “team_uuid” “channel_uuid” “thread_uuid”):
+• /list : list all existing replies
+
+                             ******
+                              INFO
+                             ******
+
+When the context is not defined (/use):
+• /info : display currently logged user infos
+When team_uuid is defined (/use “team_uuid”):
+• /info : display currently selected team infos
+When team_uuid and channel_uuid are defined (/use “team_uuid” “channel_uuid”):
+• /info : display currently selected channel infos
+When team_uuid, channel_uuid and thread_uuid are defined (/use “team_uuid” “channel_uuid” “thread_uuid”):
+• /info : display currently selected thread infos

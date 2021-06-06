@@ -26,7 +26,21 @@ void free_2d(char **s)
 
 void show_help(void)
 {
-    printf("the protocol and the commands to be updated...\n");
+    FILE *help_file_ptr;
+    char ch;
+
+    help_file_ptr = fopen("myteams_documentation/help.txt", "r");
+    if (help_file_ptr == NULL) {
+        printf("help info is currently not available, we apologize\n");
+        printf("try to see rfc.txt\n");
+        return;
+    }
+    do {
+        ch = fgetc(help_file_ptr);
+        putchar(ch);
+    } while (ch != EOF);
+    fclose(help_file_ptr);
+    return;
 }
 
 void sig_handler(int sig)
